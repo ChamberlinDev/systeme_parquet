@@ -1,0 +1,103 @@
+@extends('admin.layout.app')
+
+@section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<div class="container-fluid">
+    <h3 class="text-center">Liste des utilisateurs</h3>
+    <hr>
+
+    <a href="/create_user" class="btn btn-primary mb-3">
+        Ajouter un utilisateur
+    </a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-white">
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Statut</th>
+                <th>Rôle(s)</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @forelse($users as $user)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+
+                <td>{{ $user->name }}</td>
+
+                <td>{{ $user->email }}</td>
+
+                <td>
+                    @if($user->is_actif)
+                    <span class="badge bg-success text-white">Actif</span>
+                    @else
+                    <span class="badge bg-danger text-white">Inactif</span>
+                    @endif
+                </td>
+
+                <td>
+                    @forelse($user->getRoleNames() as $role)
+                    <span class="badge bg-primary text-white">
+                        {{ ucfirst($role) }}
+                    </span>
+                    @empty
+                    <span class="text-muted">Aucun rôle</span>
+                    @endforelse
+                </td>
+
+                <td class="text-center">
+                    {{-- Modifier utilisateur --}}
+                    <a href="#" class="btn btn-sm btn-warning" title="Modifier">
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    {{-- Supprimer utilisateur --}}
+                    <form action="#"
+                        method="POST"
+                        class="d-inline"
+                        onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+
+                    {{-- Activer / Désactiver --}}
+                    <form action="{{ $user->is_actif ? route('users.desactiver', $user->id) : route('users.activer', $user->id) }}"
+                        method="POST"
+                        class="d-inline">
+                        @csrf
+                        @method('PATCH')
+
+                        <button type="submit"
+                            class="btn btn-sm {{ $user->is_actif ? 'btn-secondary' : 'btn-success' }}"
+                            title="{{ $user->is_actif ? 'Désactiver' : 'Activer' }}"
+                            onclick="return confirm('Confirmer cette action ?')">
+                            @if($user->is_actif)
+                            <i class="fas fa-user-slash"></i>
+                            @else
+                            <i class="fas fa-user-check"></i>
+                            @endif
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+            @empty
+            <tr>
+                <td colspan="6" class="text-center text-muted">
+                    Aucun utilisateur trouvé
+                </td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+@endsection
