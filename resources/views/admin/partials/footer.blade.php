@@ -1,26 +1,13 @@
-<!-- <footer class="footer">
-					<div class="container-fluid">
-						<nav class="pull-left">
-							<ul class="nav">
-								<li class="nav-item">
-									<a class="nav-link" href="#">
-										SGSDP
-									</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="#">
-										Aide
-									</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="#">
-										Licence
-									</a>
-								</li>
-							</ul>
-						</nav>
-						<div class="copyright ml-auto">
-							2025, made by <i class="la la-heart heart text-danger"></i> by <a href="/">ych</a>
-						</div>				
-					</div>
-				</footer> -->
+<footer class="footer">
+	<div class="container footer--flex">
+		<div class="footer-start">
+			<p>2021 © Elegant Dashboard - <a href="elegant-dashboard.com" target="_blank"
+					rel="noopener noreferrer">elegant-dashboard.com</a></p>
+		</div>
+		<ul class="footer-end">
+			<li><a href="##">About</a></li>
+			<li><a href="##">Support</a></li>
+			<li><a href="##">Puchase</a></li>
+		</ul>
+	</div>
+</footer>

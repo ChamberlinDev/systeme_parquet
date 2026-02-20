@@ -1,96 +1,109 @@
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
-		<div class="sidebar">
-			<div class="scrollbar-inner sidebar-wrapper">
-				<div class="user">
-					<div class="photo">
-						<i class="la la-user-circle align-middle mr-1" style="font-size: 26px;"></i>
-
-					</div>
-					<div class="info">
-						<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-							<span>
-								Role
-								<span class="user-level">{{auth()->user()->name}}</span>
-								<span class="caret"></span>
-							</span>
-						</a>
-						<div class="clearfix"></div>
-
-						<div class="collapse in" id="collapseExample" aria-expanded="true">
-							<ul class="nav">
-								<li>
-									<a href="{{ route('profil.voir') }}">
-										<span class="link-collapse">Mon profil</span>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<span class="link-collapse">parametres</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
+<aside class="sidebar">
+	<div class="sidebar-start">
+		<div class="sidebar-head">
+			<a href="{{ route('accueil.admin') }}" class="logo-wrapper" title="Home">
+				<span class="sr-only">Home</span>
+				<!-- <span class="icon logo" aria-hidden="true"></span> -->
+				<div class="logo-text">
+					<span class="logo-title">G.S PARQUET</span>
+					<span class="logo-subtitle">Dashboard</span>
 				</div>
-				<ul class="nav">
 
-					<li class="nav-item {{ request()->is('accueil_admin') ? 'active' : '' }}">
-						<a href="/accueil_admin">
-							<i class="la la-dashboard"></i>
-							<p>Tableau de bord</p>
-							<span class="badge badge-count">5</span>
-						</a>
-					</li>
-
-					<li class="nav-item {{ request()->is('utilisateurs*') ? 'active' : '' }}">
-						<a href="/utilisateurs">
-							<i class="la la-users"></i>
-							<p>Utilisateurs</p>
-							<span class="badge badge-count">14</span>
-						</a>
-					</li>
-
-					<li class="nav-item {{ request()->routeIs('dossiers.index') ? 'active' : '' }}">
-						<a href="{{ route('dossiers.index') }}">
-							<i class="la la-folder"></i>
-							<p>Dossiers</p>
-							<span class="badge badge-count">50</span>
-						</a>
-					</li>
-
-					<li class="nav-item {{ request()->is('archives*') ? 'active' : '' }}">
-						<a href="#">
-							<i class="la la-folder-open"></i>
-							<p>Archivages</p>
-							<span class="badge badge-count">6</span>
-						</a>
-					</li>
-
-					<li class="nav-item {{ request()->is('audiences*') ? 'active' : '' }}">
-						<a href="#">
-							<i class="la la-gavel"></i>
-							<p>Audiences et Décisions</p>
-							<span class="badge badge-success">3</span>
-						</a>
-					</li>
-
-					<li class="nav-item {{ request()->is('parquets*') ? 'active' : '' }}">
-						<a href="#">
-							<i class="la la-home"></i>
-							<p>Parquets</p>
-							<span class="badge badge-success">3</span>
-						</a>
-					</li>
-
-					<li class="nav-item update-pro">
-						<a href="{{ route('logout') }}" class="btn btn-danger text-white w-100">
-							<i class="la la-logout"></i>
-							<p>Déconnexion</p>
-						</a>
-					</li>
-
-				</ul>
-
-			</div>
+			</a>
+			<button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+				<span class="sr-only">Toggle menu</span>
+				<span class="icon menu-toggle" aria-hidden="true"></span>
+			</button>
 		</div>
+		<div class="sidebar-body">
+			<ul class="sidebar-body-menu">
+				<li>
+					<a class="active" href="{{ route('accueil.admin') }}"><span class="icon home" aria-hidden="true"></span>Tableau de bord</a>
+				</li>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon folder" aria-hidden="true"></span>Dossiers
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
+						</span>
+					</a>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="categories.html">Tous les dossiers</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon image" aria-hidden="true"></span>Audiences
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
+						</span>
+					</a>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="media-01.html">Toutes les audiences</a>
+						</li>
+						
+					</ul>
+				</li>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon paper" aria-hidden="true"></span>Decisions
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
+						</span>
+					</a>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="pages.html">Toutes les decisions</a>
+						</li>
+						
+					</ul>
+				</li>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon user-3" aria-hidden="true"></span>Utilisateurs
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
+						</span>
+					</a>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="users-01.html">Tous les utilisateurs</a>
+						</li>
+						<li>
+							<a href="users-02.html">Ajouter un utilisateur</a>
+						</li>
+					</ul>
+				</li>
+
+			</ul>
+			<span class="system-menu__title">Systeme</span>
+			<ul class="sidebar-body-menu">
+
+
+				<li>
+					<a href="##"><span class="icon setting" aria-hidden="true"></span>Paramètres</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="sidebar-footer">
+		<a href="{{ route('logout') }}" class="sidebar-user">
+			<span class="sidebar-user-img">
+				<picture>
+					<source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="./img/avatar/avatar-illustrated-02.png" alt="User name">
+				</picture>
+			</span>
+			<div class="sidebar-user-info">
+				<span class="sidebar-user__title">Deconnexion</span>
+				<span class="sidebar-user__subtitle">Quitter</span>
+			</div>
+		</a>
+	</div>
+</aside>

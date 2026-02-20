@@ -1,30 +1,83 @@
-@extends('admin.layout.app')
+@extends('greffier.layout.app')
 
 @section('content')
-<div class="container-fluid py-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h3 class="mb-0">Gestion du profil</h3>
-            <p class="text-muted">Gérez vos informations personnelles et votre mot de passe</p>
-        </div>
-    </div>
 
-    <div class="row">
-        {{-- Infos utilisateur --}}
-        <div class="col-lg-4 col-md-5 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body text-center py-5">
-                    <div class="mb-3">
-                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
-                             style="width: 80px; height: 80px; font-size: 2rem;">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                        </div>
-                    </div>
+<div class="container mt-5">
+    <article class="sign-up">
 
-                    <h5 class="mb-2">{{ auth()->user()->name }}</h5>
-                    <p class="text-muted mb-3">{{ auth()->user()->email }}</p>
+        <h2 class="sign-up__title">Gestion du profil</h2>
 
-                    <div class="mb-3">
+        {{-- Message succès --}}
+        @if(session('success'))
+            <div class="mb-3 text-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <form class="sign-up-form form" action="#" method="POST">
+            @csrf
+            @method('PUT')
+
+            {{-- ================= Informations personnelles ================= --}}
+            <div class="row">
+
+                <!-- Nom -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label-wrapper w-100">
+                        <p class="form-label">Nom</p>
+                        <input
+                            class="form-input w-100 @error('name') is-invalid @enderror"
+                            type="text"
+                            name="name"
+                            value="{{ old('name', auth()->user()->name) }}"
+                            required>
+                    </label>
+                    @error('name')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label-wrapper w-100">
+                        <p class="form-label">Email</p>
+                        <input
+                            class="form-input w-100 @error('email') is-invalid @enderror"
+                            type="email"
+                            name="email"
+                            value="{{ old('email', auth()->user()->email) }}"
+                            required>
+                    </label>
+                    @error('email')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+            </div>
+
+            {{-- ================= Sécurité ================= --}}
+            <div class="row">
+
+                <!-- Mot de passe actuel -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label-wrapper w-100">
+                        <p class="form-label">Mot de passe actuel</p>
+                        <input
+                            class="form-input w-100 @error('current_password') is-invalid @enderror"
+                            type="password"
+                            name="current_password"
+                            required>
+                    </label>
+                    @error('current_password')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <!-- Statut & Rôle -->
+                <div class="col-md-6 mb-3">
+                    <p class="form-label">Statut & Rôle</p>
+
+                    <div class="mb-2">
                         <span class="badge {{ auth()->user()->is_actif ? 'bg-success' : 'bg-danger' }} px-3 py-2 text-white">
                             {{ auth()->user()->is_actif ? 'Compte actif' : 'Compte inactif' }}
                         </span>
@@ -38,109 +91,47 @@
                         @endforeach
                     </div>
                 </div>
-            </div>
-        </div>
 
-        {{-- Formulaires --}}
-        <div class="col-lg-8 col-md-7">
-            {{-- Modifier informations --}}
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white py-3">
-                    <h5 class="mb-0">Informations personnelles</h5>
-                </div>
-
-                <div class="card-body p-4">
-                    <form action="#" method="POST">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Nom <span class="text-danger">*</span></label>
-                                <input type="text"
-                                    name="name"
-                                    class="form-control"
-                                    value="{{ auth()->user()->name }}"
-                                    required>
-                                @error('name')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
-                                <input type="email"
-                                    name="email"
-                                    class="form-control"
-                                    value="{{ auth()->user()->email }}"
-                                    required>
-                                @error('email')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-end mt-3">
-                            <button type="submit" class="btn btn-primary px-4">
-                                Mettre à jour
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </div>
 
-            {{-- Changer mot de passe --}}
-            <div class="card shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="mb-0">Changer le mot de passe</h5>
+            <div class="row">
+
+                <!-- Nouveau mot de passe -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label-wrapper w-100">
+                        <p class="form-label">Nouveau mot de passe</p>
+                        <input
+                            class="form-input w-100 @error('password') is-invalid @enderror"
+                            type="password"
+                            name="password">
+                    </label>
+                    @error('password')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
 
-                <div class="card-body p-4">
-                    <form action="#" method="POST">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Mot de passe actuel <span class="text-danger">*</span></label>
-                            <input type="password"
-                                name="current_password"
-                                class="form-control"
-                                required>
-                            @error('current_password')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Nouveau mot de passe <span class="text-danger">*</span></label>
-                                <input type="password"
-                                    name="password"
-                                    class="form-control"
-                                    required>
-                                @error('password')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Confirmation <span class="text-danger">*</span></label>
-                                <input type="password"
-                                    name="password_confirmation"
-                                    class="form-control"
-                                    required>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-end mt-3">
-                            <button type="submit" class="btn btn-warning text-dark px-4">
-                                Modifier le mot de passe
-                            </button>
-                        </div>
-                    </form>
+                <!-- Confirmation -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label-wrapper w-100">
+                        <p class="form-label">Confirmation</p>
+                        <input
+                            class="form-input w-100"
+                            type="password"
+                            name="password_confirmation">
+                    </label>
                 </div>
+
             </div>
-        </div>
-    </div>
+
+            <div class="text-end mt-3">
+                <button type="submit" class="form-btn primary-default-btn">
+                    Mettre à jour
+                </button>
+            </div>
+
+        </form>
+
+    </article>
 </div>
+
 @endsection

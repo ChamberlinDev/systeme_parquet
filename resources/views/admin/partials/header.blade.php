@@ -1,58 +1,77 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
-<div class="logo-header">
-	<a href="/accueil_admin" class="logo">
-		SGSDP
-	</a>
-	<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
-</div>
-<nav class="navbar navbar-header navbar-expand-lg">
-	<div class="container-fluid">
-
-
-		<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-
-			<!-- <li class="nav-item dropdown hidden-caret">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="la la-bell"></i>
-								<span class="notification">1</span>
-							</a>
-							<ul class="dropdown-menu notif-box" aria-labelledby="navbarDropdown">
+<nav class="main-nav--bg">
+				<div class="container main-nav">
+					<div class="main-nav-start">
+						<div class="search-wrapper">
+							<i data-feather="search" aria-hidden="true"></i>
+							<input type="text" placeholder="Enter keywords ..." required>
+						</div>
+					</div>
+					<div class="main-nav-end">
+						<button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+							<span class="sr-only">Toggle menu</span>
+							<span class="icon menu-toggle--gray" aria-hidden="true"></span>
+						</button>
+						<div class="lang-switcher-wrapper">
+							<button class="lang-switcher transparent-btn" type="button">
+								EN
+								<i data-feather="chevron-down" aria-hidden="true"></i>
+							</button>
+							<ul class="lang-menu dropdown">
+								<li><a href="##">English</a></li>
+								<li><a href="##">French</a></li>
+							</ul>
+						</div>
+						<button class="theme-switcher gray-circle-btn" type="button" title="Switch theme">
+							<span class="sr-only">Switch theme</span>
+							<i class="sun-icon" data-feather="sun" aria-hidden="true"></i>
+							<i class="moon-icon" data-feather="moon" aria-hidden="true"></i>
+						</button>
+						<div class="notification-wrapper">
+							<!-- <button class="gray-circle-btn dropdown-btn" title="To messages" type="button">
+								<span class="sr-only">To messages</span>
+								<span class="icon notification active" aria-hidden="true"></span>
+							</button> -->
+							<!-- <ul class="users-item-dropdown notification-dropdown dropdown">
 								<li>
-									<div class="dropdown-title">You have a new notification</div>
+									<a href="##">
+										<div class="notification-dropdown-icon info">
+											<i data-feather="check"></i>
+										</div>
+										<div class="notification-dropdown-text">
+											<span class="notification-dropdown__title">System just updated</span>
+											<span class="notification-dropdown__subtitle">The system has been successfully upgraded. Read more
+												here.</span>
+										</div>
+									</a>
 								</li>
 								
 								
-							</ul>
-						</li> -->
-			<li class="nav-item dropdown">
-				<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-					<i class="la la-user-circle align-middle mr-1" style="font-size: 26px;"></i>
-					<span>{{ auth()->user()->name }}</span>
-				</a>
-				<ul class="dropdown-menu dropdown-user">
-					<li>
-						<div class="user-box">
-							<div class="u-img">
-								<i class="la la-user-circle align-middle mr-1" style="font-size: 26px;"></i>
-
-							</div>
-							<div class="u-text">
-								<h4>{{auth()->user()->name}}</h4>
-								<p class="text-muted">{{auth()->user()->email}}</p><a href="{{ route('profil.voir') }}" class="btn btn-rounded btn-danger btn-sm">Voir profil</a>
-							</div>
+							</ul> -->
 						</div>
-					</li>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="{{ route('profil.voir') }}"><i class="ti-user"></i>Profil</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="{{route('logout')}}"><i class="fa fa-power-off"></i> Deconnexion</a>
-				</ul>
-				<!-- /.dropdown-user -->
-			</li>
-		</ul>
-	</div>
-</nav>
-</div>
+						<div class="nav-user-wrapper">
+							<button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
+								<span class="sr-only">Mon profil</span>
+								<span class="nav-user-img">
+									<picture>
+										<source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="./img/avatar/avatar-illustrated-02.png" alt="User name">
+									</picture>
+								</span>
+							</button>
+							<ul class="users-item-dropdown nav-user-dropdown dropdown">
+								<li><a href="{{ route('profil.voir') }}">
+										<i data-feather="user" aria-hidden="true"></i>
+										<span>Profil</span>
+									</a></li>
+								<li><a href="##">
+										<i data-feather="settings" aria-hidden="true"></i>
+										<span>Parametre</span>
+									</a></li>
+								<li><a class="danger" href="##">
+										<i data-feather="log-out" aria-hidden="true"></i>
+										<span>Deconnexion</span>
+									</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</nav>

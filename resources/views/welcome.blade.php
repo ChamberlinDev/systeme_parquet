@@ -1,138 +1,394 @@
 @extends('admin.layout.app')
 @section('content')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<h4 class="mb-4">Espace de travail</h4>
-<div class="row">
-    {{-- ================== TABLE UTILISATEURS ================== --}}
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-header  text-white bg-warning">
-                <i class="fas fa-users">
-                <strong>Liste des utilisateurs</strong>
-                </i>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> -->
+
+<main class="main users chart-page" id="skip-target">
+    <div class="container">
+        <h2 class="main-title">Tableau de bord</h2>
+        <div class="row stat-cards">
+            <div class="col-md-6 col-xl-3">
+                <article class="stat-cards-item">
+                    <div class="stat-cards-icon primary">
+                        <i data-feather="bar-chart-2" aria-hidden="true"></i>
+                    </div>
+                    <div class="stat-cards-info">
+                        <p class="stat-cards-info__num">1478</p>
+                        <p class="stat-cards-info__title">Total utilisateurs</p>
+                        <!-- <p class="stat-cards-info__progress">
+                            <span class="stat-cards-info__profit success">
+                                <i data-feather="trending-up" aria-hidden="true"></i>4.07%
+                            </span>
+                            Last month
+                        </p> -->
+                    </div>
+                </article>
             </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="stat-cards-item">
+                    <div class="stat-cards-icon warning">
+                        <i data-feather="file" aria-hidden="true"></i>
+                    </div>
+                    <div class="stat-cards-info">
+                        <p class="stat-cards-info__num">1478 </p>
+                        <p class="stat-cards-info__title">Total dossiers</p>
+                        <!-- <p class="stat-cards-info__progress">
+                            <span class="stat-cards-info__profit success">
+                                <i data-feather="trending-up" aria-hidden="true"></i>0.24%
+                            </span>
+                            Last month
+                        </p> -->
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="stat-cards-item">
+                    <div class="stat-cards-icon purple">
+                        <i data-feather="file" aria-hidden="true"></i>
+                    </div>
+                    <div class="stat-cards-info">
+                        <p class="stat-cards-info__num">1478 286</p>
+                        <p class="stat-cards-info__title">Total audiences</p>
+                        <!-- <p class="stat-cards-info__progress">
+                            <span class="stat-cards-info__profit danger">
+                                <i data-feather="trending-down" aria-hidden="true"></i>1.64%
+                            </span>
+                            Last month
+                        </p> -->
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="stat-cards-item">
+                    <div class="stat-cards-icon success">
+                        <i data-feather="feather" aria-hidden="true"></i>
+                    </div>
+                    <div class="stat-cards-info">
+                        <p class="stat-cards-info__num">1478</p>
+                        <p class="stat-cards-info__title">Total decision</p>
+                        <!-- <p class="stat-cards-info__progress">
+                            <span class="stat-cards-info__profit warning">
+                                <i data-feather="trending-up" aria-hidden="true"></i>0.00%
+                            </span>
+                            Last month
+                        </p> -->
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="chart">
+                    <canvas id="myChart" aria-label="Site statistics" role="img"></canvas>
+                </div>
+                <div class="users-table table-wrapper">
+                    <!-- <table class="posts-table">
+									<thead>
+										<tr class="users-table-info">
+											<th>
+												<label class="users-table__checkbox ms-20">
+													<input type="checkbox" class="check-all">Thumbnail
+												</label>
+											</th>
+											<th>Title</th>
+											<th>Author</th>
+											<th>Status</th>
+											<th>Date</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<label class="users-table__checkbox">
+													<input type="checkbox" class="check">
+													<div class="categories-table-img">
+														<picture>
+															<source srcset="./img/categories/01.webp" type="image/webp"><img src="./img/categories/01.jpg" alt="category">
+														</picture>
+													</div>
+												</label>
+											</td>
+											<td>
+												Starting your traveling blog with Vasco
+											</td>
+											<td>
+												<div class="pages-table-img">
+													<picture>
+														<source srcset="./img/avatar/avatar-face-04.webp" type="image/webp"><img src="./img/avatar/avatar-face-04.png" alt="User Name">
+													</picture>
+													Jenny Wilson
+												</div>
+											</td>
+											<td><span class="badge-pending">Pending</span></td>
+											<td>17.04.2021</td>
+											<td>
+												<span class="p-relative">
+													<button class="dropdown-btn transparent-btn" type="button" title="More info">
+														<div class="sr-only">More info</div>
+														<i data-feather="more-horizontal" aria-hidden="true"></i>
+													</button>
+													<ul class="users-item-dropdown dropdown">
+														<li><a href="##">Edit</a></li>
+														<li><a href="##">Quick edit</a></li>
+														<li><a href="##">Trash</a></li>
+													</ul>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<label class="users-table__checkbox">
+													<input type="checkbox" class="check">
+													<div class="categories-table-img">
+														<picture>
+															<source srcset="./img/categories/02.webp" type="image/webp"><img src="./img/categories/02.jpg" alt="category">
+														</picture>
+													</div>
+												</label>
+											</td>
+											<td>
+												Start a blog to reach your creative peak
+											</td>
+											<td>
+												<div class="pages-table-img">
+													<picture>
+														<source srcset="./img/avatar/avatar-face-03.webp" type="image/webp"><img src="./img/avatar/avatar-face-03.png" alt="User Name">
+													</picture>
+													Annette Black
+												</div>
+											</td>
+											<td><span class="badge-pending">Pending</span></td>
+											<td>23.04.2021</td>
+											<td>
+												<span class="p-relative">
+													<button class="dropdown-btn transparent-btn" type="button" title="More info">
+														<div class="sr-only">More info</div>
+														<i data-feather="more-horizontal" aria-hidden="true"></i>
+													</button>
+													<ul class="users-item-dropdown dropdown">
+														<li><a href="##">Edit</a></li>
+														<li><a href="##">Quick edit</a></li>
+														<li><a href="##">Trash</a></li>
+													</ul>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<label class="users-table__checkbox">
+													<input type="checkbox" class="check">
+													<div class="categories-table-img">
+														<picture>
+															<source srcset="./img/categories/03.webp" type="image/webp"><img src="./img/categories/03.jpg" alt="category">
+														</picture>
+													</div>
+												</label>
+											</td>
+											<td>
+												Helping a local business reinvent itself
+											</td>
+											<td>
+												<div class="pages-table-img">
+													<picture>
+														<source srcset="./img/avatar/avatar-face-02.webp" type="image/webp"><img src="./img/avatar/avatar-face-02.png" alt="User Name">
+													</picture>
+													Kathryn Murphy
+												</div>
+											</td>
+											<td><span class="badge-active">Active</span></td>
+											<td>17.04.2021</td>
+											<td>
+												<span class="p-relative">
+													<button class="dropdown-btn transparent-btn" type="button" title="More info">
+														<div class="sr-only">More info</div>
+														<i data-feather="more-horizontal" aria-hidden="true"></i>
+													</button>
+													<ul class="users-item-dropdown dropdown">
+														<li><a href="##">Edit</a></li>
+														<li><a href="##">Quick edit</a></li>
+														<li><a href="##">Trash</a></li>
+													</ul>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<label class="users-table__checkbox">
+													<input type="checkbox" class="check">
+													<div class="categories-table-img">
+														<picture>
+															<source srcset="./img/categories/04.webp" type="image/webp"><img src="./img/categories/04.jpg" alt="category">
+														</picture>
+													</div>
+												</label>
+											</td>
+											<td>
+												Caring is the new marketing
+											</td>
+											<td>
+												<div class="pages-table-img">
+													<picture>
+														<source srcset="./img/avatar/avatar-face-05.webp" type="image/webp"><img src="./img/avatar/avatar-face-05.png" alt="User Name">
+													</picture>
+													Guy Hawkins
+												</div>
+											</td>
+											<td><span class="badge-active">Active</span></td>
+											<td>17.04.2021</td>
+											<td>
+												<span class="p-relative">
+													<button class="dropdown-btn transparent-btn" type="button" title="More info">
+														<div class="sr-only">More info</div>
+														<i data-feather="more-horizontal" aria-hidden="true"></i>
+													</button>
+													<ul class="users-item-dropdown dropdown">
+														<li><a href="##">Edit</a></li>
+														<li><a href="##">Quick edit</a></li>
+														<li><a href="##">Trash</a></li>
+													</ul>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<label class="users-table__checkbox">
+													<input type="checkbox" class="check">
+													<div class="categories-table-img">
+														<picture>
+															<source srcset="./img/categories/01.webp" type="image/webp"><img src="./img/categories/01.jpg" alt="category">
+														</picture>
+													</div>
+												</label>
+											</td>
+											<td>
+												How to build a loyal community online and offline
+											</td>
+											<td>
+												<div class="pages-table-img">
+													<picture>
+														<source srcset="./img/avatar/avatar-face-03.webp" type="image/webp"><img src="./img/avatar/avatar-face-03.png" alt="User Name">
+													</picture>
+													Robert Fox
+												</div>
+											</td>
+											<td><span class="badge-active">Active</span></td>
+											<td>17.04.2021</td>
+											<td>
+												<span class="p-relative">
+													<button class="dropdown-btn transparent-btn" type="button" title="More info">
+														<div class="sr-only">More info</div>
+														<i data-feather="more-horizontal" aria-hidden="true"></i>
+													</button>
+													<ul class="users-item-dropdown dropdown">
+														<li><a href="##">Edit</a></li>
+														<li><a href="##">Quick edit</a></li>
+														<li><a href="##">Trash</a></li>
+													</ul>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<label class="users-table__checkbox">
+													<input type="checkbox" class="check">
+													<div class="categories-table-img">
+														<picture>
+															<source srcset="./img/categories/03.webp" type="image/webp"><img src="./img/categories/03.jpg" alt="category">
+														</picture>
+													</div>
+												</label>
+											</td>
+											<td>
+												How to build a loyal community online and offline
+											</td>
+											<td>
+												<div class="pages-table-img">
+													<picture>
+														<source srcset="./img/avatar/avatar-face-03.webp" type="image/webp"><img src="./img/avatar/avatar-face-03.png" alt="User Name">
+													</picture>
+													Robert Fox
+												</div>
+											</td>
+											<td><span class="badge-active">Active</span></td>
+											<td>17.04.2021</td>
+											<td>
+												<span class="p-relative">
+													<button class="dropdown-btn transparent-btn" type="button" title="More info">
+														<div class="sr-only">More info</div>
+														<i data-feather="more-horizontal" aria-hidden="true"></i>
+													</button>
+													<ul class="users-item-dropdown dropdown">
+														<li><a href="##">Edit</a></li>
+														<li><a href="##">Quick edit</a></li>
+														<li><a href="##">Trash</a></li>
+													</ul>
+												</span>
+											</td>
+										</tr>
+									</tbody>
+								</table> -->
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <article class="customers-wrapper">
+                    <canvas id="customersChart" aria-label="Customers statistics" role="img"></canvas>
 
-            <div class="card-body">
-                <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary mb-3">
-                    Ajouter un utilisateur
-                </a>
-
-                <table class="table table-bordered table-striped align-middle">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Statut</th>
-                            <th>Rôle(s)</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($users as $user)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-
-                            <td>
-                                <span class="badge {{ $user->is_actif ? 'bg-success' : 'bg-danger' }} text-white">
-                                    {{ $user->is_actif ? 'Actif' : 'Inactif' }}
-                                </span>
-                            </td>
-
-                            <td>
-                                @foreach($user->getRoleNames() as $role)
-                                <span class="badge bg-primary text-white">{{ ucfirst($role) }}</span>
-                                @endforeach
-                            </td>
-                            <td class="text-center">
-                                {{-- Modifier utilisateur --}}
-                                <a href="#" class="btn btn-sm btn-warning" title="Modifier">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-
-                                {{-- Supprimer utilisateur --}}
-                                <form action="#"
-                                    method="POST"
-                                    class="d-inline"
-                                    onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-
-                                {{-- Activer / Désactiver --}}
-                                <form action="{{ $user->is_actif ? route('users.desactiver', $user->id) : route('users.activer', $user->id) }}"
-                                    method="POST"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('PATCH')
-
-                                    <button type="submit"
-                                        class="btn btn-sm {{ $user->is_actif ? 'btn-secondary' : 'btn-success' }}"
-                                        title="{{ $user->is_actif ? 'Désactiver' : 'Activer' }}"
-                                        onclick="return confirm('Confirmer cette action ?')">
-                                        @if($user->is_actif)
-                                        <i class="fas fa-user-slash"></i>
-                                        @else
-                                        <i class="fas fa-user-check"></i>
-                                        @endif
-                                    </button>
-                                </form>
-                            </td>
-
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">
-                                Aucun utilisateur trouvé
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                </article>
+                <article class="white-block">
+                    <div class="top-cat-title">
+                        <h3>Statistiques</h3>
+                    </div>
+                    <ul class="top-cat-list">
+                        <li>
+                            <a href="##">
+                                <div class="top-cat-list__title">
+                                    Dossiers <span>890</span>
+                                </div>
+                                <div class="top-cat-list__subtitle">
+                                    Dossiers traités <span class="purple">472</span>
+                                </div>
+                                 <div class="top-cat-list__subtitle">
+                                    Dossiers non traités <span class="purple">472</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="##">
+                                <div class="top-cat-list__title">
+                                    Utilisateurs <span>8009</span>
+                                </div>
+                                <div class="top-cat-list__subtitle">
+                                    Utilisateurs actifs <span class="blue">472</span>
+                                </div>
+                                <div class="top-cat-list__subtitle">
+                                    Utilisateurs inactifs <span class="red">3537</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="##">
+                                <div class="top-cat-list__title">
+                                    Audiences <span>895</span>
+                                </div>
+                                <div class="top-cat-list__subtitle">
+                                    Audiences actives <span class="danger">472</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="##">
+                                <div class="top-cat-list__title">
+                                    Decisions <span>875</span>
+                                </div>
+                                <div class="top-cat-list__subtitle">
+                                    Decisions rendues <span class="success">472</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </article>
             </div>
         </div>
     </div>
-
-    {{-- ================== TABLE DOSSIERS ================== --}}
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-success text-white">
-                <i class="fas fa-folder">
-                <strong>Liste des dossiers</strong>
-                </i>
-            </div>
-
-            <div class="card-body">
-                <a href="#" class="btn btn-sm btn-warning mb-3">
-                    Ajouter un dossier
-                </a>
-                <table class="table table-bordered table-striped align-middle">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Numéro</th>
-                            <th>Type</th>
-                            <th>Statut</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">
-                                Aucun dossier disponible
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
+</main>
 @endsection

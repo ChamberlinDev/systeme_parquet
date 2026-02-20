@@ -1,79 +1,105 @@
-	<div class="sidebar">
-		<div class="scrollbar-inner sidebar-wrapper">
-			<div class="user">
-				
-				<div class="info">
-					<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-						<span>
-							Procureur
-							<span class="user-level">{{auth()->user()->name}}</span>
-							<span class="caret"></span>
+<aside class="sidebar">
+	<div class="sidebar-start">
+		<div class="sidebar-head">
+			<a href="/" class="logo-wrapper" title="Home">
+				<span class="sr-only">Accueil</span>
+				<!-- <span class="icon logo" aria-hidden="true"></span> -->
+				<div class="logo-text">
+					<span class="logo-title">Gest parquet</span>
+					<span class="logo-subtitle">{{ucfirst(auth()->user()->name)}}</span>
+				</div>
+
+			</a>
+			<button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+				<span class="sr-only">Toggle menu</span>
+				<span class="icon menu-toggle" aria-hidden="true"></span>
+			</button>
+		</div>
+		<div class="sidebar-body">
+			<ul class="sidebar-body-menu">
+				<li>
+					<a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Tableau de bord</a>
+				</li>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon document" aria-hidden="true"></span>Dossiers
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
 						</span>
 					</a>
-					<div class="clearfix"></div>
-
-					<div class="collapse in" id="collapseExample" aria-expanded="true">
-						<ul class="nav">
-							<li>
-								<a href="{{ route('profil.voir') }}">
-									<span class="link-collapse">Mon profil</span>
-								</a>
-							</li>
-
-						</ul>
-					</div>
-				</div>
-			</div>
-			<ul class="nav">
-
-				<li class="nav-item {{ request()->routeIs('accueil.procureur') ? 'active' : '' }}">
-					<a href="{{ route('accueil.procureur') }}">
-						<i class="la la-dashboard"></i>
-						<p>Tableau de bord</p>
-						<span class="badge badge-count">5</span>
-					</a>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="#">Encours</a>
+						</li>
+						<li>
+							<a href="#">Traité</a>
+						</li>
+						<li>
+							<a href="#">Archivé</a>
+						</li>
+					</ul>
 				</li>
-
-				<li class="nav-item {{ request()->routeIs('dossiers.index.procureur') ? 'active' : '' }}">
-					<a href="{{ route('dossiers.index.procureur') }}">
-						<i class="la la-folder"></i>
-						<p>Dossiers</p>
-						<span class="badge badge-count">50</span>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon folder" aria-hidden="true"></span>Registres
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
+						</span>
 					</a>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="categories.html">Tous</a>
+						</li>
+					</ul>
 				</li>
-
-				<li class="nav-item {{ request()->is('procureur/archives*') ? 'active' : '' }}">
-					<a href="#">
-						<i class="la la-folder-open"></i>
-						<p>Archivages</p>
-						<span class="badge badge-count">6</span>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon image" aria-hidden="true"></span>Audiences
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
+						</span>
 					</a>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="media-01.html">Instructions</a>
+						</li>
+						<li>
+							<a href="media-02.html">Media-02</a>
+						</li>
+					</ul>
 				</li>
-
-				<li class="nav-item {{ request()->is('procureur/notifications*') ? 'active' : '' }}">
-					<a href="#">
-						<i class="la la-bell"></i>
-						<p>Notifications</p>
-						<span class="badge badge-success">3</span>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon paper" aria-hidden="true"></span>Decisions
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
+						</span>
 					</a>
-				</li>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="pages.html">Toutes les decisions</a>
+						</li>
 
-				<li class="nav-item {{ request()->is('procureur/audiences*') ? 'active' : '' }}">
-					<a href="#">
-						<i class="la la-folder"></i>
-						<p>Audiences</p>
-						<span class="badge badge-count">50</span>
-					</a>
+					</ul>
 				</li>
-
-				<li class="nav-item update-pro">
-					<a href="{{ route('logout') }}" class="btn btn-danger text-white w-100">
-						<i class="la la-logout"></i>
-						<p>Déconnexion</p>
-					</a>
-				</li>
-
 			</ul>
-
 		</div>
 	</div>
+	<div class="sidebar-footer">
+		<a href="{{ route('logout') }}" class="sidebar-user">
+			<span class="sidebar-user-img">
+				<picture>
+					<source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="./img/avatar/avatar-illustrated-02.png" alt="User name">
+				</picture>
+			</span>
+			<div class="sidebar-user-info">
+				<span class="sidebar-user__title">Deconnexion</span>
+				<span class="sidebar-user__subtitle">Quitter</span>
+			</div>
+		</a>
+	</div>
+</aside>
