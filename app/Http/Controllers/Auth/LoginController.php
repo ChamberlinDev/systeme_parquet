@@ -45,9 +45,7 @@ class LoginController extends Controller
         // Redirection normale par rôle
         if ($user->hasRole('admin')) return redirect('/accueil_admin');
         if ($user->hasRole('greffier')) return redirect('/accueil_greffier');
-        if ($user->hasRole('procureur')) return redirect('/accueil_procureur');
-        if ($user->hasRole('substitut')) return redirect('/accueil_substitut');
-        if ($user->hasRole('juge')) return redirect('/accueil_juge');
+
 
         Auth::logout();
         return back()->withErrors([
@@ -74,18 +72,16 @@ class LoginController extends Controller
         // Redirection après changement
         if ($user->hasRole('admin')) return redirect('/accueil_admin');
         if ($user->hasRole('greffier')) return redirect('/accueil_greffier');
-        if ($user->hasRole('procureur')) return redirect('/accueil_procureur');
-        if ($user->hasRole('substitut')) return redirect('/accueil_substitut');
-        if ($user->hasRole('juge')) return redirect('/accueil_juge');
+
 
         return redirect('/');
     }
 
     public function logout(Request $request)
     {
-       // Déconnexion de l'utilisateur
+        // Déconnexion de l'utilisateur
         Auth::logout();
-      // Invalider la session
+        // Invalider la session
         $request->session()->invalidate();
 
         // Régénérer le token CSRF
