@@ -25,24 +25,25 @@ class DossierController extends Controller
             ->get();
         return view('greffier.dossier.index', compact('dossiers'));
     }
+    
     // affichage des dossiers procureur
-    public function index_procureur()
-    {
-        $dossiers = Dossier::all();
-        return view('procureur.dossiers.index', compact('dossiers'));
-    }
+    // public function index_procureur()
+    // {
+    //     $dossiers = Dossier::all();
+    //     return view('procureur.dossiers.index', compact('dossiers'));
+    // }
     // affichage des dossiers substitut
-    public function index_substitut()
-    {
-        $dossiers = Dossier::all();
-        return view('substitut.dossier.index', compact('dossiers'));
-    }
+    // public function index_substitut()
+    // {
+    //     $dossiers = Dossier::all();
+    //     return view('substitut.dossier.index', compact('dossiers'));
+    // }
     // affichage des dossiers juge
-    public function index_juge()
-    {
-        $dossiers = Dossier::all();
-        return view('juge.dossiers.index', compact('dossiers'));
-    }
+    // public function index_juge()
+    // {
+    //     $dossiers = Dossier::all();
+    //     return view('juge.dossiers.index', compact('dossiers'));
+    // }
 
 
     public function create_form()

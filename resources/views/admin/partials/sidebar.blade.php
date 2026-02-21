@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <aside class="sidebar">
 	<div class="sidebar-start">
 		<div class="sidebar-head">
@@ -22,7 +23,9 @@
 				</li>
 				<li>
 					<a class="show-cat-btn" href="##">
-						<span class="icon folder" aria-hidden="true"></span>Dossiers
+						<span class="icon folder" aria-hidden="true"><i class="fa-solid fa-folder"></i>
+						</span>
+						Dossiers
 						<span class="category__btn transparent-btn" title="Open list">
 							<span class="sr-only">Open list</span>
 							<span class="icon arrow-down" aria-hidden="true"></span>
@@ -36,7 +39,9 @@
 				</li>
 				<li>
 					<a class="show-cat-btn" href="##">
-						<span class="icon image" aria-hidden="true"></span>Audiences
+						<span class="icon calendar" aria-hidden="true"><i class="fa-solid fa-calendar"></i>
+						</span>
+						Audiences
 						<span class="category__btn transparent-btn" title="Open list">
 							<span class="sr-only">Open list</span>
 							<span class="icon arrow-down" aria-hidden="true"></span>
@@ -44,14 +49,15 @@
 					</a>
 					<ul class="cat-sub-menu">
 						<li>
-							<a href="media-01.html">Toutes les audiences</a>
+							<a href="#">Toutes les audiences</a>
 						</li>
-						
+
 					</ul>
 				</li>
 				<li>
 					<a class="show-cat-btn" href="##">
-						<span class="icon paper" aria-hidden="true"></span>Decisions
+						<span class="icon file-text" aria-hidden="true"><i class="fa-solid fa-file-lines"></i>
+						</span>Decisions
 						<span class="category__btn transparent-btn" title="Open list">
 							<span class="sr-only">Open list</span>
 							<span class="icon arrow-down" aria-hidden="true"></span>
@@ -59,14 +65,16 @@
 					</a>
 					<ul class="cat-sub-menu">
 						<li>
-							<a href="pages.html">Toutes les decisions</a>
+							<a href="#">Toutes les decisions</a>
 						</li>
-						
+
 					</ul>
 				</li>
 				<li>
 					<a class="show-cat-btn" href="##">
-						<span class="icon user-3" aria-hidden="true"></span>Utilisateurs
+						<span class="icon users" aria-hidden="true">
+							<i class="fa-solid fa-users"></i>
+						</span>Utilisateurs
 						<span class="category__btn transparent-btn" title="Open list">
 							<span class="sr-only">Open list</span>
 							<span class="icon arrow-down" aria-hidden="true"></span>
@@ -74,11 +82,28 @@
 					</a>
 					<ul class="cat-sub-menu">
 						<li>
-							<a href="users-01.html">Tous les utilisateurs</a>
+							<a href="#">Tous les utilisateurs</a>
 						</li>
 						<li>
-							<a href="users-02.html">Ajouter un utilisateur</a>
+							<a href="#">Ajouter un utilisateur</a>
 						</li>
+					</ul>
+				</li>
+				<li>
+					<a class="show-cat-btn" href="##">
+						<span class="icon building" aria-hidden="true">
+							<i class="fa-solid fa-building"></i>
+						</span>Parquets
+						<span class="category__btn transparent-btn" title="Open list">
+							<span class="sr-only">Open list</span>
+							<span class="icon arrow-down" aria-hidden="true"></span>
+						</span>
+					</a>
+					<ul class="cat-sub-menu">
+						<li>
+							<a href="#">Tous les parquets</a>
+						</li>
+
 					</ul>
 				</li>
 

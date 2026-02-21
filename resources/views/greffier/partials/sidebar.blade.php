@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <aside class="sidebar">
 	<div class="sidebar-start">
 		<div class="sidebar-head">
@@ -22,8 +23,11 @@
 				</li>
 
 				<li>
-					<a class="show-cat-btn" href="##">
-						<span class="icon folder" aria-hidden="true"></span>Dossiers
+					<a class="show-cat-btn" href="{{route('dossiers.index.greffier')}}">
+						<span class="icon folder" aria-hidden="true">
+							<i class="fa-solid fa-folder"></i>
+
+						</span>Dossiers
 						<span class="category__btn transparent-btn" title="Open list">
 							<span class="sr-only">Open list</span>
 							<span class="icon arrow-down" aria-hidden="true"></span>
@@ -31,13 +35,15 @@
 					</a>
 					<ul class="cat-sub-menu">
 						<li>
-							<a href="categories.html">Tous les dossiers</a>
+							<a href="{{route('dossiers.index.greffier')}}">Tous les dossiers</a>
 						</li>
 					</ul>
 				</li>
 				<li>
 					<a class="show-cat-btn" href="##">
-						<span class="icon image" aria-hidden="true"></span>Audiences
+						<span class="icon image" aria-hidden="true">
+							<i class="fa-solid fa-calendar"></i>
+						</span>Audiences
 						<span class="category__btn transparent-btn" title="Open list">
 							<span class="sr-only">Open list</span>
 							<span class="icon arrow-down" aria-hidden="true"></span>
@@ -54,7 +60,9 @@
 				</li>
 				<li>
 					<a class="show-cat-btn" href="##">
-						<span class="icon paper" aria-hidden="true"></span>Decisions
+						<span class="icon paper" aria-hidden="true">
+							<i class="fa-solid fa-file-lines"></i>
+						</span>Decisions
 						<span class="category__btn transparent-btn" title="Open list">
 							<span class="sr-only">Open list</span>
 							<span class="icon arrow-down" aria-hidden="true"></span>
@@ -85,7 +93,7 @@
 		<a href="{{ route('logout') }}" class="sidebar-user">
 			<span class="sidebar-user-img">
 				<picture>
-					<source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="./img/avatar/avatar-illustrated-02.png" alt="User name">
+					<source srcset="{{ asset('./img/avatar/avatar-illustrated-02.webp') }}" type="image/webp"><img src="{{ asset('./img/avatar/avatar-illustrated-02.png') }}" alt="User name">
 				</picture>
 			</span>
 			<div class="sidebar-user-info">

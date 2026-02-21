@@ -53,7 +53,7 @@
 								<span class="sr-only">Mon profil</span>
 								<span class="nav-user-img">
 									<picture>
-										<source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img src="./img/avatar/avatar-illustrated-02.png" alt="User name">
+										<source srcset="{{ asset('./img/avatar/avatar-illustrated-02.webp') }}" type="image/webp"><img src="{{ asset('./img/avatar/avatar-illustrated-02.png') }}" alt="User name">
 									</picture>
 								</span>
 							</button>
