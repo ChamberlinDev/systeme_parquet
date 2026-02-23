@@ -2,8 +2,64 @@
 
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<div class="container-fluid">
+<div class="container-fluid py-4">
+
+    {{-- ===================== STATISTIQUES ===================== --}}
+    <div class="row g-4 mb-4">
+
+        @php
+        $total = $users->count();
+        $enCours = $users->where('is_actif', 1)->count();
+        $traites = $users->where('is_actif', 0)->count();
+        @endphp
+
+        {{-- Total --}}
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-uppercase small fw-bold text-muted">Total Utilisateurs</div>
+                        <div class="fs-4 fw-bold text-dark">{{ $total }}</div>
+                    </div>
+                    <i class="fas fa-users fa-2x text-primary opacity-75"></i>
+                </div>
+            </div>
+        </div>
+
+        {{-- En cours --}}
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-uppercase small fw-bold text-muted">Utilisateurs Actifs</div>
+                        <div class="fs-4 fw-bold text-success">{{ $enCours }}</div>
+                    </div>
+                    <i class="fas fa-user-check fa-2x text-success opacity-75"></i>
+                </div>
+            </div>
+        </div>
+
+        {{-- Traités --}}
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-uppercase small fw-bold text-muted">Utilisateurs Inactifs</div>
+                        <div class="fs-4 fw-bold text-danger">{{ $traites }}</div>
+                    </div>
+                    <i class="fas fa-user-times fa-2x text-danger opacity-75"></i>
+                </div>
+            </div>
+        </div>
+
+      
+    </div>
+
+<hr>
+    
+
     <h3 class="text-center">Liste des utilisateurs</h3>
+    
     <hr>
 
     <a href="/create_user" class="btn btn-primary mb-3">

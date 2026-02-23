@@ -27,10 +27,12 @@ class Dossier extends Model
     }
     public function files()
     {
-        return $this->hasMany(Dossier_files::class, 'dossier_id');
+        return $this->hasMany(Dossier_files::class, 'id_dossier', 'id_dossier');
     }
+  
+
     public function parties()
     {
-        return $this->hasMany(Partie::class);
+        return $this->hasMany(Partie::class, 'id_dossier', 'id_dossier');
     }
 }

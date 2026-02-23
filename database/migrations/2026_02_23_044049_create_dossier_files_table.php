@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('dossier_files', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_dossier');
+            $table->string('file_path');
+            $table->foreign('id_dossier')->references('id_dossier')->on('dossiers')->onDelete('cascade');
             $table->timestamps();
         });
     }

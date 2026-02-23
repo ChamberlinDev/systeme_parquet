@@ -19,14 +19,11 @@ return new class extends Migration
             $table->date('date_demande');
             $table->string('statut')->default('En cours');
             $table->unsignedBigInteger('id_greffier')->nullable();
-            $table->unsignedBigInteger('id_parquet')->nullable();
+            $table->foreign('id_greffier')->references('id')->on('users')->onDelete('set null');
 
             $table->timestamps();
 
-            // Clé étrangère vers la table greffiers
-            $table->foreign('id_greffier')->references('id_greffier')->on('greffiers')->onDelete('set null');
-            // Clé étrangère vers la table parquets
-            $table->foreign('id_parquet')->references('id_parquet')->on('parquets')->onDelete('set null');
+           
         });
     }
 

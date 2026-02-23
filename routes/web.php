@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
 
         // creation dossier
         Route::get('/dossiers/creer', [DossierController::class, 'create_form'])->name('dossiers.create.form');
-        Route::post('/dossiers/creer', [DossierController::class, 'store'])->name('dossiers.create');
+        Route::post('/dossiers/creer', [DossierController::class, 'store'])->name('dossiers.store');
 
         /*
         |--------------------------------------------------------------------------

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Partie extends Model
 {
     //
-    
+
     protected $fillable = [
         'nom',
         'prenom',
@@ -17,6 +17,6 @@ class Partie extends Model
 
     public function dossier()
     {
-        return $this->belongsTo(Dossier::class);
+        return $this->belongsTo(Dossier::class, 'id_dossier', 'id_dossier');
     }
 }

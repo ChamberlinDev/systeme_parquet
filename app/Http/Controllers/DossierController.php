@@ -20,9 +20,8 @@ class DossierController extends Controller
     {
         $user = Auth::user();
 
-        $dossiers = Dossier::where('id_greffier', $user->id_greffier ?? null)
-            ->orWhere('id_parquet', $user->id_parquet ?? null)
-            ->get();
+        $dossiers = Dossier::where('id_greffier', $user->id)->paginate(10);
+
         return view('greffier.dossier.index', compact('dossiers'));
     }
 
@@ -111,6 +110,6 @@ class DossierController extends Controller
             }
         }
 
-        return redirect()->route('greffier.dossiers.index')->with('success', 'Dossier ajouté avec succès !');
+        return redirect()->route('dossiers.index.greffier')->with('success', 'Dossier ajouté avec succès !');
     }
 }
