@@ -2,201 +2,163 @@
 
 @section('content')
 
-<main class="main users chart-page" id="skip-target">
-	<div class="container">
-		<h2 class="main-title">Tableau de bord</h2>
-		<div class="row stat-cards">
-			<div class="col-md-6 col-xl-3">
-				<article class="stat-cards-item">
-					<div class="stat-cards-icon primary">
-						<i data-feather="folder" aria-hidden="true"></i>
+<div class="row mb-3">
+	<div class="col-xl-3 col-md-6 mb-4">
+		<div class="card h-100">
+			<div class="card-body">
+				<div class="row align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-uppercase mb-1">Total Dossiers</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800">32</div>
 					</div>
-					<div class="stat-cards-info">
-
-						<p class="stat-cards-info__num">1478 286</p>
-						<p class="stat-cards-info__title"> Total dossiers</p>
-						<!-- <p class="stat-cards-info__progress">
-                            <span class="stat-cards-info__profit success">
-                                <i data-feather="trending-up" aria-hidden="true"></i>4.07%
-                            </span>
-                            Last month
-                        </p> -->
+					<div class="col-auto">
+						<i class="fas fa-calendar fa-2x text-primary"></i>
 					</div>
-				</article>
+				</div>
 			</div>
-			<div class="col-md-6 col-xl-3">
-				<article class="stat-cards-item">
-					<div class="stat-cards-icon warning">
-						<i data-feather="clock" aria-hidden="true"></i>
-					</div>
-					<div class="stat-cards-info">
-						<p class="stat-cards-info__num">1478 </p>
-						<p class="stat-cards-info__title">Total audiences</p>
-						<!-- <p class="stat-cards-info__progress">
-                            <span class="stat-cards-info__profit success">
-                                <i data-feather="trending-up" aria-hidden="true"></i>0.24%
-                            </span>
-                            Last month
-                        </p> -->
-					</div>
-				</article>
-			</div>
-			<div class="col-md-6 col-xl-3">
-				<article class="stat-cards-item">
-					<div class="stat-cards-icon purple">
-						<i data-feather="check-circle" aria-hidden="true"></i>
-					</div>
-					<div class="stat-cards-info">
-						<p class="stat-cards-info__num">1478</p>
-						<p class="stat-cards-info__title">Total decisions</p>
-						<!-- <p class="stat-cards-info__progress">
-                            <span class="stat-cards-info__profit danger">
-                                <i data-feather="trending-down" aria-hidden="true"></i>1.64%
-                            </span>
-                            Last month
-                        </p> -->
-					</div>
-				</article>
-			</div>
-			<div class="col-md-6 col-xl-3">
-				<article class="stat-cards-item">
-					<div class="stat-cards-icon success">
-						<i data-feather="archive" aria-hidden="true"></i>
-					</div>
-					<div class="stat-cards-info">
-						<p class="stat-cards-info__num">1478 286</p>
-						<p class="stat-cards-info__title">Dossiers archivés</p>
-						<!-- <p class="stat-cards-info__progress">
-                            <span class="stat-cards-info__profit warning">
-                                <i data-feather="trending-up" aria-hidden="true"></i>0.00%
-                            </span>
-                            Last month
-                        </p> -->
-					</div>
-				</article>
-			</div>
-
 		</div>
+	</div>
+	<div class="col-xl-3 col-md-6 mb-4">
+		<div class="card h-100">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-uppercase mb-1">Audiences</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
 
-		<div class="row">
-			<div class="col-lg-9">
-
-				<div class="users-table table-wrapper">
-					<table class="posts-table">
-						<thead>
-							<tr class="users-table-info">
-								<th>
-								Numero dossier
-								</th>
-								<th>Status</th>
-								<th>Date</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<label class="users-table__checkbox">
-										<input type="checkbox" class="check">
-										<div class="categories-table-img">
-											<picture>
-												<source srcset="./img/categories/01.webp" type="image/webp"><img src="./img/categories/01.jpg" alt="category">
-											</picture>
-										</div>
-									</label>
-								</td>
-								
-								
-								<td><span class="badge-pending">Pending</span></td>
-								<td>17.04.2021</td>
-								<td>
-									<span class="p-relative">
-										<button class="dropdown-btn transparent-btn" type="button" title="More info">
-											<div class="sr-only">More info</div>
-											<i data-feather="more-horizontal" aria-hidden="true"></i>
-										</button>
-										<ul class="users-item-dropdown dropdown">
-											<li><a href="##">Edit</a></li>
-											<li><a href="##">Quick edit</a></li>
-											<li><a href="##">Trash</a></li>
-										</ul>
-									</span>
-								</td>
-							</tr>
-						
-						</tbody>
-					</table>
-				</div>
-				<div class="chart">
-					<canvas id="myChart" aria-label="Site statistics" role="img"></canvas>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-users fa-2x text-success"></i>
+					</div>
 				</div>
 			</div>
-			<div class="col-lg-3">
-				<article class="customers-wrapper">
-					<canvas id="customersChart" aria-label="Customers statistics" role="img"></canvas>
+		</div>
+	</div>
+	<div class="col-xl-3 col-md-6 mb-4">
+		<div class="card h-100">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-uppercase mb-1">Décision</div>
+						<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">366</div>
 
-				</article>
-				<article class="white-block">
-					<div class="top-cat-title">
-						<h3>Statistiques</h3>
 					</div>
-					<ul class="top-cat-list">
-						<li>
-							<a href="##">
-								<div class="top-cat-list__title">
-									Dossiers <span>890</span>
-								</div>
-								<div class="top-cat-list__subtitle">
-									Dossiers traités <span class="purple">472</span>
-								</div>
-								<div class="top-cat-list__subtitle">
-									Dossiers non traités <span class="purple">472</span>
-								</div>
-							</a>
-						</li>
-						<!-- <li>
-							<a href="##">
-								<div class="top-cat-list__title">
-									Utilisateurs <span>8009</span>
-								</div>
-								<div class="top-cat-list__subtitle">
-									Utilisateurs actifs <span class="blue">472</span>
-								</div>
-								<div class="top-cat-list__subtitle">
-									Utilisateurs inactifs <span class="red">3537</span>
-								</div>
-							</a>
-						</li> -->
-						<li>
-							<a href="##">
-								<div class="top-cat-list__title">
-									Audiences <span>895</span>
-								</div>
-								<div class="top-cat-list__subtitle">
-									Audiences actives <span class="danger">472</span>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="##">
-								<div class="top-cat-list__title">
-									Decisions <span>875</span>
-								</div>
-								<div class="top-cat-list__subtitle">
-									Decisions rendues <span class="success">472</span>
-								</div>
-							</a>
-						</li>
-					</ul>
-				</article>
+					<div class="col-auto">
+						<i class="fas fa-users fa-2x text-info"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-3 col-md-6 mb-4">
+		<div class="card h-100">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-uppercase mb-1">Archivage</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-comments fa-2x text-warning"></i>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 
+	<div class="col-xl-8 col-lg-7 mb-4">
+		<div class="card">
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold text-primary">Aperçu des dossiers</h6>
+				<a class="m-0 float-right btn btn-danger btn-sm" href="#">Parcourir <i
+						class="fas fa-chevron-right"></i></a>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-items-center table-flush">
+					<thead class="thead-light">
+						<tr>
+							<th>Order ID</th>
+							<th>Customer</th>
+							<th>Item</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><a href="#">RA0449</a></td>
+							<td>Udin Wayang</td>
+							<td>Nasi Padang</td>
+							<td><span class="badge badge-success">Delivered</span></td>
+							<td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
+						</tr>
 
 
+					</tbody>
+				</table>
+			</div>
+			<div class="card-footer"></div>
+		</div>
+	</div>
 
-	
-</main>
 
+	<div class="col-xl-8 col-lg-7">
+		<div class="card mb-4">
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold text-primary">Statistiques</h6>
+
+			</div>
+
+			<div class="card-body">
+				<div class="chart-area">
+					<canvas id="myAreaChart"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-4 col-lg-5">
+		<div class="card mb-4">
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold text-primary">Statistiques detaillées</h6>
+			</div>
+			<div class="card-body">
+				<div class="mb-3">
+					<div class="small text-gray-500">Total Dossiers
+						<div class="small float-right"><b>600</b></div>
+					</div>
+
+				</div>
+				<div class="mb-3">
+					<div class="small text-gray-500">Dossiers en cours
+						<div class="small float-right"><b>500</b></div>
+					</div>
+
+				</div>
+				<div class="mb-3">
+					<div class="small text-gray-500">Dossiers traités
+						<div class="small float-right"><b>455</b></div>
+					</div>
+				</div>
+				<div class="mb-3">
+					<div class="small text-gray-500">Dossiers archivés
+						<div class="small float-right"><b>400</b></div>
+					</div>
+
+				</div>
+				<!-- <div class="mb-3">
+					<div class="small text-gray-500">Utilisateurs
+						<div class="small float-right"><b>200</b></div>
+					</div>
+
+				</div> -->
+			</div>
+			<!-- <div class="card-footer text-center">
+			<a class="m-0 small text-primary card-link" href="#">View More <i
+			class="fas fa-chevron-right"></i></a>
+			</div> -->
+		</div>
+	</div>
+
+</div>
 @endsection

@@ -1,131 +1,138 @@
 @extends('greffier.layout.app')
 @section('content')
 
+<div class="container-fluid">
 
-<div class="container">
-
-    <h2 class="main-title">Toute les dossiers</h2>
-    <hr>
-    <div class="row stat-cards">
-        <div class="col-md-6 col-xl-3">
-            <article class="stat-cards-item">
-                <div class="stat-cards-icon primary">
-                    <i data-feather="folder" aria-hidden="true"></i>
+    {{-- Statistiques --}}
+    <div class="row">
+        <!-- Total Dossiers -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Total Dossiers</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">56</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-folder-open fa-2x text-primary"></i> <!-- Icône dossier ouvert -->
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-cards-info">
-
-                    <p class="stat-cards-info__num">1478 286</p>
-                    <p class="stat-cards-info__title"> Dossiers</p>
-                    <!-- <p class="stat-cards-info__progress">
-                            <span class="stat-cards-info__profit success">
-                                <i data-feather="trending-up" aria-hidden="true"></i>4.07%
-                            </span>
-                            Last month
-                        </p> -->
-                </div>
-            </article>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <article class="stat-cards-item">
-                <div class="stat-cards-icon warning">
-                    <i data-feather="clock" aria-hidden="true"></i>
-                </div>
-                <div class="stat-cards-info">
-                    <p class="stat-cards-info__num">1478 </p>
-                    <p class="stat-cards-info__title">Dossiers en cours</p>
-                    <!-- <p class="stat-cards-info__progress">
-                            <span class="stat-cards-info__profit success">
-                                <i data-feather="trending-up" aria-hidden="true"></i>0.24%
-                            </span>
-                            Last month
-                        </p> -->
-                </div>
-            </article>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <article class="stat-cards-item">
-                <div class="stat-cards-icon purple">
-                    <i data-feather="check-circle" aria-hidden="true"></i>
-                </div>
-                <div class="stat-cards-info">
-                    <p class="stat-cards-info__num">1478</p>
-                    <p class="stat-cards-info__title">Dossiers Traités</p>
-                    <!-- <p class="stat-cards-info__progress">
-                            <span class="stat-cards-info__profit danger">
-                                <i data-feather="trending-down" aria-hidden="true"></i>1.64%
-                            </span>
-                            Last month
-                        </p> -->
-                </div>
-            </article>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <article class="stat-cards-item">
-                <div class="stat-cards-icon success">
-                    <i data-feather="archive" aria-hidden="true"></i>
-                </div>
-                <div class="stat-cards-info">
-                    <p class="stat-cards-info__num">1478 286</p>
-                    <p class="stat-cards-info__title">Dossiers archivés</p>
-                    <!-- <p class="stat-cards-info__progress">
-                            <span class="stat-cards-info__profit warning">
-                                <i data-feather="trending-up" aria-hidden="true"></i>0.00%
-                            </span>
-                            Last month
-                        </p> -->
-                </div>
-            </article>
+            </div>
         </div>
 
-    </div>
-    <br>
+        <!-- Dossiers en cours -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Dossiers en cours</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hourglass-half fa-2x text-success"></i> <!-- Icône en cours -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="users-table table-wrapper">
-        <table class="posts-table">
-            <thead>
-                <tr class="users-table-info">
-                    <th>
-                        Numero dossier
-                    </th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <label class="users-table__checkbox">
-                            <input type="checkbox" class="check">
-                            <div class="categories-table-img">
-                                <picture>
-                                    <source srcset="./img/categories/01.webp" type="image/webp"><img src="./img/categories/01.jpg" alt="category">
-                                </picture>
-                            </div>
-                        </label>
-                    </td>
+        <!-- Dossiers traités -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Dossiers traités</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">24</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-info"></i> <!-- Icône dossier traité -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-
-                    <td><span class="badge-pending">Pending</span></td>
-                    <td>17.04.2021</td>
-                    <td>
-
-                        <button class="form-btn primary-default-btn">
-                          <a href="##" class="form-btn warning-default-btn">Voir</a>
-                            <!-- <li><a href="##" class="form-btn warning-default-btn">Modifier</a></li>
-                            <li><a href="##" class="form-btn danger-default-btn">Supprimer</a></li> -->
-                        </button>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
-        <div class="col-lg-3 text-end mb-3">
-            <button type="submit" class="form-btn primary-default-btn">
-                Ajouter un dossier
-            </button>
+        <!-- Dossiers Archivés -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Dossiers Archivés</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">15</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-archive fa-2x text-warning"></i> <!-- Icône dossier archivé -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 
-    @endsection
+    {{-- Tableau des dossiers --}}
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dossiers</h1>
+        <div class="d-flex gap-2">
+            <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm mx-2">
+                <i class="fas fa-plus"></i> Ajouter un dossier
+            </a>
+            <a href="#" class="btn btn-secondary btn-sm">
+                <i class="fas fa-file-pdf"></i> Exporter PDF
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Liste des dossiers</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Numéro dossier</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($dossiers as $dossier)
+                        <tr>
+                            <td>{{ $dossier->numero }}</td>
+                            <td>
+                                <span class="badge {{ $dossier->status == 'pending' ? 'badge-warning' : 'badge-success' }}">
+                                    {{ ucfirst($dossier->status) }}
+                                </span>
+                            </td>
+                            <td>{{ $dossier->created_at->format('d.m.Y') }}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-info">Voir</a>
+                                <a href="#" class="btn btn-sm btn-warning">Modifier</a>
+                                <form action="#" method="POST" style="display:inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr ?')">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center">Aucun dossier trouvé</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+@endsection

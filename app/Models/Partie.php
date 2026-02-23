@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Partie extends Model
 {
     //
-    protected $primaryKey = 'id_partie';
     
     protected $fillable = [
         'nom',
         'prenom',
         'contact',
-        'qualite'
+        'role'
     ];
+
+    public function dossier()
+    {
+        return $this->belongsTo(Dossier::class);
+    }
 }

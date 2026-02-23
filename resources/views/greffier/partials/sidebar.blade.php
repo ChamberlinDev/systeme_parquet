@@ -1,105 +1,89 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<aside class="sidebar">
-	<div class="sidebar-start">
-		<div class="sidebar-head">
-			<a href="/accueil_greffier" class="logo-wrapper" title="Home">
-				<span class="sr-only">Home</span>
-				<!-- <span class="icon logo" aria-hidden="true"></span> -->
-				<div class="logo-text">
-					<span class="logo-title">G.S PARQUET</span>
-					<span class="logo-subtitle">Dashboard</span>
-				</div>
+<ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
 
-			</a>
-			<button class="sidebar-toggle transparent-btn" title="Menu" type="button">
-				<span class="sr-only">Toggle menu</span>
-				<span class="icon menu-toggle" aria-hidden="true"></span>
-			</button>
-		</div>
-		<div class="sidebar-body">
-			<ul class="sidebar-body-menu">
-				<li>
-					<a class="active" href="/accueil_greffier"><span class="icon home" aria-hidden="true"></span>Tableau de bord</a>
-				</li>
+  {{-- Logo --}}
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/accueil_greffier">
+    <div class="sidebar-brand-icon">
+      <img src="{{ asset('img/logo/logo2.png') }}">
+    </div>
+    <div class="sidebar-brand-text mx-3">GS. Parquet</div>
+  </a>
 
-				<li>
-					<a class="show-cat-btn" href="{{route('dossiers.index.greffier')}}">
-						<span class="icon folder" aria-hidden="true">
-							<i class="fa-solid fa-folder"></i>
+  <hr class="sidebar-divider my-0">
 
-						</span>Dossiers
-						<span class="category__btn transparent-btn" title="Open list">
-							<span class="sr-only">Open list</span>
-							<span class="icon arrow-down" aria-hidden="true"></span>
-						</span>
-					</a>
-					<ul class="cat-sub-menu">
-						<li>
-							<a href="{{route('dossiers.index.greffier')}}">Tous les dossiers</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a class="show-cat-btn" href="##">
-						<span class="icon image" aria-hidden="true">
-							<i class="fa-solid fa-calendar"></i>
-						</span>Audiences
-						<span class="category__btn transparent-btn" title="Open list">
-							<span class="sr-only">Open list</span>
-							<span class="icon arrow-down" aria-hidden="true"></span>
-						</span>
-					</a>
-					<ul class="cat-sub-menu">
-						<li>
-							<a href="media-01.html">Audiences en attente</a>
-						</li>
-						<li>
-							<a href="media-02.html">Audiences rendues</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a class="show-cat-btn" href="##">
-						<span class="icon paper" aria-hidden="true">
-							<i class="fa-solid fa-file-lines"></i>
-						</span>Decisions
-						<span class="category__btn transparent-btn" title="Open list">
-							<span class="sr-only">Open list</span>
-							<span class="icon arrow-down" aria-hidden="true"></span>
-						</span>
-					</a>
-					<ul class="cat-sub-menu">
-						<li>
-							<a href="pages.html">toutes les decisions</a>
-						</li>
-						<li>
-							<a href="pages.html">Decisions rendues</a>
-					</ul>
-				</li>
+  {{-- Dashboard --}}
+  <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-tachometer-alt"></i>
+      <span>Dashboard</span>
+    </a>
+  </li>
 
+  <hr class="sidebar-divider">
 
-			</ul>
-			<span class="system-menu__title">Systeme</span>
-			<ul class="sidebar-body-menu">
+  <div class="sidebar-heading">
+    Fonctionnalités
+  </div>
 
+  {{-- Nouveau dossier --}}
+  <li class="nav-item {{ request()->routeIs('dossier.create') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('dossiers.index.greffier') }}">
+      <i class="fas fa-fw fa-folder"></i>
+      <span>Nouveau dossier</span>
+    </a>
+  </li>
 
-				<li>
-					<a href="##"><span class="icon setting" aria-hidden="true"></span>Paramètres</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-	<div class="sidebar-footer">
-		<a href="{{ route('logout') }}" class="sidebar-user">
-			<span class="sidebar-user-img">
-				<picture>
-					<source srcset="{{ asset('./img/avatar/avatar-illustrated-02.webp') }}" type="image/webp"><img src="{{ asset('./img/avatar/avatar-illustrated-02.png') }}" alt="User name">
-				</picture>
-			</span>
-			<div class="sidebar-user-info">
-				<span class="sidebar-user__title">Deconnexion</span>
-				<span class="sidebar-user__subtitle">Quitter</span>
-			</div>
-		</a>
-	</div>
-</aside>
+  {{-- Instruction et suivi --}}
+  <li class="nav-item {{ request()->routeIs('instruction.index') ? 'active' : '' }}">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-clipboard"></i>
+      <span>Instruction et suivi</span>
+    </a>
+  </li>
+
+  {{-- Instruction judiciaire --}}
+  <li class="nav-item {{ request()->routeIs('instruction.judiciaire') ? 'active' : '' }}">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-gavel"></i>
+      <span>Instruction judiciaire</span>
+    </a>
+  </li>
+
+  {{-- Préparation audience --}}
+  <li class="nav-item {{ request()->routeIs('audience.preparation') ? 'active' : '' }}">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-calendar-alt"></i>
+      <span>Préparation audience</span>
+    </a>
+  </li>
+
+  {{-- Audience et décision --}}
+  <li class="nav-item {{ request()->routeIs('audience.index') ? 'active' : '' }}">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-calendar-check"></i>
+      <span>Audience et Décision</span>
+    </a>
+  </li>
+
+  {{-- Exécution --}}
+  <li class="nav-item {{ request()->routeIs('execution.index') ? 'active' : '' }}">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-clipboard-check"></i>
+      <span>Exécution des décisions</span>
+    </a>
+  </li>
+
+  <hr class="sidebar-divider">
+
+  {{-- Déconnexion sécurisée --}}
+  <li class="nav-item px-3">
+    <form action="{{ route('logout') }}" method="POST">
+      @csrf
+      <button type="submit" class="btn btn-danger btn-block">
+        Déconnexion
+      </button>
+    </form>
+  </li>
+
+  <div class="version" id="version-ruangadmin"></div>
+
+</ul>

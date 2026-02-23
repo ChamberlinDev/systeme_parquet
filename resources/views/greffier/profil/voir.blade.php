@@ -1,137 +1,142 @@
 @extends('greffier.layout.app')
-
 @section('content')
 
 <div class="container mt-5">
-    <article class="sign-up">
-
-        <h2 class="sign-up__title">Gestion du profil</h2>
-
-        {{-- Message succès --}}
-        @if(session('success'))
-            <div class="mb-3 text-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <form class="sign-up-form form" action="#" method="POST">
-            @csrf
-            @method('PUT')
-
-            {{-- ================= Informations personnelles ================= --}}
-            <div class="row">
-
-                <!-- Nom -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label-wrapper w-100">
-                        <p class="form-label">Nom</p>
-                        <input
-                            class="form-input w-100 @error('name') is-invalid @enderror"
-                            type="text"
-                            name="name"
-                            value="{{ old('name', auth()->user()->name) }}"
-                            required>
-                    </label>
-                    @error('name')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between text-center">
+                    <h3 class="m-0 font-weight-bold text-primary ">Gestion du Profil</h3>
                 </div>
 
-                <!-- Email -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label-wrapper w-100">
-                        <p class="form-label">Email</p>
-                        <input
-                            class="form-input w-100 @error('email') is-invalid @enderror"
-                            type="email"
-                            name="email"
-                            value="{{ old('email', auth()->user()->email) }}"
-                            required>
-                    </label>
-                    @error('email')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+                <div class="card-body">
 
-            </div>
-
-            {{-- ================= Sécurité ================= --}}
-            <div class="row">
-
-                <!-- Mot de passe actuel -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label-wrapper w-100">
-                        <p class="form-label">Mot de passe actuel</p>
-                        <input
-                            class="form-input w-100 @error('current_password') is-invalid @enderror"
-                            type="password"
-                            name="current_password"
-                            required>
-                    </label>
-                    @error('current_password')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-
-                <!-- Statut & Rôle -->
-                <div class="col-md-6 mb-3">
-                    <p class="form-label">Statut & Rôle</p>
-
-                    <div class="mb-2">
-                        <span class="badge {{ auth()->user()->is_actif ? 'bg-success' : 'bg-danger' }} px-3 py-2 text-white">
-                            {{ auth()->user()->is_actif ? 'Compte actif' : 'Compte inactif' }}
-                        </span>
+                    {{-- Message succès --}}
+                    @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
                     </div>
+                    @endif
 
-                    <div>
-                        @foreach(auth()->user()->getRoleNames() as $role)
-                            <span class="badge bg-primary px-3 py-2 me-1 text-white">
-                                {{ ucfirst($role) }}
-                            </span>
-                        @endforeach
-                    </div>
+                    <form action="#" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="row">
+
+                            {{-- Nom --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <input type="text"
+                                        name="name"
+                                        class="form-control @error('name') is-invalid @enderror"
+                                        value="{{ old('name', auth()->user()->name) }}"
+                                        required>
+                                    @error('name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Email --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email"
+                                        name="email"
+                                        class="form-control @error('email') is-invalid @enderror"
+                                        value="{{ old('email', auth()->user()->email) }}"
+                                        required>
+                                    @error('email')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            {{-- Mot de passe actuel --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mot de passe actuel</label>
+                                    <input type="password"
+                                        name="current_password"
+                                        class="form-control @error('current_password') is-invalid @enderror"
+                                        required>
+                                    @error('current_password')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Statut + Rôle --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Statut</label>
+                                    <div class="mb-2">
+                                        <span class="badge {{ auth()->user()->is_actif ? 'badge-success' : 'badge-danger' }}">
+                                            {{ auth()->user()->is_actif ? 'Compte actif' : 'Compte inactif' }}
+                                        </span>
+                                    </div>
+
+                                    <label>Rôle</label>
+                                    <div>
+                                        @foreach(auth()->user()->getRoleNames() as $role)
+                                        <span class="badge badge-primary mr-1">
+                                            {{ ucfirst($role) }}
+                                        </span>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            {{-- Nouveau mot de passe --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nouveau mot de passe</label>
+                                    <input type="password"
+                                        name="password"
+                                        class="form-control @error('password') is-invalid @enderror">
+                                    @error('password')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Confirmation --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Confirmation</label>
+                                    <input type="password"
+                                        name="password_confirmation"
+                                        class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="text-right">
+                            <a href="/accueil_admin" class="btn btn-secondary">
+                                Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                Mettre à jour
+                            </button>
+
+                        </div>
+
+                    </form>
                 </div>
-
             </div>
+        </div>
+    </div>
 
-            <div class="row">
-
-                <!-- Nouveau mot de passe -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label-wrapper w-100">
-                        <p class="form-label">Nouveau mot de passe</p>
-                        <input
-                            class="form-input w-100 @error('password') is-invalid @enderror"
-                            type="password"
-                            name="password">
-                    </label>
-                    @error('password')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-
-                <!-- Confirmation -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label-wrapper w-100">
-                        <p class="form-label">Confirmation</p>
-                        <input
-                            class="form-input w-100"
-                            type="password"
-                            name="password_confirmation">
-                    </label>
-                </div>
-
-            </div>
-
-            <div class="text-end mt-3">
-                <button type="submit" class="form-btn primary-default-btn">
-                    Mettre à jour
-                </button>
-            </div>
-
-        </form>
-
-    </article>
 </div>
-
 @endsection

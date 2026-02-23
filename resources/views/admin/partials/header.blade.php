@@ -1,77 +1,54 @@
-<nav class="main-nav--bg">
-				<div class="container main-nav">
-					<div class="main-nav-start">
-						<div class="search-wrapper">
-							<i data-feather="search" aria-hidden="true"></i>
-							<input type="text" placeholder="Enter keywords ..." required>
-						</div>
-					</div>
-					<div class="main-nav-end">
-						<button class="sidebar-toggle transparent-btn" title="Menu" type="button">
-							<span class="sr-only">Toggle menu</span>
-							<span class="icon menu-toggle--gray" aria-hidden="true"></span>
-						</button>
-						<div class="lang-switcher-wrapper">
-							<button class="lang-switcher transparent-btn" type="button">
-								EN
-								<i data-feather="chevron-down" aria-hidden="true"></i>
-							</button>
-							<ul class="lang-menu dropdown">
-								<li><a href="##">English</a></li>
-								<li><a href="##">French</a></li>
-							</ul>
-						</div>
-						<button class="theme-switcher gray-circle-btn" type="button" title="Switch theme">
-							<span class="sr-only">Switch theme</span>
-							<i class="sun-icon" data-feather="sun" aria-hidden="true"></i>
-							<i class="moon-icon" data-feather="moon" aria-hidden="true"></i>
-						</button>
-						<div class="notification-wrapper">
-							<!-- <button class="gray-circle-btn dropdown-btn" title="To messages" type="button">
-								<span class="sr-only">To messages</span>
-								<span class="icon notification active" aria-hidden="true"></span>
-							</button> -->
-							<!-- <ul class="users-item-dropdown notification-dropdown dropdown">
-								<li>
-									<a href="##">
-										<div class="notification-dropdown-icon info">
-											<i data-feather="check"></i>
-										</div>
-										<div class="notification-dropdown-text">
-											<span class="notification-dropdown__title">System just updated</span>
-											<span class="notification-dropdown__subtitle">The system has been successfully upgraded. Read more
-												here.</span>
-										</div>
-									</a>
-								</li>
-								
-								
-							</ul> -->
-						</div>
-						<div class="nav-user-wrapper">
-							<button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
-								<span class="sr-only">Mon profil</span>
-								<span class="nav-user-img">
-									<picture>
-										<source srcset="{{ asset('./img/avatar/avatar-illustrated-02.webp') }}" type="image/webp"><img src="{{ asset('./img/avatar/avatar-illustrated-02.png') }}" alt="User name">
-									</picture>
-								</span>
-							</button>
-							<ul class="users-item-dropdown nav-user-dropdown dropdown">
-								<li><a href="{{ route('profil.voir') }}">
-										<i data-feather="user" aria-hidden="true"></i>
-										<span>Profil</span>
-									</a></li>
-								<li><a href="##">
-										<i data-feather="settings" aria-hidden="true"></i>
-										<span>Parametre</span>
-									</a></li>
-								<li><a class="danger" href="##">
-										<i data-feather="log-out" aria-hidden="true"></i>
-										<span>Deconnexion</span>
-									</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</nav>
+ <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+ 	<button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
+ 		<i class="fa fa-bars"></i>
+ 	</button>
+ 	<ul class="navbar-nav ml-auto">
+ 		<li class="nav-item dropdown no-arrow">
+ 			<a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+ 				aria-haspopup="true" aria-expanded="false">
+ 				<i class="fas fa-search fa-fw"></i>
+ 			</a>
+ 			<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+ 				aria-labelledby="searchDropdown">
+ 				<form class="navbar-search">
+ 					<div class="input-group">
+ 						<input type="text" class="form-control bg-light border-1 small" placeholder="What do you want to look for?"
+ 							aria-label="Search" aria-describedby="basic-addon2" style="border-color: #3f51b5;">
+ 						<div class="input-group-append">
+ 							<button class="btn btn-primary" type="button">
+ 								<i class="fas fa-search fa-sm"></i>
+ 							</button>
+ 						</div>
+ 					</div>
+ 				</form>
+ 			</div>
+ 		</li>
+ 		
+ 		
+ 	
+ 		<div class="topbar-divider d-none d-sm-block"></div>
+ 		<li class="nav-item dropdown no-arrow">
+ 			<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+ 				aria-haspopup="true" aria-expanded="false">
+ 				<img class="img-profile rounded-circle" src="img/boy.png" style="max-width: 60px">
+ 				<span class="ml-2 d-none d-lg-inline text-white small">{{ Auth::user()->name }}</span>
+ 			</a>
+ 			<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+ 				<a class="dropdown-item" href="{{route('profil.voir')}}">
+ 					<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+ 					Profil
+ 				</a>
+ 				<a class="dropdown-item" href="#">
+ 					<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+ 					Parametres du compte
+ 				</a>
+ 				
+ 				<div class="dropdown-divider"></div>
+ 				<a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
+ 					<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+ 					Deconnexion
+ 				</a>
+ 			</div>
+ 		</li>
+ 	</ul>
+ </nav>

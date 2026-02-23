@@ -12,7 +12,7 @@ class DossierController extends Controller
     //affichage des dossiers admin
     public function index()
     {
-        $dossiers = Dossier::all();
+        $dossiers = Dossier::latest()->paginate(10);
         return view('admin.dossiers.index', compact('dossiers'));
     }
     // affichage des dossiers greffier
@@ -25,7 +25,7 @@ class DossierController extends Controller
             ->get();
         return view('greffier.dossier.index', compact('dossiers'));
     }
-    
+
     // affichage des dossiers procureur
     // public function index_procureur()
     // {
@@ -48,42 +48,69 @@ class DossierController extends Controller
 
     public function create_form()
     {
-        return view('greffier.dossier.ajout');
+        $nextDossierRP = $this->getNextDossierNumber();
+        return view('greffier.dossier.ajout', compact('nextDossierRP'));
     }
 
-    public function create(Request $request)
+    protected function getNextDossierNumber()
     {
-        $user = auth()->user();
+        $year = date('Y');
 
-        // Vérifier que l'utilisateur est un greffier ou admin
-        if (! $user->hasRole('greffier') && ! $user->hasRole('admin')) {
-            abort(403, 'Non autorisé');
+        // On récupère le dernier dossier de l'année en cours
+        $lastDossier = Dossier::whereYear('created_at', $year)
+            ->orderBy('id_dossier', 'desc')
+            ->first();
+
+        if ($lastDossier) {
+            $parts = explode('/', $lastDossier->registre_rp);
+            $lastNumber = intval(end($parts)); // Convertir en entier
+            $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            $nextNumber = '001';
         }
 
-        // Récupérer le registre sélectionné
-        $registre = Registre::find($request->id_registre);
-        if (!$registre) {
-            return back()->withErrors(['id_registre' => 'Registre invalide']);
+        return "RP/{$year}/{$nextNumber}";
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'type_affaire' => 'required|string',
+            'date_demande' => 'required|date',
+            'pdf_files.*' => 'nullable|mimes:pdf|max:5120', // 5MB max
+            'parties.*.nom' => 'required|string',
+            'parties.*.prenom' => 'nullable|string',
+            'parties.*.contact' => 'nullable|string',
+        ]);
+
+        // Création du dossier
+        $dossier = Dossier::create([
+            'registre_rp' => $request->registre_rp,
+            'type_affaire' => $request->type_affaire,
+            'date_demande' => $request->date_demande,
+            'id_greffier' => auth()->id(), // ou auth()->user()->id_greffier si tu as ce champ
+        ]);
+
+        // Gestion des parties
+        if ($request->has('parties')) {
+            foreach ($request->parties as $partie) {
+                $dossier->parties()->create([
+                    'nom' => $partie['nom'],
+                    'prenom' => $partie['prenom'] ?? null,
+                    'contact' => $partie['contact'] ?? null,
+                    'role' => 'Plaignant',
+                ]);
+            }
         }
 
-        // Générer le numéro du dossier
-        $dernierDossier = Dossier::where('id_registre', $registre->id)->latest('id_dossier')->first();
-        $dernierId = $dernierDossier ? $dernierDossier->id_dossier : 0;
+        // Gestion des fichiers PDF
+        if ($request->hasFile('pdf_files')) {
+            foreach ($request->file('pdf_files') as $pdf) {
+                $filename = $pdf->store('dossiers_pdfs', 'public');
+                $dossier->files()->create(['file_path' => $filename]);
+            }
+        }
 
-        $num_dossier = $registre->code . '/' . date('Y') . '/' . str_pad($dernierId + 1, 3, '0', STR_PAD_LEFT);
-
-        // Créer le dossier
-        $dossier = new Dossier();
-        $dossier->num_dossier = $num_dossier;
-        $dossier->date_enregistrement = $request->date_enregistrement;
-        $dossier->type_affaire = $request->type_affaire;
-        $dossier->statut = $request->statut;
-        $dossier->id_parquet = $request->id_parquet;
-        $dossier->id_greffier = $user->id; // l'utilisateur connecté
-        $dossier->id_registre = $registre->id;
-
-        $dossier->save();
-
-        return redirect()->route('dossiers.index')->with('success', 'Dossier créé avec succès');
+        return redirect()->route('greffier.dossiers.index')->with('success', 'Dossier ajouté avec succès !');
     }
 }
