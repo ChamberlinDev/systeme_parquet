@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('registres', function (Blueprint $table) {
-            $table->bigIncrements('id_registre');
-            $table->string('code'); // CORR, CRIM, CIV, REF, CONTR
-            $table->string('nom'); // Correctionnel, Criminel, Civil, Référé, Contraventions
-
+            $table->id('id_registre');
+            $table->string('code')->unique(); // CORR, CRIM, CIV...
+            $table->string('nom');            // Correctionnelle, Criminelle...
             $table->timestamps();
         });
     }

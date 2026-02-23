@@ -7,14 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Registre extends Model
 {
     //
-    protected $fillable =
-    [
-        'code',
-        'nom'
-    ];
+    protected $primaryKey = 'id_registre';
+    protected $fillable = ['code', 'nom'];
 
     public function dossiers()
     {
-        return $this->hasMany(Dossier::class, 'id_registre');
+        return $this->hasMany(Dossier::class, 'id_registre', 'id_registre');
     }
 }

@@ -6,30 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dossier extends Model
 {
-
     protected $primaryKey = 'id_dossier';
     protected $fillable = [
-        'id_dossier',
-        'registre_rp',
-        'type_affaire',
+        'numero_rp',
+        'numero_registre',
+        'id_registre',
+        'nature_infraction',
         'date_demande',
+        'parquet_competent',
         'statut',
         'id_greffier',
-        'id_parquet',
     ];
 
-
-
-
-    public function greffier()
+    public function registre()
     {
-        return $this->belongsTo(Greffier::class, 'id_greffier');
+        return $this->belongsTo(Registre::class, 'id_registre', 'id_registre');
     }
+
     public function files()
     {
         return $this->hasMany(Dossier_files::class, 'id_dossier', 'id_dossier');
     }
-  
 
     public function parties()
     {

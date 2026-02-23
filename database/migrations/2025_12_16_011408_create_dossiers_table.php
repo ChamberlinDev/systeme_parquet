@@ -14,16 +14,17 @@ return new class extends Migration
 
         Schema::create('dossiers', function (Blueprint $table) {
             $table->id('id_dossier');
-            $table->string('registre_rp');
-            $table->string('type_affaire');
+            $table->string('numero_rp')->unique();
+            $table->string('numero_registre')->unique();
+            $table->unsignedBigInteger('id_registre');
+            $table->foreign('id_registre')->references('id_registre')->on('registres')->onDelete('restrict');
+            $table->text('nature_infraction')->nullable();
             $table->date('date_demande');
+            $table->string('parquet_competent')->nullable();
             $table->string('statut')->default('En cours');
             $table->unsignedBigInteger('id_greffier')->nullable();
             $table->foreign('id_greffier')->references('id')->on('users')->onDelete('set null');
-
             $table->timestamps();
-
-           
         });
     }
 

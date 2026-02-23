@@ -68,10 +68,9 @@
     </div>
 
 
-    {{-- ===================== HEADER TABLE ===================== --}}
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-bold text-dark mb-0">Liste des Dossiers</h4>
-
         <div class="d-flex gap-2">
             <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm">
                 <i class="fas fa-plus me-1"></i> Nouveau
@@ -82,8 +81,6 @@
         </div>
     </div>
 
-
-    {{-- ===================== TABLE ===================== --}}
     <div class="card shadow-sm border-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
@@ -91,7 +88,7 @@
                 <thead class="table-light">
                     <tr>
                         <th style="width:35%">Dossier</th>
-                        <th>Type</th>
+                        <th>Registre</th>
                         <th>Statut</th>
                         <th>Date</th>
                         <th class="text-center">Actions</th>
@@ -100,28 +97,33 @@
 
                 <tbody>
                     @forelse($dossiers as $dossier)
-
                     <tr>
+
                         {{-- DOSSIER --}}
                         <td>
                             <div class="d-flex align-items-center gap-3">
                                 <i class="fas fa-folder-open fa-2x text-warning"></i>
                                 <div>
-                                    <div class="fw-semibold">{{ $dossier->registre_rp }}</div>
+                                    <a href="#" class="text-primary">
+                                    <div class="fw-semibold"> {{ $dossier->numero_registre }}</div>
+                                     </a>
                                     <small class="text-muted">
-                                        {{ $dossier->parties->count() }} partie(s)
+                                       
+                                        · {{ $dossier->parties->count() }} partie(s)
                                         @if($dossier->files->count())
                                         · {{ $dossier->files->count() }} fichier(s)
                                         @endif
                                     </small>
+                                   
                                 </div>
                             </div>
                         </td>
 
-                        {{-- TYPE --}}
-                        <td>
+                        {{-- REGISTRE --}}
+                       <td>
+                            
                             <span class="badge bg-light border text-dark">
-                                {{ $dossier->type_affaire }}
+                                {{ $dossier->registre->nom ?? '—' }}
                             </span>
                         </td>
 
@@ -136,10 +138,7 @@
                             ];
                             $color = $colors[$dossier->statut] ?? 'secondary';
                             @endphp
-
-                            <span class="badge bg-{{ $color }}">
-                                {{ $dossier->statut }}
-                            </span>
+                            <span class="badge bg-{{ $color }}">{{ $dossier->statut }}</span>
                         </td>
 
                         {{-- DATE --}}
@@ -153,16 +152,16 @@
                         {{-- ACTIONS --}}
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="#" class="btn btn-sm btn-outline-primary">
+                                <a href="#" class="btn btn-sm btn-outline-primary" title="Voir">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="#" class="btn btn-sm btn-outline-warning">
+                                <a href="#" class="btn btn-sm btn-outline-warning" title="Modifier">
                                     <i class="fas fa-pen"></i>
                                 </a>
-                                <form action="#" method="POST">
+                                <form action="#" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger"
+                                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"
                                         onclick="return confirm('Supprimer ce dossier ?')">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -171,32 +170,29 @@
                         </td>
 
                     </tr>
-
                     @empty
-
                     <tr>
                         <td colspan="5" class="text-center py-5 text-muted">
-                            <i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i>
-                            <div>Aucun dossier trouvé</div>
-                            <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm mt-3">
-                                Créer un dossier
-                            </a>
+                            <i class="fas fa-folder-open fa-3x mb-3 opacity-25 d-block"></i>
+                            Aucun dossier trouvé
+                            <div class="mt-3">
+                                <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm">
+                                    Créer un dossier
+                                </a>
+                            </div>
                         </td>
                     </tr>
-
                     @endforelse
                 </tbody>
 
             </table>
         </div>
 
-        {{-- Pagination --}}
         @if(method_exists($dossiers, 'links'))
         <div class="card-footer bg-white">
             {{ $dossiers->links() }}
         </div>
         @endif
-
     </div>
 
 </div>

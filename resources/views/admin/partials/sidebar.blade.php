@@ -99,14 +99,13 @@
 
   {{-- Déconnexion sécurisée --}}
   <li class="nav-item px-3">
-    <form action="{{ route('logout') }}" method="POST">
-      @csrf
-      <button type="submit" class="btn btn-danger btn-block">
-        Déconnexion
-      </button>
-    </form>
+   <div class="dropdown-divider"></div>
+ 				<a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
+ 					<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger-400"></i>
+ 					Deconnexion
+ 				</a>
   </li>
 
-  <div class="version" id="version-ruangadmin"></div>
+  <!-- <div class="version" id="version-ruangadmin"></div> -->
 
 </ul>

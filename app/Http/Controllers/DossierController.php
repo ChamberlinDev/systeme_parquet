@@ -20,8 +20,9 @@ class DossierController extends Controller
     {
         $user = Auth::user();
 
-        $dossiers = Dossier::where('id_greffier', $user->id)->paginate(10);
-
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->where('id_greffier', $user->id)
+            ->paginate(10);
         return view('greffier.dossier.index', compact('dossiers'));
     }
 
@@ -47,62 +48,75 @@ class DossierController extends Controller
 
     public function create_form()
     {
-        $nextDossierRP = $this->getNextDossierNumber();
-        return view('greffier.dossier.ajout', compact('nextDossierRP'));
+        $numbers  = $this->getNextDossierNumber();
+        $registres = Registre::all();
+        return view('greffier.dossier.ajout', compact('numbers', 'registres'));
     }
-
-    protected function getNextDossierNumber()
+    protected function getNextDossierNumber(): array
     {
         $year = date('Y');
 
-        // On récupère le dernier dossier de l'année en cours
         $lastDossier = Dossier::whereYear('created_at', $year)
             ->orderBy('id_dossier', 'desc')
             ->first();
 
         if ($lastDossier) {
-            $parts = explode('/', $lastDossier->registre_rp);
-            $lastNumber = intval(end($parts)); // Convertir en entier
+            $parts      = explode('/', $lastDossier->numero_rp);
+            $lastNumber = intval(end($parts));
             $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
         } else {
             $nextNumber = '001';
         }
 
-        return "RP/{$year}/{$nextNumber}";
+        return [
+            'numero_rp'       => "RP/{$year}/{$nextNumber}",
+            'numero_registre' => "{$year}/{$nextNumber}",
+        ];
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'type_affaire' => 'required|string',
-            'date_demande' => 'required|date',
-            'pdf_files.*' => 'nullable|mimes:pdf|max:5120', // 5MB max
-            'parties.*.nom' => 'required|string',
-            'parties.*.prenom' => 'nullable|string',
-            'parties.*.contact' => 'nullable|string',
+            'id_registre'        => 'required|exists:registres,id_registre',
+            'nature_infraction'  => 'nullable|string',
+            'date_demande'       => 'required|date',
+            'parquet_competent'  => 'nullable|string',
+            'pdf_files.*'        => 'nullable|mimes:pdf|max:5120',
+            'parties.*.nom'      => 'required|string',
+            'parties.*.prenom'   => 'nullable|string',
+            'parties.*.contact'  => 'nullable|string',
+            'parties.*.role'     => 'nullable|string',
         ]);
 
-        // Création du dossier
+        $numbers  = $this->getNextDossierNumber();
+        $registre = Registre::findOrFail($request->id_registre);
+        $seq      = explode('/', $numbers['numero_rp'])[2];
+        $year     = date('Y');
+
         $dossier = Dossier::create([
-            'registre_rp' => $request->registre_rp,
-            'type_affaire' => $request->type_affaire,
-            'date_demande' => $request->date_demande,
-            'id_greffier' => auth()->id(), // ou auth()->user()->id_greffier si tu as ce champ
+            'numero_rp'         => $numbers['numero_rp'],
+            'numero_registre'   => "{$registre->code}/{$year}/{$seq}",
+            'id_registre'       => $registre->id_registre,
+            'nature_infraction' => $request->nature_infraction,
+            'date_demande'      => $request->date_demande,
+            'parquet_competent' => $request->parquet_competent,
+            'id_greffier'       => Auth::id(),
         ]);
 
-        // Gestion des parties
+
+        // Parties
         if ($request->has('parties')) {
             foreach ($request->parties as $partie) {
                 $dossier->parties()->create([
-                    'nom' => $partie['nom'],
-                    'prenom' => $partie['prenom'] ?? null,
+                    'nom'     => $partie['nom'],
+                    'prenom'  => $partie['prenom']  ?? null,
                     'contact' => $partie['contact'] ?? null,
-                    'role' => 'Plaignant',
+                    'role'    => $partie['role']    ?? 'Plaignant',
                 ]);
             }
         }
 
-        // Gestion des fichiers PDF
+        // Fichiers PDF
         if ($request->hasFile('pdf_files')) {
             foreach ($request->file('pdf_files') as $pdf) {
                 $filename = $pdf->store('dossiers_pdfs', 'public');
@@ -110,6 +124,7 @@ class DossierController extends Controller
             }
         }
 
-        return redirect()->route('dossiers.index.greffier')->with('success', 'Dossier ajouté avec succès !');
+        return redirect()->route('dossiers.index.greffier')
+            ->with('success', 'Dossier ajouté avec succès !');
     }
 }
