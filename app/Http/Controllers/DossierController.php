@@ -93,43 +93,51 @@ class DossierController extends Controller
         ]);
 
         $dossier = DB::transaction(function () use ($request) {
-        $numbers  = $this->getNextDossierNumber();
-        $registre = Registre::findOrFail($request->id_registre);
-        $seq      = explode('/', $numbers['numero_rp'])[2];
-        $year     = date('Y');
+            $numbers  = $this->getNextDossierNumber();
+            $registre = Registre::findOrFail($request->id_registre);
+            $seq      = explode('/', $numbers['numero_rp'])[2];
+            $year     = date('Y');
 
-        $dossier = Dossier::create([
-            'numero_rp'         => $numbers['numero_rp'],
-            'numero_registre'   => "{$registre->code}/{$year}/{$seq}",
-            'id_registre'       => $registre->id_registre,
-            'nature_infraction' => $request->nature_infraction,
-            'date_demande'      => $request->date_demande,
-            'parquet_id'        => Auth::user()->parquet_id,
-            'id_greffier'       => Auth::id(),
-        ]);
+            $dossier = Dossier::create([
+                'numero_rp'         => $numbers['numero_rp'],
+                'numero_registre'   => "{$registre->code}/{$year}/{$seq}",
+                'id_registre'       => $registre->id_registre,
+                'nature_infraction' => $request->nature_infraction,
+                'date_demande'      => $request->date_demande,
+                'parquet_id'        => Auth::user()->parquet_id,
+                'id_greffier'       => Auth::id(),
+            ]);
 
-        if ($request->has('parties')) {
-            foreach ($request->parties as $partie) {
-                $dossier->parties()->create([
-                    'nom'     => $partie['nom'],
-                    'prenom'  => $partie['prenom']  ?? null,
-                    'contact' => $partie['contact'] ?? null,
-                    'role'    => $partie['role']    ?? 'Plaignant',
-                ]);
+            if ($request->has('parties')) {
+                foreach ($request->parties as $partie) {
+                    $dossier->parties()->create([
+                        'nom'     => $partie['nom'],
+                        'prenom'  => $partie['prenom']  ?? null,
+                        'contact' => $partie['contact'] ?? null,
+                        'role'    => $partie['role']    ?? 'Plaignant',
+                    ]);
+                }
             }
-        }
 
-        if ($request->hasFile('pdf_files')) {
-            foreach ($request->file('pdf_files') as $pdf) {
-                $filename = $pdf->store('dossiers_pdfs', 'public');
-                $dossier->files()->create(['file_path' => $filename]);
+            if ($request->hasFile('pdf_files')) {
+                foreach ($request->file('pdf_files') as $pdf) {
+                    $filename = $pdf->store('dossiers_pdfs', 'public');
+                    $dossier->files()->create(['file_path' => $filename]);
+                }
             }
-        }
 
-        return $dossier;
-    });
+            return $dossier;
+        });
 
-    return redirect()->route('dossiers.index.greffier')
-        ->with('success', "Dossier {$dossier->numero_rp} ajouté avec succès !");
-}
+        return redirect()->route('dossiers.index.greffier')
+            ->with('success', "Dossier {$dossier->numero_rp} ajouté avec succès !");
+    }
+
+
+    public function show($id)
+    {
+        $dossier = Dossier::with(['registre', 'parties', 'files', 'parquet'])
+            ->findOrFail($id);
+        return view('greffier.dossier.details', compact('dossier'));
+    }
 }

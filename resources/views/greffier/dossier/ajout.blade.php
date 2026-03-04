@@ -5,7 +5,8 @@
     <div class="col-lg-10">
         <div class="card mb-4 shadow-sm">
             <div class="card-header py-3 text-center">
-                <h2 class="m-0 font-weight-bold text-dark">Ajouter un Dossier</h2>
+                <h2 class="m-0 font-weight-bold text-primary">Creer un Dossier</h2><br>
+                <p class="text-center text-muted mb-0">Systeme de Gestion des Dossiers Judiciaires</p>
             </div>
             <div class="card-body p-5 text-dark">
 

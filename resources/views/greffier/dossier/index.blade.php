@@ -1,6 +1,6 @@
 @extends('greffier.layout.app')
 @section('content')
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 <div class="container-fluid py-4">
 
     {{-- ===================== STATISTIQUES ===================== --}}
@@ -104,24 +104,24 @@
                             <div class="d-flex align-items-center gap-3">
                                 <i class="fas fa-folder-open fa-2x text-warning"></i>
                                 <div>
-                                    <a href="#" class="text-primary">
-                                    <div class="fw-semibold"> {{ $dossier->numero_registre }}</div>
-                                     </a>
+                                    <a href="{{ route('dossiers.show', $dossier->id_dossier) }}" class="text-primary">
+                                        <div class="fw-semibold"> {{ $dossier->numero_registre }}</div>
+                                    </a>
                                     <small class="text-muted">
-                                       
+
                                         · {{ $dossier->parties->count() }} partie(s)
                                         @if($dossier->files->count())
                                         · {{ $dossier->files->count() }} fichier(s)
                                         @endif
                                     </small>
-                                   
+
                                 </div>
                             </div>
                         </td>
 
                         {{-- REGISTRE --}}
-                       <td>
-                            
+                        <td>
+
                             <span class="badge bg-light border text-dark">
                                 {{ $dossier->registre->nom ?? '—' }}
                             </span>
@@ -152,7 +152,7 @@
                         {{-- ACTIONS --}}
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="#" class="btn btn-sm btn-outline-primary" title="Voir">
+                                <a href="{{ route('dossiers.show', $dossier->id_dossier) }}" class="btn btn-sm btn-info">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="btn btn-sm btn-outline-warning" title="Modifier">

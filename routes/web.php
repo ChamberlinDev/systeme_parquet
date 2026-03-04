@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
         */
         Route::get('/dossiers', [DossierController::class, 'index'])->name('dossiers.index');
         Route::get('/greffier/dossiers', [DossierController::class, 'index_greffier'])->name('dossiers.index.greffier');
-        
+        Route::get('/greffier/dossiers/{id}', [DossierController::class, 'show'])->name('dossiers.show');
 
 
         // creation dossier

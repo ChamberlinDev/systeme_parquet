@@ -41,4 +41,8 @@ class Dossier extends Model
     {
         return $this->hasMany(Partie::class, 'id_dossier', 'id_dossier');
     }
+    public function greffier()
+    {
+        return $this->belongsTo(User::class, 'id_greffier');
+    }
 }
