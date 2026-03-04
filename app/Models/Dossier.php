@@ -13,11 +13,20 @@ class Dossier extends Model
         'id_registre',
         'nature_infraction',
         'date_demande',
-        'parquet_competent',
+        'parquet_id',
         'statut',
         'id_greffier',
     ];
 
+    // public function dossiers()
+    // {
+    //     return $this->hasMany(Dossier::class);
+    // }
+
+    public function parquet()
+    {
+        return $this->belongsTo(Parquet::class, 'parquet_id');
+    }
     public function registre()
     {
         return $this->belongsTo(Registre::class, 'id_registre', 'id_registre');

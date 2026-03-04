@@ -4,13 +4,13 @@
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
             <div class="card shadow-lg">
-                <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                <div class="card-header text-white text-center py-4 bg-primary">
                     <h2 class="mb-2">Ajouter un utilisateur</h2>
                     <p class="mb-0 small">Système de Gestion des Dossiers Judiciaires</p>
                 </div>
 
                 <div class="card-body p-4">
-                    <form action="/register" method="POST">
+                    <form action="{{route('users.register')}}" method="POST">
                         @csrf
 
                         {{-- Nom et Email --}}
@@ -70,6 +70,22 @@
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Parquet <span class="text-danger">*</span></label>
+                                <select name="parquet_id" class="form-control" required>
+                                    <option value="">-- Sélectionner un parquet --</option>
+                                    @foreach ($parquets as $parquet)
+                                    <option value="{{ $parquet->id }}"
+                                        {{ old('parquet_id') == $parquet->id ? 'selected' : '' }}>
+                                        {{ $parquet->nom }} - {{ $parquet->ville }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @error('parquet_id')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
                         </div>
 
                         {{-- Boutons --}}
@@ -77,7 +93,7 @@
                             <a href="/utilisateurs" class="btn btn-secondary mx-3">
                                 Annuler
                             </a>
-                            <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                            <button type="submit" class="btn text-white bg-primary" >
                                 Ajouter l'utilisateur
                             </button>
                         </div>

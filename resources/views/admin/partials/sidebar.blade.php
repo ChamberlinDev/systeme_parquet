@@ -15,7 +15,7 @@
   <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Dashboard</span>
+      <span>Espace de travail</span>
     </a>
   </li>
 
@@ -84,6 +84,12 @@
     <a class="nav-link" href="{{ route('users.index') }}">
       <i class="fas fa-fw fa-users"></i>
       <span>Utilisateurs</span>
+    </a>
+  </li>
+   <li class="nav-item {{ request()->routeIs('parquets.*') ? 'active' : '' }}">
+    <a class="nav-link" href="/liste_parquets">
+      <i class="fas fa-fw fa-home"></i>
+      <span>Parquets</span>
     </a>
   </li>
 

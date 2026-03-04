@@ -115,6 +115,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'password' => Hash::make('motdepasse1234'),
                 'is_actif' => true,
                 'must_change_password' => true, 
+                'parquet_id'=>null,
 
             ]
         );

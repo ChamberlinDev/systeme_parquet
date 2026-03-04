@@ -23,6 +23,8 @@ class User extends Authenticatable
         'email',
         'password',
         'is_actif',
+        'parquet_id'
+
     ];
 
     /**
@@ -46,5 +48,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    public function parquet()
+    {
+        return $this->belongsTo(Parquet::class, 'parquet_id');
     }
 }

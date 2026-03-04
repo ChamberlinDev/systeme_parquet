@@ -51,13 +51,13 @@
                             @error('date_demande') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
 
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <label>Parquet compétent</label>
                             <input type="text" class="form-control" name="parquet_competent"
                                 placeholder="Ex : Parquet de Dakar" value="{{ old('parquet_competent') }}">
-                        </div>
+                        </div> -->
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label>Greffier responsable</label>
                             <input type="text" class="form-control bg-light"
                                 value="{{ auth()->user()->name }}" readonly>

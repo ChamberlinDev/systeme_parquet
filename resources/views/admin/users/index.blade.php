@@ -52,14 +52,14 @@
             </div>
         </div>
 
-      
+
     </div>
 
-<hr>
-    
+    <hr>
+
 
     <h3 class="text-center">Liste des utilisateurs</h3>
-    
+
     <hr>
 
     <a href="/create_user" class="btn btn-primary mb-3">
@@ -72,6 +72,7 @@
                 <th>#</th>
                 <th>Nom</th>
                 <th>Email</th>
+                <th>Parquet</th>
                 <th>Statut</th>
                 <th>Rôle(s)</th>
                 <th class="text-center">Actions</th>
@@ -86,6 +87,13 @@
                 <td>{{ $user->name }}</td>
 
                 <td>{{ $user->email }}</td>
+                <td>
+                    @if($user->parquet)
+                    {{ $user->parquet->nom }}
+                    @else
+                    <span class="text-muted">Global</span>
+                    @endif
+                </td>
 
                 <td>
                     @if($user->is_actif)

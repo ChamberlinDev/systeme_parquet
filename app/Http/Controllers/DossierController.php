@@ -6,6 +6,7 @@ use App\Models\Dossier;
 use App\Models\Registre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DossierController extends Controller
 {
@@ -54,15 +55,18 @@ class DossierController extends Controller
     }
     protected function getNextDossierNumber(): array
     {
-        $year = date('Y');
+        $year      = date('Y');
+        $parquetId = Auth::user()->parquet_id;
 
         $lastDossier = Dossier::whereYear('created_at', $year)
+            ->where('parquet_id', $parquetId)
             ->orderBy('id_dossier', 'desc')
+            ->lockForUpdate() // ✅ évite les doublons simultanés
             ->first();
 
         if ($lastDossier) {
-            $parts      = explode('/', $lastDossier->numero_rp);
-            $lastNumber = intval(end($parts));
+            preg_match('/RP\/\d{4}\/(\d+)/', $lastDossier->numero_rp, $matches);
+            $lastNumber = isset($matches[1]) ? intval($matches[1]) : 0;
             $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
         } else {
             $nextNumber = '001';
@@ -74,13 +78,13 @@ class DossierController extends Controller
         ];
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
             'id_registre'        => 'required|exists:registres,id_registre',
             'nature_infraction'  => 'nullable|string',
             'date_demande'       => 'required|date',
-            'parquet_competent'  => 'nullable|string',
             'pdf_files.*'        => 'nullable|mimes:pdf|max:5120',
             'parties.*.nom'      => 'required|string',
             'parties.*.prenom'   => 'nullable|string',
@@ -88,6 +92,7 @@ class DossierController extends Controller
             'parties.*.role'     => 'nullable|string',
         ]);
 
+        $dossier = DB::transaction(function () use ($request) {
         $numbers  = $this->getNextDossierNumber();
         $registre = Registre::findOrFail($request->id_registre);
         $seq      = explode('/', $numbers['numero_rp'])[2];
@@ -99,12 +104,10 @@ class DossierController extends Controller
             'id_registre'       => $registre->id_registre,
             'nature_infraction' => $request->nature_infraction,
             'date_demande'      => $request->date_demande,
-            'parquet_competent' => $request->parquet_competent,
+            'parquet_id'        => Auth::user()->parquet_id,
             'id_greffier'       => Auth::id(),
         ]);
 
-
-        // Parties
         if ($request->has('parties')) {
             foreach ($request->parties as $partie) {
                 $dossier->parties()->create([
@@ -116,7 +119,6 @@ class DossierController extends Controller
             }
         }
 
-        // Fichiers PDF
         if ($request->hasFile('pdf_files')) {
             foreach ($request->file('pdf_files') as $pdf) {
                 $filename = $pdf->store('dossiers_pdfs', 'public');
@@ -124,7 +126,10 @@ class DossierController extends Controller
             }
         }
 
-        return redirect()->route('dossiers.index.greffier')
-            ->with('success', 'Dossier ajouté avec succès !');
-    }
+        return $dossier;
+    });
+
+    return redirect()->route('dossiers.index.greffier')
+        ->with('success', "Dossier {$dossier->numero_rp} ajouté avec succès !");
+}
 }

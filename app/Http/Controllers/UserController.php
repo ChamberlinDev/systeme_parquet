@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Parquet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,14 +15,26 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::all();
+        if (auth()->user()->hasRole('admin')) {
+            $users = User::with('parquet')->get();
+        } else {
+            $users = User::with('parquet')
+                ->where('parquet_id', auth()->user()->parquet_id)
+                ->get();
+        }
+
         return view('admin.users.index', compact('users'));
     }
+
     public function create_user_form()
     {
+
         $roles = Role::all();
-        return view('admin.users.ajout', compact('roles'));
+        $parquets = Parquet::all();
+
+        return view('admin.users.ajout', compact('roles', 'parquets'));
     }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -30,6 +43,7 @@ class UserController extends Controller
             'password' => 'required|min:6',
             'role'     => 'required|string|exists:roles,name',
             'is_actif' => 'required|boolean',
+            'parquet_id' => 'required|exists:parquets,id',
         ]);
 
         // Création utilisateur
@@ -38,9 +52,11 @@ class UserController extends Controller
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'is_actif' => $request->is_actif,
+            'parquet_id' => $request->parquet_id,
+
         ]);
 
-        // Assignation du rôle Spatie
+        // Assignation du rôle 
         $user->assignRole($request->role);
 
         return redirect()->route('users.index')->with('success', "Utilisateur créé avec succès !");
@@ -58,9 +74,10 @@ class UserController extends Controller
         return back()->with('success', 'Utilisateur activé avec succès.');
     }
 
-    public function desactiver($id){
+    public function desactiver($id)
+    {
         $user = User::findOrFail($id);
-           // Sécurité : empêcher de se désactiver soi-même
+        // Sécurité : empêcher de se désactiver soi-même
         if (Auth::id() === $user->id) {
             return back()->with('error', 'Vous ne pouvez pas désactiver votre propre compte.');
         }

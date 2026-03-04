@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DossierController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ParquetController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RegistreController;
 use App\Http\Controllers\UserController;
@@ -71,6 +72,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/register', [UserController::class, 'register'])->name('users.register');
         Route::patch('/users/{id}/activer', [UserController::class, 'activer'])->name('users.activer');
         Route::patch('/users/{id}/desactiver', [UserController::class, 'desactiver'])->name('users.desactiver');
+
+
+        Route::get('liste_parquets', [ParquetController::class, 'index'])->name('parquets.index');
+        Route::get('/parquets', [ParquetController::class, 'create']);
+        Route::post('/parquet/creer', [ParquetController::class, 'store'])->name('parquets.store');
 
         Route::resource('registres', RegistreController::class);
     });
