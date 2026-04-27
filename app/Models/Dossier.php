@@ -16,6 +16,7 @@ class Dossier extends Model
         'parquet_id',
         'statut',
         'id_greffier',
+        
     ];
 
     // public function dossiers()

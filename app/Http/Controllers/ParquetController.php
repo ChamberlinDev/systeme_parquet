@@ -9,7 +9,6 @@ class ParquetController extends Controller
 {
     // 
 
-
     public function index(){
 
         $parquets=Parquet::all();
@@ -21,6 +20,7 @@ class ParquetController extends Controller
     {
         return view('admin.parquet.ajout');
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -33,4 +33,5 @@ class ParquetController extends Controller
         Parquet::create($request->all());
         return redirect()->route('parquets.index')->with('success', 'Parquet créé avec succès.');
     }
+
 }

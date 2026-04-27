@@ -91,7 +91,9 @@
                         <th>Registre</th>
                         <th>Statut</th>
                         <th>Date</th>
+                        <th>Greffier</th>
                         <th class="text-center">Actions</th>
+
                     </tr>
                 </thead>
 
@@ -148,8 +150,11 @@
                                 {{ \Carbon\Carbon::parse($dossier->date_demande)->diffForHumans() }}
                             </small>
                         </td>
-
+                        <td>
+                            {{ $dossier->greffier->name ?? '—' }}
+                        </td>
                         {{-- ACTIONS --}}
+
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
                                 <a href="{{ route('dossiers.show', $dossier->id_dossier) }}" class="btn btn-sm btn-info">
@@ -168,6 +173,7 @@
                                 </form>
                             </div>
                         </td>
+
 
                     </tr>
                     @empty

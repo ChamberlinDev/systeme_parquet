@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
         */
         Route::get('/accueil_admin', [HomeController::class, 'accueil_admin'])->name('accueil.admin');
         Route::get('/accueil_greffier', [HomeController::class, 'accueil_greffier'])->name('accueil.greffier');
-        
+
 
         /*
         |--------------------------------------------------------------------------

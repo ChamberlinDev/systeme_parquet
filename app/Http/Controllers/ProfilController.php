@@ -21,13 +21,13 @@ class ProfilController extends Controller
             return view('greffier.profil.voir', compact('user'));
         }
 
-        if ($user->hasRole('juge')) {
-            return view('juge.profil.voir', compact('user'));
-        }
+        // if ($user->hasRole('juge')) {
+        //     return view('juge.profil.voir', compact('user'));
+        // }
 
-        if ($user->hasRole('procureur')) {
-            return view('procureur.profil.voir', compact('user'));
-        }
+        // if ($user->hasRole('procureur')) {
+        //     return view('procureur.profil.voir', compact('user'));
+        // }
 
         abort(403, 'Rôle non autorisé');
     }

@@ -22,59 +22,63 @@ class DossierController extends Controller
         $user = Auth::user();
 
         $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->where('parquet_id', $user->parquet_id)
             ->where('id_greffier', $user->id)
+            ->latest()
             ->paginate(10);
+
         return view('greffier.dossier.index', compact('dossiers'));
     }
 
-    // affichage des dossiers procureur
-    // public function index_procureur()
-    // {
-    //     $dossiers = Dossier::all();
-    //     return view('procureur.dossiers.index', compact('dossiers'));
-    // }
-    // affichage des dossiers substitut
-    // public function index_substitut()
-    // {
-    //     $dossiers = Dossier::all();
-    //     return view('substitut.dossier.index', compact('dossiers'));
-    // }
-    // affichage des dossiers juge
-    // public function index_juge()
-    // {
-    //     $dossiers = Dossier::all();
-    //     return view('juge.dossiers.index', compact('dossiers'));
-    // }
+
 
 
     public function create_form()
     {
-        $numbers  = $this->getNextDossierNumber();
         $registres = Registre::all();
+
+        // valeur par défaut (ex: premier registre)
+        $defaultRegistre = $registres->first();
+
+        $numbers = null;
+
+        if ($defaultRegistre) {
+            $data = $this->getNextDossierNumber($defaultRegistre->code);
+
+            $numbers = [
+                'numero_rp' => "RP/{$data['year']}/{$data['sequence']}",
+                'numero_registre' => "{$defaultRegistre->code}/{$data['year']}/{$data['sequence']}"
+            ];
+        }
+
         return view('greffier.dossier.ajout', compact('numbers', 'registres'));
     }
-    protected function getNextDossierNumber(): array
+
+    protected function getNextDossierNumber($registreCode): array
     {
         $year      = date('Y');
         $parquetId = Auth::user()->parquet_id;
 
         $lastDossier = Dossier::whereYear('created_at', $year)
             ->where('parquet_id', $parquetId)
+            ->whereHas('registre', function ($q) use ($registreCode) {
+                $q->where('code', $registreCode);
+            })
             ->orderBy('id_dossier', 'desc')
-            ->lockForUpdate() // ✅ évite les doublons simultanés
+            ->lockForUpdate()
             ->first();
 
         if ($lastDossier) {
-            preg_match('/RP\/\d{4}\/(\d+)/', $lastDossier->numero_rp, $matches);
+            preg_match("/{$registreCode}\/\d{4}\/(\d+)/", $lastDossier->numero_registre, $matches);
             $lastNumber = isset($matches[1]) ? intval($matches[1]) : 0;
-            $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+            $nextNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
         } else {
-            $nextNumber = '001';
+            $nextNumber = '0001';
         }
 
         return [
-            'numero_rp'       => "RP/{$year}/{$nextNumber}",
-            'numero_registre' => "{$year}/{$nextNumber}",
+            'sequence' => $nextNumber,
+            'year'     => $year
         ];
     }
 
@@ -93,14 +97,17 @@ class DossierController extends Controller
         ]);
 
         $dossier = DB::transaction(function () use ($request) {
-            $numbers  = $this->getNextDossierNumber();
+
             $registre = Registre::findOrFail($request->id_registre);
-            $seq      = explode('/', $numbers['numero_rp'])[2];
-            $year     = date('Y');
+
+            $numbers = $this->getNextDossierNumber($registre->code);
+
+            $numero_registre = "{$registre->code}/{$numbers['year']}/{$numbers['sequence']}";
+            $numero_rp       = "RP/{$numbers['year']}/{$numbers['sequence']}";
 
             $dossier = Dossier::create([
-                'numero_rp'         => $numbers['numero_rp'],
-                'numero_registre'   => "{$registre->code}/{$year}/{$seq}",
+                'numero_rp'         => $numero_rp,
+                'numero_registre'   => $numero_registre,
                 'id_registre'       => $registre->id_registre,
                 'nature_infraction' => $request->nature_infraction,
                 'date_demande'      => $request->date_demande,
@@ -135,9 +142,11 @@ class DossierController extends Controller
 
 
     public function show($id)
-    {
-        $dossier = Dossier::with(['registre', 'parties', 'files', 'parquet'])
-            ->findOrFail($id);
-        return view('greffier.dossier.details', compact('dossier'));
-    }
+{
+    $dossier = Dossier::with(['registre', 'parties', 'files', 'parquet'])
+        ->where('id_greffier', Auth::id())
+        ->findOrFail($id);
+
+    return view('greffier.dossier.details', compact('dossier'));
+}
 }
