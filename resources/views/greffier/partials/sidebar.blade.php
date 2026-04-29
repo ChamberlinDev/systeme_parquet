@@ -14,7 +14,7 @@
   <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Dashboard</span>
+      <span>Tableau de bord</span>
     </a>
   </li>
 

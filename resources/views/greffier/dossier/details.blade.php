@@ -180,7 +180,7 @@
                        target="_blank"
                        class="d-flex align-items-center gap-2 text-decoration-none text-danger border border-danger-subtle rounded p-2 mb-2">
                         <i class="fas fa-file-pdf fa-lg"></i>
-                        <span class="flex-grow-1 small">Document {{ $index + 1 }}</span>
+                        <span class=" text-dark small">Document {{ $index + 1 }}</span>
                         <i class="fas fa-external-link-alt fa-sm"></i>
                     </a>
                     @empty
@@ -197,10 +197,10 @@
         <a href="{{ route('dossiers.index.greffier') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left me-1"></i> Retour
         </a>
-        <a href="#" class="btn btn-warning text-white">
+        <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}" class="btn btn-warning text-white">
             <i class="fas fa-edit me-1"></i> Modifier
         </a>
-        <form action="#" method="POST" class="d-inline"
+        <form action="{{ route('dossiers.destroy', $dossier->id_dossier) }}" method="POST" class="d-inline"
               onsubmit="return confirm('Supprimer ce dossier ?')">
             @csrf
             @method('DELETE')

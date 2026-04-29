@@ -81,19 +81,25 @@
         </div>
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-success  text-dark fade show" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="card shadow-sm border-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
 
                 <thead class="table-light">
                     <tr>
-                        <th style="width:35%">Dossier</th>
-                        <th>Registre</th>
+                        <th>N° Registre</th>
+                        <th>N° Affaire</th>
+                        <th>Type Affaire</th>
                         <th>Statut</th>
-                        <th>Date</th>
-                        <th>Greffier</th>
+                        <th>Date enregistrement</th>
+                        <th>Par</th>
                         <th class="text-center">Actions</th>
-
                     </tr>
                 </thead>
 
@@ -101,29 +107,35 @@
                     @forelse($dossiers as $dossier)
                     <tr>
 
-                        {{-- DOSSIER --}}
+                        {{-- NUMÉRO REGISTRE --}}
                         <td>
                             <div class="d-flex align-items-center gap-3">
                                 <i class="fas fa-folder-open fa-2x text-warning"></i>
                                 <div>
-                                    <a href="{{ route('dossiers.show', $dossier->id_dossier) }}" class="text-primary">
-                                        <div class="fw-semibold"> {{ $dossier->numero_registre }}</div>
+                                    <a href="{{ route('dossiers.show', $dossier->id_dossier) }}"
+                                        class="text-primary fw-semibold text-decoration-none">
+                                        {{ $dossier->numero_rp }}
                                     </a>
-                                    <small class="text-muted">
-
-                                        · {{ $dossier->parties->count() }} partie(s)
-                                        @if($dossier->files->count())
-                                        · {{ $dossier->files->count() }} fichier(s)
-                                        @endif
-                                    </small>
-
+                                    <div>
+                                        <small class="text-muted">
+                                            · {{ $dossier->parties->count() }} partie(s)
+                                            @if($dossier->files->count())
+                                            · {{ $dossier->files->count() }} fichier(s)
+                                            @endif
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                         </td>
 
-                        {{-- REGISTRE --}}
+                        {{-- Type affaire --}}
                         <td>
+                            <span class="fw-semibold text-secondary"> {{ $dossier->numero_registre }}
+                            </span>
+                        </td>
 
+                        {{-- Nom affaire --}}
+                        <td>
                             <span class="badge bg-light border text-dark">
                                 {{ $dossier->registre->nom ?? '—' }}
                             </span>
@@ -137,6 +149,7 @@
                             'Clôturé' => 'success',
                             'Archivé' => 'secondary',
                             'Suspendu' => 'danger',
+                            'Orienté' => 'info',
                             ];
                             $color = $colors[$dossier->statut] ?? 'secondary';
                             @endphp
@@ -150,20 +163,21 @@
                                 {{ \Carbon\Carbon::parse($dossier->date_demande)->diffForHumans() }}
                             </small>
                         </td>
-                        <td>
-                            {{ $dossier->greffier->name ?? '—' }}
-                        </td>
-                        {{-- ACTIONS --}}
 
+                        {{-- GREFFIER --}}
+                        <td>{{ $dossier->greffier->name ?? '—' }}</td>
+
+                        {{-- ACTIONS --}}
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="{{ route('dossiers.show', $dossier->id_dossier) }}" class="btn btn-sm btn-info">
+                                <a href="{{ route('dossiers.show', $dossier->id_dossier) }}"
+                                    class="btn btn-sm btn-info" title="Voir">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="#" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
                                     <i class="fas fa-pen"></i>
                                 </a>
-                                <form action="#" method="POST" class="d-inline">
+                                <form action="{{ route('dossiers.destroy', $dossier->id_dossier) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger" title="Supprimer"
@@ -174,11 +188,10 @@
                             </div>
                         </td>
 
-
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">
+                        <td colspan="7" class="text-center py-5 text-muted">
                             <i class="fas fa-folder-open fa-3x mb-3 opacity-25 d-block"></i>
                             Aucun dossier trouvé
                             <div class="mt-3">

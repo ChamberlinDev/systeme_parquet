@@ -38,10 +38,10 @@
  					<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
  					Profil
  				</a>
- 				<a class="dropdown-item" href="#">
+ 				<!-- <a class="dropdown-item" href="#">
  					<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
  					Parametres du compte
- 				</a>
+ 				</a> -->
  				
  				<div class="dropdown-divider"></div>
  				<a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">

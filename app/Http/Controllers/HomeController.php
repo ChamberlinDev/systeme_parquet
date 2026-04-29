@@ -18,6 +18,7 @@ class HomeController extends Controller
 
     public function accueil_greffier()
     {
+
         return view('gref_accueil');
     }
 
