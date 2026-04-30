@@ -1,4 +1,7 @@
 services:
+#----------------------------------
+# Database service configuration
+#----------------------------------
   db:
     image: mysql:8.0
     container_name: systeme_parquet_db
@@ -14,6 +17,9 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - systeme_parquet_network
+#---------------------------------
+# phpMyAdmin service configuration
+#---------------------------------
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
