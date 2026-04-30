@@ -1,0 +1,1 @@
+@include('greffier.partials.stat')

@@ -21,5 +21,10 @@ class HomeController extends Controller
         return view('gref_accueil');
     }
 
+    public function accueil_procureur()
+    {
+        return view('procureur.accueil');
+    }
+
    
 }

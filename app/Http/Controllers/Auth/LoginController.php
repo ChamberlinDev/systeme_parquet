@@ -45,6 +45,7 @@ class LoginController extends Controller
         // Redirection normale par rôle
         if ($user->hasRole('admin')) return redirect('/accueil_admin');
         if ($user->hasRole('greffier')) return redirect('/accueil_greffier');
+        if ($user->hasRole('procureur')) return redirect('/accueil_procureur');
 
 
         Auth::logout();
@@ -72,6 +73,7 @@ class LoginController extends Controller
         // Redirection après changement
         if ($user->hasRole('admin')) return redirect('/accueil_admin');
         if ($user->hasRole('greffier')) return redirect('/accueil_greffier');
+        if ($user->hasRole('procureur')) return redirect('/accueil_procureur');
 
 
         return redirect('/');

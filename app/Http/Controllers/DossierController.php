@@ -27,11 +27,14 @@ class DossierController extends Controller
     }
 
     // affichage des dossiers procureur
-    // public function index_procureur()
-    // {
-    //     $dossiers = Dossier::all();
-    //     return view('procureur.dossiers.index', compact('dossiers'));
-    // }
+    public function index_procureur()
+    {
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->latest()
+            ->paginate(10);
+
+        return view('procureur.dossier.index', compact('dossiers'));
+    }
     // affichage des dossiers substitut
     // public function index_substitut()
     // {
@@ -48,9 +51,13 @@ class DossierController extends Controller
 
     public function create_form()
     {
-        $numbers  = $this->getNextDossierNumber();
+        $numbers = $this->getNextDossierNumber();
         $registres = Registre::all();
-        return view('greffier.dossier.ajout', compact('numbers', 'registres'));
+        $view = Auth::user()?->hasRole('procureur')
+            ? 'procureur.dossier.ajout'
+            : 'greffier.dossier.ajout';
+
+        return view($view, compact('numbers', 'registres'));
     }
     protected function getNextDossierNumber(): array
     {
@@ -76,6 +83,8 @@ class DossierController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
             'id_registre'        => 'required|exists:registres,id_registre',
             'nature_infraction'  => 'nullable|string',
@@ -100,7 +109,7 @@ class DossierController extends Controller
             'nature_infraction' => $request->nature_infraction,
             'date_demande'      => $request->date_demande,
             'parquet_competent' => $request->parquet_competent,
-            'id_greffier'       => Auth::id(),
+            'id_greffier'       => $user && $user->hasRole('greffier') ? $user->id : null,
         ]);
 
 
@@ -124,7 +133,11 @@ class DossierController extends Controller
             }
         }
 
-        return redirect()->route('dossiers.index.greffier')
+        $redirectRoute = $user && $user->hasRole('procureur')
+            ? 'dossiers.index.procureur'
+            : 'dossiers.index.greffier';
+
+        return redirect()->route($redirectRoute)
             ->with('success', 'Dossier ajouté avec succès !');
     }
 }

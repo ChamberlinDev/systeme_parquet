@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
         */
         Route::get('/accueil_admin', [HomeController::class, 'accueil_admin'])->name('accueil.admin');
         Route::get('/accueil_greffier', [HomeController::class, 'accueil_greffier'])->name('accueil.greffier');
+        Route::get('/accueil_procureur', [HomeController::class, 'accueil_procureur'])->name('accueil.procureur');
         
 
         /*
@@ -47,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
         */
         Route::get('/dossiers', [DossierController::class, 'index'])->name('dossiers.index');
         Route::get('/greffier/dossiers', [DossierController::class, 'index_greffier'])->name('dossiers.index.greffier');
+        Route::get('/procureur/dossiers', [DossierController::class, 'index_procureur'])->name('dossiers.index.procureur');
         
 
 

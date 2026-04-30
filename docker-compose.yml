@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: systeme_parquet_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: parquet
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - systeme_parquet_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: systeme_parquet_phpmyadmin
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ABSOLUTE_URI: http://localhost:8081/
+    ports:
+      - "8081:80"
+    networks:
+      - systeme_parquet_network
+
+volumes:
+  db_data:
+
+networks:
+  systeme_parquet_network:
+    driver: bridge
