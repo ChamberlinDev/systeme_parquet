@@ -230,40 +230,7 @@
                     </div>
                 </div>
 
-                <div class="card-body p-4" id="transfertSection" style="display:none;">
-                    <div class="alert alert-warning border-0 d-flex align-items-center gap-2 py-2 mb-4">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <small class="text-dark">Le dossier sera transmis à l'autorité sélectionnée dès l'enregistrement.</small>
-                    </div>
-                    <div class="row g-3">
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Autorité compétente</label>
-                            <select class="form-select" name="procureur_id" id="procureurSelect">
-                                <option value="">— Sélectionner un procureur —</option>
-                                <option value=""
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Statut après transfert</label>
-                            <select class="form-select" name="statut">
-                                <option value="En cours">En cours</option>
-                                <option value="Orienté" selected>Orienté</option>
-                                <option value="Suspendu">Suspendu</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold small">Motif du transfert</label>
-                            <textarea class="form-control" name="motif_orientation" rows="2"
-                                placeholder="Raison du transfert vers l'autorité...">{{ old('motif_orientation') }}</textarea>
-                        </div>
-
-                    </div>
-                </div>
-
+               
                 {{-- Si pas de transfert, statut par défaut --}}
                 <div class="card-body py-3 px-4 border-top" id="statutDefaut">
                     <div class="d-flex align-items-center gap-2">

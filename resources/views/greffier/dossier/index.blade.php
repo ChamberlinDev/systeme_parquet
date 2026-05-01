@@ -177,14 +177,19 @@
                                 <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
                                     <i class="fas fa-pen"></i>
                                 </a>
+                                
                                 <form action="{{ route('dossiers.destroy', $dossier->id_dossier) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"
+                                    <a class="btn btn-danger btn-outline-danger" title="Supprimer"
                                         onclick="return confirm('Supprimer ce dossier ?')">
                                         <i class="fas fa-trash"></i>
-                                    </button>
+                                    </a>
                                 </form>
+
+                                <a href="#" class="btn btn-success" title="Envoyer/Transferer">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
                             </div>
                         </td>
 

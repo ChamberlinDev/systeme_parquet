@@ -34,18 +34,16 @@ class DossierController extends Controller
     public function create_form()
     {
         $registres = Registre::all();
-        $dossiers = Dossier::where('id_greffier', Auth::id());
+        $dossiers  = Dossier::where('id_greffier', Auth::id());
 
-        // valeur par défaut (ex: premier registre)
         $defaultRegistre = $registres->first();
-
         $numbers = null;
 
         if ($defaultRegistre) {
             $data = $this->getNextDossierNumber($defaultRegistre->code);
 
             $numbers = [
-                'numero_rp' => "RP/{$data['year']}/{$data['sequence']}",
+                'numero_rp'       => "RP/{$data['year']}/{$data['sequence']}",
                 'numero_registre' => "{$defaultRegistre->code}/{$data['year']}/{$data['sequence']}"
             ];
         }
@@ -77,10 +75,31 @@ class DossierController extends Controller
 
         return [
             'sequence' => $nextNumber,
-            'year'     => $year
+            'year'     => $year,
         ];
     }
 
+    protected function getNextRpNumber($parquetId): string
+    {
+        $year = date('Y');
+
+        $last = Dossier::whereYear('created_at', $year)
+            ->where('parquet_id', $parquetId)
+            ->where('numero_rp', 'like', "RP/{$year}/%")
+            ->orderByRaw('CAST(SUBSTRING_INDEX(numero_rp, "/", -1) AS UNSIGNED) DESC')
+            ->lockForUpdate()
+            ->first();
+
+        if ($last) {
+            preg_match("/RP\/\d{4}\/(\d+)/", $last->numero_rp, $matches);
+            $lastNumber = isset($matches[1]) ? (int)$matches[1] : 0;
+            $next       = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            $next = '001';
+        }
+
+        return "RP/{$year}/{$next}";
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -89,50 +108,72 @@ class DossierController extends Controller
             'date_demande'       => 'required|date',
             'pdf_files.*'        => 'nullable|mimes:pdf|max:5120',
             'parties.*.nom'      => 'required|string',
-            'parties.*.prenom'   => 'nullable|string',
-            'parties.*.contact'  => 'nullable|string',
-            'parties.*.role'     => 'nullable|string',
         ]);
 
-        $dossier = DB::transaction(function () use ($request) {
+        $parquetId = Auth::user()->parquet_id;
 
-            $registre = Registre::findOrFail($request->id_registre);
+        $dossier = null;
+        $attempts = 0;
 
-            $numbers = $this->getNextDossierNumber($registre->code);
+        while ($attempts < 3) {
+            try {
+                $dossier = DB::transaction(function () use ($request, $parquetId) {
 
-            $numero_registre = "{$registre->code}/{$numbers['year']}/{$numbers['sequence']}";
-            $numero_rp       = "RP/{$numbers['year']}/{$numbers['sequence']}";
+                    $registre = Registre::findOrFail($request->id_registre);
 
-            $dossier = Dossier::create([
-                'numero_rp'         => $numero_rp,
-                'numero_registre'   => $numero_registre,
-                'id_registre'       => $registre->id_registre,
-                'nature_infraction' => $request->nature_infraction,
-                'date_demande'      => $request->date_demande,
-                'parquet_id'        => Auth::user()->parquet_id,
-                'id_greffier'       => Auth::id(),
-            ]);
+                    $numbers = $this->getNextDossierNumber($registre->code);
 
-            if ($request->has('parties')) {
-                foreach ($request->parties as $partie) {
-                    $dossier->parties()->create([
-                        'nom'     => $partie['nom'],
-                        'prenom'  => $partie['prenom']  ?? null,
-                        'contact' => $partie['contact'] ?? null,
-                        'role'    => $partie['role']    ?? 'Plaignant',
+                    $numero_registre = "{$registre->code}/{$numbers['year']}/{$numbers['sequence']}";
+                    $numero_rp       = $this->getNextRpNumber($parquetId);
+
+                    $dossier = Dossier::create([
+                        'numero_rp'         => $numero_rp,
+                        'numero_registre'   => $numero_registre,
+                        'id_registre'       => $registre->id_registre,
+                        'nature_infraction' => $request->nature_infraction,
+                        'date_demande'      => $request->date_demande,
+                        'parquet_id'        => $parquetId,
+                        'id_greffier'       => Auth::id(),
                     ]);
-                }
-            }
 
-            if ($request->hasFile('pdf_files')) {
-                foreach ($request->file('pdf_files') as $pdf) {
-                    $filename = $pdf->store('dossiers_pdfs', 'public');
-                    $dossier->files()->create(['file_path' => $filename]);
-                }
-            }
+                    // Parties
+                    if ($request->has('parties')) {
+                        foreach ($request->parties as $partie) {
+                            $dossier->parties()->create([
+                                'nom'     => $partie['nom'],
+                                'prenom'  => $partie['prenom']  ?? null,
+                                'contact' => $partie['contact'] ?? null,
+                                'role'    => $partie['role']    ?? 'Plaignant',
+                            ]);
+                        }
+                    }
 
-            return $dossier;
-        });
+                    // Fichiers
+                    if ($request->hasFile('pdf_files')) {
+                        foreach ($request->file('pdf_files') as $pdf) {
+                            $filename = $pdf->store('dossiers_pdfs', 'public');
+                            $dossier->files()->create(['file_path' => $filename]);
+                        }
+                    }
+
+                    return $dossier;
+                });
+
+                break; // succès
+
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Code 1062 = duplicate entry
+                if ($e->errorInfo[1] == 1062) {
+                    $attempts++;
+                    continue; // on réessaie
+                }
+                throw $e;
+            }
+        }
+
+        if (!$dossier) {
+            return back()->withErrors(['error' => 'Erreur lors de la création du dossier, veuillez réessayer.']);
+        }
 
         return redirect()->route('dossiers.index.greffier')
             ->with('success', "Dossier {$dossier->numero_rp} ajouté avec succès !");
@@ -217,13 +258,12 @@ class DossierController extends Controller
     public function destroy($id)
     {
         //suppression d'un dossier
-        $dossier = Dossier::where('id_greffier', Auth::id())->findOrFail($id); 
+        $dossier = Dossier::where('id_greffier', Auth::id())->findOrFail($id);
         foreach ($dossier->files as $file) {
             Storage::disk('public')->delete($file->file_path);
         }
         $dossier->delete();
         return redirect()->route('dossiers.index.greffier')
             ->with('success', "Dossier {$dossier->numero_rp} supprimé avec succès !");
-
     }
 }

@@ -11,8 +11,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    //
-
+    // Afficher la liste des utilisateurs
     public function index()
     {
         if (auth()->user()->hasRole('admin')) {
@@ -22,10 +21,10 @@ class UserController extends Controller
                 ->where('parquet_id', auth()->user()->parquet_id)
                 ->get();
         }
-
         return view('admin.users.index', compact('users'));
     }
 
+    // Afficher le formulaire de création d'utilisateur
     public function create_user_form()
     {
 
@@ -35,6 +34,7 @@ class UserController extends Controller
         return view('admin.users.ajout', compact('roles', 'parquets'));
     }
 
+    // Traiter la création d'utilisateur
     public function register(Request $request)
     {
         $request->validate([
@@ -63,6 +63,7 @@ class UserController extends Controller
     }
 
 
+    // Activer un utilisateur
     public function activer($id)
     {
         $user = User::findOrFail($id);
@@ -74,6 +75,7 @@ class UserController extends Controller
         return back()->with('success', 'Utilisateur activé avec succès.');
     }
 
+    // Désactiver un utilisateur
     public function desactiver($id)
     {
         $user = User::findOrFail($id);
@@ -88,4 +90,7 @@ class UserController extends Controller
 
         return back()->with('success', 'Utilisateur désactivé avec succès.');
     }
+
+    // Donner les permissions à un utilisateur
+   
 }

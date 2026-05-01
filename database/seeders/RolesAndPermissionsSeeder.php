@@ -30,20 +30,20 @@ class RolesAndPermissionsSeeder extends Seeder
             'dossier.archiver',
 
             // Analyse & Orientation
-            'analyse.obv',
-            'decision.orientation',
+            // 'analyse.obv',
+            // 'decision.orientation',
 
             // Rôle & Audience
-            'role.prepare',
-            'audience.tenir',
+            // 'role.prepare',
+            // 'audience.tenir',
 
             // Décision
-            'decision.rediger',
-            'decision.signer',
-            'decision.transmettre',
+            // 'decision.rediger',
+            // 'decision.signer',
+            // 'decision.transmettre',
 
             // Statistiques
-            'rapport.generer',
+            // 'rapport.generer',
         ];
 
         foreach ($permissions as $permission) {
@@ -68,18 +68,18 @@ class RolesAndPermissionsSeeder extends Seeder
         */
 
         // ADMIN → tout
-        // $admin->syncPermissions(Permission::all());
+        $admin->syncPermissions(Permission::all());
 
         // GREFFIER
-        // $greffier->syncPermissions([
-        //     'dossier.create',
-        //     'dossier.view',
-        //     'dossier.update',
-        //     'dossier.suivi',
-        //     'decision.transmettre',
-        //     'dossier.archiver',
-        //     'rapport.generer',
-        // ]);
+         $greffier->syncPermissions([
+            'dossier.create',
+            'dossier.view',
+            'dossier.update',
+            'dossier.suivi',
+            'decision.transmettre',
+            'dossier.archiver',
+            'rapport.generer',
+        ]);
 
         // PROCUREUR
         // $procureur->syncPermissions([
