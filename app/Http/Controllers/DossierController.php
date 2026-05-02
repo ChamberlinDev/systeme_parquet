@@ -35,27 +35,35 @@ class DossierController extends Controller
 
         return view('procureur.dossier.index', compact('dossiers'));
     }
+    // affichage des dossiers juge
+    public function index_juge()
+    {
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->latest()
+            ->paginate(10);
+
+        return view('juge.dossier.index', compact('dossiers'));
+    }
     // affichage des dossiers substitut
     // public function index_substitut()
     // {
     //     $dossiers = Dossier::all();
     //     return view('substitut.dossier.index', compact('dossiers'));
     // }
-    // affichage des dossiers juge
-    // public function index_juge()
-    // {
-    //     $dossiers = Dossier::all();
-    //     return view('juge.dossiers.index', compact('dossiers'));
-    // }
-
-
     public function create_form()
     {
         $numbers = $this->getNextDossierNumber();
         $registres = Registre::all();
-        $view = Auth::user()?->hasRole('procureur')
-            ? 'procureur.dossier.ajout'
-            : 'greffier.dossier.ajout';
+        $user = Auth::user();
+        $view = 'greffier.dossier.ajout';
+
+        if ($user?->hasRole('procureur')) {
+            $view = 'procureur.dossier.ajout';
+        }
+
+        if ($user?->hasRole('juge')) {
+            $view = 'juge.dossier.ajout';
+        }
 
         return view($view, compact('numbers', 'registres'));
     }
@@ -133,9 +141,15 @@ class DossierController extends Controller
             }
         }
 
-        $redirectRoute = $user && $user->hasRole('procureur')
-            ? 'dossiers.index.procureur'
-            : 'dossiers.index.greffier';
+        $redirectRoute = 'dossiers.index.greffier';
+
+        if ($user && $user->hasRole('procureur')) {
+            $redirectRoute = 'dossiers.index.procureur';
+        }
+
+        if ($user && $user->hasRole('juge')) {
+            $redirectRoute = 'dossiers.index.juge';
+        }
 
         return redirect()->route($redirectRoute)
             ->with('success', 'Dossier ajouté avec succès !');

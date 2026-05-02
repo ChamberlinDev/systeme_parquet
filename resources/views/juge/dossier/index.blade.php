@@ -1,4 +1,4 @@
-@extends('procureur.layout.app')
+@extends('juge.layout.app')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -61,12 +61,13 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-bold text-dark mb-0">Liste des Dossiers</h4>
-        <div class="d-flex">
+        <div class="d-flex ">
             <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm mr-2">
-                <i class="fas fa-plus"></i> Nouveau
+                <i class="fas fa-plus me-1"></i> Nouveau
             </a>
+            
             <a href="#" class="btn btn-outline-secondary btn-sm">
-                <i class="fas fa-file-pdf"></i> Export PDF
+                <i class="fas fa-file-pdf me-1"></i> Export PDF
             </a>
         </div>
     </div>

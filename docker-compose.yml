@@ -7,10 +7,10 @@ services:
     container_name: systeme_parquet_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: parquet
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: laravel
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
@@ -28,9 +28,9 @@ services:
     depends_on:
       - db
     environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_ABSOLUTE_URI: http://localhost:8081/
+      PMA_HOST: ${PMA_HOST}
+      PMA_PORT: ${PMA_PORT}
+      PMA_ABSOLUTE_URI: ${PMA_ABSOLUTE_URI}
     ports:
       - "8081:80"
     networks:

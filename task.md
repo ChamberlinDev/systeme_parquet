@@ -1,11 +1,10 @@
 # Les commandes a faire : 
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
-php artisan storage:link
-php artisan serve
-
+- composer install
+- cp .env.example .env
+- php artisan key:generate
+- php artisan migrate --seed
+- php artisan storage:link
+- php artisan serve
 
 # Docker 
 
