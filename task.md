@@ -11,5 +11,5 @@ php artisan serve
 
 ``` bash
     docker compose up : pour demarer le container 
-    docker compose down : il arrete le container si a la fin  de la commmande tu ajoutes '' -v ''                    il va supprimer les volumes du container 
+    docker compose down : il arrete le container si a la fin  de la commmande tu ajoutes '-v',il va supprimer les volumes du container 
 ```
