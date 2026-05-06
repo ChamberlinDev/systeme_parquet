@@ -35,9 +35,28 @@ services:
       - "8081:80"
     networks:
       - systeme_parquet_network
+#---------------------------------
+# MINIO service de storage configuration
+#---------------------------------
+  minio:
+    image: minio/minio
+    container_name: systeme_parquet_minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9001:9000"   # API S3
+      - "9002:9001"   # Console web MinIO
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - systeme_parquet_network
 
 volumes:
   db_data:
+  minio_data:
 
 networks:
   systeme_parquet_network:
