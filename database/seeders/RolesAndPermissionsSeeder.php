@@ -104,7 +104,7 @@ class RolesAndPermissionsSeeder extends Seeder
         //     'audience.tenir',
         //     'decision.rediger',
         //     'decision.signer',
-        // ]);
+        // ]); 
 
         //ADMIN PAR DÉFAUT
 

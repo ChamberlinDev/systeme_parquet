@@ -34,6 +34,13 @@
                                             Système de gestion et de suivi des dossiers au parquet
                                         </p>
                                     </div>
+                                    <!-- message deconnexion -->
+                                    @if (session('success'))
+                                    <div class="alert alert-danger">
+                                        {{ session('success') }}
+                                    </div>
+                                    @endif 
+
 
                                     {{-- ===== Messages d'erreurs ===== --}}
                                     @if ($errors->any())

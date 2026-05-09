@@ -15,7 +15,8 @@ class HomeController extends Controller
     public function accueil_admin()
     {
         $users = User::with('roles')->get();
-        return view('welcome', compact('users'));
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])->latest()->paginate(10);
+        return view('welcome', compact('users', 'dossiers'));
     }
 
     public function accueil_greffier()

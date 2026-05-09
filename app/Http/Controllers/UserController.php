@@ -62,6 +62,11 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', "Utilisateur créé avec succès !");
     }
 
+    public function details($id){
+        $user = User::with('parquet')->findOrFail($id);
+        return view('admin.users.detail', compact('user'));
+    }
+
 
     // Activer un utilisateur
     public function activer($id)

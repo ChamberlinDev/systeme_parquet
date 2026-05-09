@@ -115,7 +115,7 @@
 
                 <td class="text-center">
                     {{-- Modifier utilisateur --}}
-                    <a href="#" class="btn btn-sm btn-warning" title="Modifier">
+                    <a href="{{ route('users.details', $user->id) }}" class="btn btn-sm btn-warning" title="Modifier">
                         <i class="fas fa-edit"></i>
                     </a>
 

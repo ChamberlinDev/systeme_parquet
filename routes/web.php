@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/utilisateurs', [UserController::class, 'index'])->name('users.index');
         Route::get('/create_user', [UserController::class, 'create_user_form'])->name('users.create');
         Route::post('/register', [UserController::class, 'register'])->name('users.register');
+        Route::get('/users/{id}/details', [UserController::class, 'details'])->name('users.details');
         Route::patch('/users/{id}/activer', [UserController::class, 'activer'])->name('users.activer');
         Route::patch('/users/{id}/desactiver', [UserController::class, 'desactiver'])->name('users.desactiver');
 
