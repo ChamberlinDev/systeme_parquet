@@ -14,13 +14,19 @@ class UserController extends Controller
     // Afficher la liste des utilisateurs
     public function index()
     {
-        if (auth()->user()->hasRole('admin')) {
-            $users = User::with('parquet')->get();
+        $user  = auth()->user();
+        $query = User::with(['parquet', 'roles']);
+
+        if ($user->hasRole('admin') && is_null($user->parquet_id)) {
+            // Admin global (pas de parquet) → voit tout
+            $users = $query->get();
         } else {
-            $users = User::with('parquet')
-                ->where('parquet_id', auth()->user()->parquet_id)
+            // Admin de parquet → voit uniquement son parquet
+            $users = $query
+                ->where('parquet_id', $user->parquet_id)
                 ->get();
         }
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -62,10 +68,12 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', "Utilisateur créé avec succès !");
     }
 
-    public function details($id){
+    public function details($id)
+    {
         $user = User::with('parquet')->findOrFail($id);
         return view('admin.users.detail', compact('user'));
     }
+
 
 
     // Activer un utilisateur
@@ -97,5 +105,5 @@ class UserController extends Controller
     }
 
     // Donner les permissions à un utilisateur
-   
+
 }
