@@ -35,44 +35,44 @@
   </li>
 
   {{-- Instruction et suivi --}}
-  <li class="nav-item {{ request()->routeIs('instructions.*') ? 'active' : '' }}">
+  <!-- <li class="nav-item {{ request()->routeIs('instructions.*') ? 'active' : '' }}">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-clipboard"></i>
       <span>Instruction et suivi</span>
     </a>
-  </li>
+  </li> -->
 
   {{-- Instruction judiciaire --}}
-  <li class="nav-item {{ request()->routeIs('instruction.judiciaire') ? 'active' : '' }}">
+  <!-- <li class="nav-item {{ request()->routeIs('instruction.judiciaire') ? 'active' : '' }}">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-gavel"></i>
       <span>Instruction judiciaire</span>
     </a>
-  </li>
+  </li> -->
 
   {{-- Préparation audience --}}
-  <li class="nav-item {{ request()->routeIs('audiences.preparation') ? 'active' : '' }}">
+  <!-- <li class="nav-item {{ request()->routeIs('audiences.preparation') ? 'active' : '' }}">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-calendar-alt"></i>
       <span>Préparation audience</span>
     </a>
-  </li>
+  </li> -->
 
   {{-- Audience et décision --}}
-  <li class="nav-item {{ request()->routeIs('audiences.index') ? 'active' : '' }}">
+  <!-- <li class="nav-item {{ request()->routeIs('audiences.index') ? 'active' : '' }}">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-calendar-check"></i>
       <span>Audience et décision</span>
     </a>
-  </li>
+  </li> -->
 
   {{-- Exécution --}}
-  <li class="nav-item {{ request()->routeIs('executions.*') ? 'active' : '' }}">
+  <!-- <li class="nav-item {{ request()->routeIs('executions.*') ? 'active' : '' }}">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-clipboard-check"></i>
       <span>Exécution des décisions</span>
     </a>
-  </li>
+  </li> -->
 
   <hr class="sidebar-divider">
 
