@@ -27,7 +27,7 @@ class HomeController extends Controller
             ->where('id_greffier', $user->id)
             ->latest()
             ->paginate(10);
-        $dossier = Dossier::where('id_greffier', Auth::id())->get();
+        $dossier = Dossier::where('id_greffier', Auth::id())->get(); 
         return view('gref_accueil', compact('dossier', 'dossiers'));
     }
 }

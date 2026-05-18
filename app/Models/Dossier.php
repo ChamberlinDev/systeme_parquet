@@ -16,7 +16,10 @@ class Dossier extends Model
         'parquet_id',
         'statut',
         'id_greffier',
-        
+        'procureur_id',
+        'motif_orientation',
+        'date_orientation',
+
     ];
 
     // public function dossiers()
@@ -45,5 +48,9 @@ class Dossier extends Model
     public function greffier()
     {
         return $this->belongsTo(User::class, 'id_greffier');
+    }
+    public function procureur()
+    {
+        return $this->belongsTo(User::class, 'procureur_id'); // ← manquante
     }
 }

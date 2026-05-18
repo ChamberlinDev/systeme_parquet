@@ -5,7 +5,7 @@
 <div class="container-fluid py-4 text-dark">
 
     {{-- ===== EN-TÊTE DOSSIER ===== --}}
-    <div class="card shadow-sm border-0 mb-4 bg-primary" >
+    <div class="card shadow-sm border-0 mb-4 bg-primary">
         <div class="card-body p-4 text-white">
             <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
                 <div>
@@ -15,13 +15,13 @@
                 </div>
                 <div class="text-end">
                     @php
-                        $statutColors = [
-                            'En cours' => 'warning',
-                            'Classé'   => 'success',
-                            'Archivé'  => 'secondary',
-                            'Suspendu' => 'danger',
-                        ];
-                        $color = $statutColors[$dossier->statut] ?? 'primary';
+                    $statutColors = [
+                    'En cours' => 'warning',
+                    'Classé' => 'success',
+                    'Archivé' => 'secondary',
+                    'Suspendu' => 'danger',
+                    ];
+                    $color = $statutColors[$dossier->statut] ?? 'primary';
                     @endphp
                     <span class="badge bg-{{ $color }} mb-2 px-3 py-2">
                         <i class="fas fa-circle me-1" style="font-size:0.6rem"></i>
@@ -123,12 +123,12 @@
                                 <td>{{ $partie->contact ?? '—' }}</td>
                                 <td>
                                     @php
-                                        $roleColors = [
-                                            'Plaignant'  => 'primary',
-                                            'Défendeur'  => 'danger',
-                                            'Témoin'     => 'warning',
-                                        ];
-                                        $rc = $roleColors[$partie->role] ?? 'white';
+                                    $roleColors = [
+                                    'Plaignant' => 'primary',
+                                    'Défendeur' => 'danger',
+                                    'Témoin' => 'warning',
+                                    ];
+                                    $rc = $roleColors[$partie->role] ?? 'white';
                                     @endphp
                                     <span class="badge bg-{{ $rc }}">{{ $partie->role }}</span>
                                 </td>
@@ -177,8 +177,8 @@
                 <div class="card-body">
                     @forelse($dossier->files as $index => $file)
                     <a href="{{ asset('storage/' . $file->file_path) }}"
-                       target="_blank"
-                       class="d-flex align-items-center gap-2 text-decoration-none text-danger border border-danger-subtle rounded p-2 mb-2">
+                        target="_blank"
+                        class="d-flex align-items-center gap-2 text-decoration-none text-danger border border-danger-subtle rounded p-2 mb-2">
                         <i class="fas fa-file-pdf fa-lg"></i>
                         <span class=" text-dark small">Document {{ $index + 1 }}</span>
                         <i class="fas fa-external-link-alt fa-sm"></i>
@@ -192,11 +192,13 @@
         </div>
     </div>
 
-    {{-- ===== BOUTONS ===== --}}
-    <div class="d-flex gap-2 mt-2">
-        <a href="{{ route('dossiers.index.greffier') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left me-1"></i> Retour
-        </a>
+   {{-- BOUTONS détails --}}
+<div class="d-flex gap-2 mt-2">
+    <a href="{{ route('dossiers.index.greffier') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Retour
+    </a>
+
+    @if(!in_array($dossier->statut, ['Clôturé', 'Archivé', 'Orienté']))
         <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}" class="btn btn-warning text-white">
             <i class="fas fa-edit me-1"></i> Modifier
         </a>
@@ -208,7 +210,112 @@
                 <i class="fas fa-trash me-1"></i> Supprimer
             </button>
         </form>
-    </div>
+    @else
+        <span class="btn btn-light text-muted" title="Dossier verrouillé">
+            <i class="fas fa-lock me-1"></i> Verrouillé
+        </span>
+    @endif
 
+    {{-- Orienter toujours visible sauf si archivé --}}
+    @if($dossier->statut !== 'Archivé')
+        <a href="#" class="btn btn-outline-success"
+           data-bs-toggle="modal" data-bs-target="#modalOrienter">
+            <i class="fas fa-share me-1"></i> Orienter
+        </a>
+    @endif
+</div>
+
+</div>
+{{-- MODAL ORIENTATION --}}
+<div class="modal fade" id="modalOrienter" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-share me-2"></i>
+                    Orienter — {{ $dossier->numero_registre }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="{{ route('dossiers.orienter', $dossier->id_dossier) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+
+                    {{-- STATUT --}}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Nouveau statut</label>
+                        <select name="statut" class="form-select" required>
+                            @foreach(['Orienté'] as $statut)
+                            <option value="{{ $statut }}"
+                                {{ $dossier->statut === $statut ? 'selected' : '' }}>
+                                {{ $statut }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- PROCUREUR --}}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">
+                            Transférer à un procureur
+                            <span class="text-muted fw-normal">(optionnel)</span>
+                        </label>
+                        <select name="procureur_id" class="form-select">
+                            <option value="">— Sélectionner un procureur —</option>
+                            @foreach($procureurs as $procureur)
+                            <option value="{{ $procureur->id }}"
+                                {{ $dossier->procureur_id == $procureur->id ? 'selected' : '' }}>
+                                {{ $procureur->name }}
+                                — {{ $procureur->email }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @if($procureurs->isEmpty())
+                        <div class="form-text text-danger">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            Aucun procureur disponible dans ce parquet.
+                        </div>
+                        @endif
+                    </div>
+
+                    {{-- MOTIF --}}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">
+                            Motif
+                            <span class="text-muted fw-normal">(optionnel)</span>
+                        </label>
+                        <textarea name="motif_orientation" class="form-control" rows="3"
+                            placeholder="Raison de l'orientation...">{{ $dossier->motif_orientation }}</textarea>
+                    </div>
+
+                    {{-- INFO DERNIÈRE ORIENTATION --}}
+                    @if($dossier->date_orientation)
+                    <div class="alert alert-info py-2 mb-0 small">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Dernière orientation :
+                        <strong>
+                            {{ \Carbon\Carbon::parse($dossier->date_orientation)->format('d/m/Y à H:i') }}
+                        </strong>
+                        @if($dossier->procureur)
+                        → {{ $dossier->procureur->name }}
+                        @endif
+                    </div>
+                    @endif
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check me-1"></i> Confirmer l'orientation
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
 </div>
 @endsection

@@ -8,7 +8,7 @@
 
         @php
         $total = $dossiers->count();
-        $enCours = $dossiers->where('statut', 'En cours')->count();
+        $enCours = $dossiers->where('statut', 'orienté')->count();
         $traites = $dossiers->where('statut', 'Clôturé')->count();
         $archives = $dossiers->where('statut', 'Archivé')->count();
         @endphp
@@ -82,9 +82,9 @@
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success  text-dark fade show" role="alert">
-            {{ session('success') }}
-        </div>
+    <div class="alert alert-success  text-dark fade show" role="alert">
+        {{ session('success') }}
+    </div>
     @endif
 
     <div class="card shadow-sm border-0">
@@ -170,26 +170,36 @@
                         {{-- ACTIONS --}}
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
+
+                                {{-- Voir — toujours visible --}}
                                 <a href="{{ route('dossiers.show', $dossier->id_dossier) }}"
                                     class="btn btn-sm btn-info" title="Voir">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
+
+                                {{-- Modifier & Supprimer — masqués si dossier clôturé/archivé/orienté --}}
+                                @if(!in_array($dossier->statut, ['Clôturé', 'Archivé', 'Orienté']))
+                                <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}"
+                                    class="btn btn-sm btn-outline-warning" title="Modifier">
                                     <i class="fas fa-pen"></i>
                                 </a>
-                                
-                                <form action="{{ route('dossiers.destroy', $dossier->id_dossier) }}" method="POST" class="d-inline">
+
+                                <form action="{{ route('dossiers.destroy', $dossier->id_dossier) }}"
+                                    method="POST" class="d-inline"
+                                    onsubmit="return confirm('Supprimer ce dossier ?')">
                                     @csrf
                                     @method('DELETE')
-                                    <a class="btn btn-danger btn-outline-danger" title="Supprimer"
-                                        onclick="return confirm('Supprimer ce dossier ?')">
+                                    <button class="btn btn-sm btn-outline-danger" title="Supprimer">
                                         <i class="fas fa-trash"></i>
-                                    </a>
+                                    </button>
                                 </form>
+                                @else
+                                {{-- Indicateur visuel que le dossier est verrouillé --}}
+                                <span class="btn btn-sm btn-light text-muted" title="Dossier verrouillé">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                @endif
 
-                                <a href="#" class="btn btn-success" title="Envoyer/Transferer">
-                                    <i class="fas fa-paper-plane"></i>
-                                </a>
                             </div>
                         </td>
 

@@ -33,12 +33,12 @@
   </li>
 
   {{-- Instruction et suivi --}}
-  <!-- <li class="nav-item {{ request()->routeIs('instruction.index') ? 'active' : '' }}">
+  <li class="nav-item {{ request()->routeIs('instruction.index') ? 'active' : '' }}">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-clipboard"></i>
-      <span>Instruction et suivi</span>
+      <span>Instructions</span>
     </a>
-  </li> -->
+  </li>
 
   {{-- Instruction judiciaire --}}
   <!-- <li class="nav-item {{ request()->routeIs('instruction.judiciaire') ? 'active' : '' }}">

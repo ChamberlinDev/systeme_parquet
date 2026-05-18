@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Dossier;
 use App\Models\Registre;
+use App\Models\User;
+use App\Notifications\DossierTransmisNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class DossierController extends Controller
@@ -111,18 +114,15 @@ class DossierController extends Controller
         ]);
 
         $parquetId = Auth::user()->parquet_id;
-
-        $dossier = null;
-        $attempts = 0;
+        $dossier   = null;
+        $attempts  = 0;
 
         while ($attempts < 3) {
             try {
                 $dossier = DB::transaction(function () use ($request, $parquetId) {
 
-                    $registre = Registre::findOrFail($request->id_registre);
-
-                    $numbers = $this->getNextDossierNumber($registre->code);
-
+                    $registre        = Registre::findOrFail($request->id_registre);
+                    $numbers         = $this->getNextDossierNumber($registre->code);
                     $numero_registre = "{$registre->code}/{$numbers['year']}/{$numbers['sequence']}";
                     $numero_rp       = $this->getNextRpNumber($parquetId);
 
@@ -134,18 +134,20 @@ class DossierController extends Controller
                         'date_demande'      => $request->date_demande,
                         'parquet_id'        => $parquetId,
                         'id_greffier'       => Auth::id(),
+                        'procureur_id'      => $request->procureur_id ?? null,
+                        'statut'            => $request->filled('procureur_id') ? 'Orienté' : 'En cours',
+                        'motif_orientation' => $request->motif_orientation ?? null,
+                        'date_orientation'  => $request->filled('procureur_id') ? now() : null,
                     ]);
 
                     // Parties
-                    if ($request->has('parties')) {
-                        foreach ($request->parties as $partie) {
-                            $dossier->parties()->create([
-                                'nom'     => $partie['nom'],
-                                'prenom'  => $partie['prenom']  ?? null,
-                                'contact' => $partie['contact'] ?? null,
-                                'role'    => $partie['role']    ?? 'Plaignant',
-                            ]);
-                        }
+                    foreach ($request->parties ?? [] as $partie) {
+                        $dossier->parties()->create([
+                            'nom'     => $partie['nom'],
+                            'prenom'  => $partie['prenom']  ?? null,
+                            'contact' => $partie['contact'] ?? null,
+                            'role'    => $partie['role']    ?? 'Plaignant',
+                        ]);
                     }
 
                     // Fichiers
@@ -159,34 +161,82 @@ class DossierController extends Controller
                     return $dossier;
                 });
 
-                break; // succès
-
+                break;
             } catch (\Illuminate\Database\QueryException $e) {
-                // Code 1062 = duplicate entry
                 if ($e->errorInfo[1] == 1062) {
                     $attempts++;
-                    continue; // on réessaie
+                    continue;
                 }
                 throw $e;
             }
         }
 
         if (!$dossier) {
-            return back()->withErrors(['error' => 'Erreur lors de la création du dossier, veuillez réessayer.']);
+            return back()->withErrors(['error' => 'Erreur lors de la création, veuillez réessayer.']);
+        }
+
+        // Notifier le procureur si un transfert a été fait
+        if ($request->filled('procureur_id')) {
+            $procureur = User::find($request->procureur_id);
+            if ($procureur) {
+                $dossier->load(['registre', 'greffier']);
+                $procureur->notify(new DossierTransmisNotification($dossier));
+            }
         }
 
         return redirect()->route('dossiers.index.greffier')
             ->with('success', "Dossier {$dossier->numero_rp} ajouté avec succès !");
     }
 
+    public function orienter(Request $request, $id)
+    {
+        $request->validate([
+            'statut'            => 'required|in:En cours,Clôturé,Archivé,Suspendu,Orienté',
+            'procureur_id'      => 'nullable|exists:users,id',
+            'motif_orientation' => 'nullable|string|max:500',
+        ]);
+
+        $dossier = Dossier::where('id_greffier', Auth::id())->findOrFail($id);
+
+        $ancienProcureurId = $dossier->procureur_id;
+
+        $dossier->update([
+            'statut'            => $request->statut,
+            'procureur_id'      => $request->procureur_id,
+            'motif_orientation' => $request->motif_orientation,
+            'date_orientation'  => now(),
+        ]);
+
+        // Notifier le nouveau procureur s'il a changé
+        if ($request->filled('procureur_id') && $request->procureur_id != $ancienProcureurId) {
+            $procureur = User::find($request->procureur_id);
+            if ($procureur) {
+                try {
+                    $dossier->load(['registre', 'greffier']);
+                    $procureur->notify(new DossierTransmisNotification($dossier));
+                    $messageEmail = " — Email de notification envoyé à {$procureur->name}.";
+                } catch (\Exception $e) {
+                    // L'email a échoué mais le dossier est bien orienté
+                    Log::error("Échec envoi email orientation dossier {$dossier->numero_rp} : " . $e->getMessage());
+                    $messageEmail = " — (notification email non envoyée)";
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', "Dossier orienté avec succès !" . ($messageEmail ?? ''));
+    }
 
     public function show($id)
     {
-        $dossier = Dossier::with(['registre', 'parties', 'files', 'parquet'])
+        $dossier = Dossier::with(['registre', 'parties', 'files', 'parquet', 'procureur'])
             ->where('id_greffier', Auth::id())
             ->findOrFail($id);
 
-        return view('greffier.dossier.details', compact('dossier'));
+        $procureurs = User::role('procureur')
+            ->where('parquet_id', Auth::user()->parquet_id)
+            ->get();
+
+        return view('greffier.dossier.details', compact('dossier', 'procureurs'));
     }
 
     public function edit($id)

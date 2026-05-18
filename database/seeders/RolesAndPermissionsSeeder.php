@@ -76,9 +76,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'dossier.view',
             'dossier.update',
             'dossier.suivi',
-            'decision.transmettre',
+            //'decision.transmettre',
             'dossier.archiver',
-            'rapport.generer',
+            //'rapport.generer',
         ]);
 
         // PROCUREUR
