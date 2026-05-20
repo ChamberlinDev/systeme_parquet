@@ -98,7 +98,8 @@
                         <th>Type Affaire</th>
                         <th>Statut</th>
                         <th>Date enregistrement</th>
-                        <th>Par</th>
+                        <th>Créé par</th>
+                        <th>Procureur</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -166,7 +167,8 @@
 
                         {{-- GREFFIER --}}
                         <td>{{ $dossier->greffier->name ?? '—' }}</td>
-
+                        {{-- PROCUREUR --}}
+                        <td>{{ $dossier->procureur->name ?? 'pas assigné' }}</td>
                         {{-- ACTIONS --}}
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
