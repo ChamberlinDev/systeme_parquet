@@ -212,21 +212,15 @@
                 </div>
             </div>
 
-            {{-- ÉTAPE 3 : ORIENTATION / TRANSFERT --}}
+            {{-- ÉTAPE 3 : STATUT  --}}
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-white border-bottom py-3">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                         <h6 class="mb-0 fw-semibold">
                             <span class="badge bg-primary rounded-circle me-2">3</span>
-                            Orientation & Transfert
-                            <span class="text-muted fw-normal small ms-1">(optionnel)</span>
+                        Statut du dossier
                         </h6>
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" id="toggleTransfert" role="switch">
-                            <label class="form-check-label small text-muted" for="toggleTransfert">
-                                Transférer à une autorité
-                            </label>
-                        </div>
+                        
                     </div>
                 </div>
 

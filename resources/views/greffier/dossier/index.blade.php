@@ -147,10 +147,10 @@
                             @php
                             $colors = [
                             'En cours' => 'warning',
-                            'Clôturé' => 'success',
+                            'Clôturé' => 'info',
                             'Archivé' => 'secondary',
                             'Suspendu' => 'danger',
-                            'Orienté' => 'info',
+                            'Orienté' => 'success',
                             ];
                             $color = $colors[$dossier->statut] ?? 'secondary';
                             @endphp
@@ -175,7 +175,7 @@
 
                                 {{-- Voir — toujours visible --}}
                                 <a href="{{ route('dossiers.show', $dossier->id_dossier) }}"
-                                    class="btn btn-sm btn-info" title="Voir">
+                                    class="btn btn-sm btn-primary" title="Voir">
                                     <i class="fas fa-eye"></i>
                                 </a>
 

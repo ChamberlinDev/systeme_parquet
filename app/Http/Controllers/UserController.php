@@ -14,7 +14,7 @@ class UserController extends Controller
     // Afficher la liste des utilisateurs
     public function index()
     {
-        $user  = auth()->user();
+        $user  = Auth::user();
         $query = User::with(['parquet', 'roles']);
 
         if ($user->hasRole('admin') && is_null($user->parquet_id)) {
@@ -33,11 +33,11 @@ class UserController extends Controller
     // Afficher le formulaire de création d'utilisateur
     public function create_user_form()
     {
-
+        $users = User::all();
         $roles = Role::all();
         $parquets = Parquet::all();
 
-        return view('admin.users.ajout', compact('roles', 'parquets'));
+        return view('admin.users.ajout', compact('roles', 'parquets', 'users'));
     }
 
     // Traiter la création d'utilisateur

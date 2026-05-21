@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 class DossierController extends Controller
 {
     //affichage des dossiers admin
-    public function index()
+    public function index_admin()
     {
         $dossiers = Dossier::latest()->paginate(10);
         return view('admin.dossiers.index', compact('dossiers'));

@@ -39,6 +39,14 @@
         Ajouter un parquet
     </a>
 
+    <div>
+        @if(session('success'))
+        <div class="alert alert-success text-dark">
+            {{ session('success') }}
+        </div>
+        @endif
+    </div>
+
     <table class="table table-bordered table-striped">
         <thead class="table-white">
             <tr>
@@ -74,12 +82,12 @@
 
                 <td class="text-center">
                     {{-- Modifier parquet --}}
-                    <a href="#" class="btn btn-sm btn-warning" title="Modifier">
+                    <a href="{{route('parquets.edit', $parquet->id)}}" class="btn btn-sm btn-warning" title="Modifier">
                         <i class="fas fa-edit"></i>
                     </a>
 
                     {{-- Supprimer parquet --}}
-                    <form action="#"
+                    <form action="{{ route('parquets.destroy', $parquet->id) }}"
                         method="POST"
                         class="d-inline"
                         onsubmit="return confirm('Voulez-vous vraiment supprimer cet parquet ?')">

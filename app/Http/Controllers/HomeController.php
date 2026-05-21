@@ -30,4 +30,19 @@ class HomeController extends Controller
         $dossier = Dossier::where('id_greffier', Auth::id())->get(); 
         return view('gref_accueil', compact('dossier', 'dossiers'));
     }
+
+
+    // Dossiers 
+
+     public function show($id)
+    {
+        $dossier = Dossier::with(['registre', 'parties', 'files', 'parquet', 'procureur'])
+            ->findOrFail($id);
+
+        $procureurs = User::role('procureur')
+            ->where('parquet_id', Auth::user()->parquet_id)
+            ->get();
+
+        return view('admin.dossiers.details', compact('dossier', 'procureurs'));
+    }
 }

@@ -104,9 +104,9 @@
                             <div class="d-flex align-items-center gap-3">
                                 <i class="fas fa-folder-open fa-2x text-warning"></i>
                                 <div>
-                                    <a href="#" class="text-primary">
-                                    <div class="fw-semibold"> {{ $dossier->numero_registre }}</div>
-                                     </a>
+                                    <a href="{{ route('dossiers.show.admin', $dossier->id_dossier) }}" class="text-primary">
+                                        <div class="fw-semibold"> {{ $dossier->numero_registre }}</div>
+                                    </a>
                                     <small class="text-muted">
                                        
                                         · {{ $dossier->parties->count() }} partie(s)
@@ -152,10 +152,10 @@
                         {{-- ACTIONS --}}
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="#" class="btn btn-sm btn-outline-primary" title="Voir">
+                                <a href="{{ route('dossiers.show.admin', $dossier->id_dossier) }}" class="btn btn-sm btn-outline-primary" title="Voir">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="#" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
                                     <i class="fas fa-pen"></i>
                                 </a>
                                 <form action="#" method="POST" class="d-inline">

@@ -41,12 +41,12 @@
   </li>
 
   {{-- Instruction judiciaire --}}
-  <!-- <li class="nav-item {{ request()->routeIs('instruction.judiciaire') ? 'active' : '' }}">
+  <li class="nav-item {{ request()->routeIs('archives.index') ? 'active' : '' }}">
     <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-gavel"></i>
-      <span>Instruction judiciaire</span>
+      <i class="fas fa-fw fa-clipboard"></i>
+      <span>Archives</span>
     </a>
-  </li> -->
+  </li>
 
   {{-- Préparation audience --}}
   <!-- <li class="nav-item {{ request()->routeIs('audience.preparation') ? 'active' : '' }}">

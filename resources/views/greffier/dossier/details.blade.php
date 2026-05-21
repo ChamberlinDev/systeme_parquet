@@ -86,6 +86,13 @@
                                 <span class="badge bg-{{ $color }}">{{ $dossier->statut }}</span>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="text-muted small text-uppercase fw-bold">Orienter à</div>
+                            <div class="mt-1">
+                                <span class="badge bg-success">{{ $dossier->procureur->name ?? 'pas assigné' }}</span>
+                            </div>
+                        </div>
+
                     </div>
 
                     @if($dossier->nature_infraction)
@@ -193,49 +200,69 @@
     </div>
 
    {{-- BOUTONS détails --}}
-<div class="d-flex gap-2 mt-2">
-    <a href="{{ route('dossiers.index.greffier') }}" class="btn btn-secondary">
+<div class="d-flex gap-2 mt-4 flex-wrap">
+
+    {{-- Retour --}}
+    <a href="{{ route('dossiers.index.greffier') }}" class="btn btn-outline-secondary">
         <i class="fas fa-arrow-left me-1"></i> Retour
     </a>
 
     @if(!in_array($dossier->statut, ['Clôturé', 'Archivé', 'Orienté']))
+
+        {{-- Modifier --}}
         <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}" class="btn btn-warning text-white">
             <i class="fas fa-edit me-1"></i> Modifier
         </a>
+
+        {{-- Supprimer --}}
         <form action="{{ route('dossiers.destroy', $dossier->id_dossier) }}" method="POST" class="d-inline"
-              onsubmit="return confirm('Supprimer ce dossier ?')">
+              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce dossier ? Cette action est irréversible.')">
             @csrf
             @method('DELETE')
             <button class="btn btn-danger">
                 <i class="fas fa-trash me-1"></i> Supprimer
             </button>
         </form>
+
+        {{-- Orienter --}}
+        <button class="btn btn-success"
+                data-bs-toggle="modal"
+                data-bs-target="#modalOrienter">
+            <i class="fas fa-share-square me-1"></i> Transférer au procureur
+        </button>
+
     @else
-        <span class="btn btn-light text-muted" title="Dossier verrouillé">
-            <i class="fas fa-lock me-1"></i> Verrouillé
+
+        {{-- Dossier verrouillé --}}
+        <span class="btn btn-light text-muted pe-none">
+            <i class="fas fa-lock me-1"></i> Dossier verrouillé
         </span>
+
+        {{-- Réorienter si déjà orienté --}}
+        @if($dossier->statut === 'Orienté')
+        <button class="btn btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalOrienter">
+            <i class="fas fa-sync-alt me-1"></i> Réorienter
+        </button>
+        @endif
+
     @endif
 
-    {{-- Orienter toujours visible sauf si archivé --}}
-    @if($dossier->statut !== 'Archivé')
-        <a href="#" class="btn btn-outline-success"
-           data-bs-toggle="modal" data-bs-target="#modalOrienter">
-            <i class="fas fa-share me-1"></i> Orienter
-        </a>
-    @endif
 </div>
 
-</div>
-{{-- MODAL ORIENTATION --}}
+{{-- ===== MODAL ORIENTATION ===== --}}
 <div class="modal fade" id="modalOrienter" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
 
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-share me-2"></i>
-                    Orienter — {{ $dossier->numero_registre }}
-                </h5>
+                <div>
+                    <h5 class="modal-title mb-0">
+                        <i class="fas fa-share-square me-2"></i>Transfert au procureur
+                    </h5>
+                    <small class="text-white-50">{{ $dossier->numero_rp }} · {{ $dossier->numero_registre }}</small>
+                </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
@@ -243,32 +270,27 @@
                 @csrf
                 <div class="modal-body">
 
-                    {{-- STATUT --}}
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small">Nouveau statut</label>
-                        <select name="statut" class="form-select" required>
-                            @foreach(['Orienté'] as $statut)
-                            <option value="{{ $statut }}"
-                                {{ $dossier->statut === $statut ? 'selected' : '' }}>
-                                {{ $statut }}
-                            </option>
-                            @endforeach
-                        </select>
+                    {{-- ALERTE SI DÉJÀ ORIENTÉ --}}
+                    @if($dossier->statut === 'Orienté' && $dossier->procureur)
+                    <div class="alert alert-warning text-dark py-2 small mb-3">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        Ce dossier est déjà assigné à
+                        <strong>{{ $dossier->procureur->name }}</strong>.
+                        Vous pouvez le réassigner ci-dessous.
                     </div>
+                    @endif
 
                     {{-- PROCUREUR --}}
                     <div class="mb-3">
                         <label class="form-label fw-semibold small">
-                            Transférer à un procureur
-                            <span class="text-muted fw-normal">(optionnel)</span>
+                            Autorité compétente <span class="text-danger">*</span>
                         </label>
-                        <select name="procureur_id" class="form-select">
+                        <select name="procureur_id" class="form-select" required>
                             <option value="">— Sélectionner un procureur —</option>
                             @foreach($procureurs as $procureur)
                             <option value="{{ $procureur->id }}"
                                 {{ $dossier->procureur_id == $procureur->id ? 'selected' : '' }}>
-                                {{ $procureur->name }}
-                                — {{ $procureur->email }}
+                                {{ $procureur->name }} — {{ $procureur->email }}
                             </option>
                             @endforeach
                         </select>
@@ -283,38 +305,40 @@
                     {{-- MOTIF --}}
                     <div class="mb-3">
                         <label class="form-label fw-semibold small">
-                            Motif
+                            Motif du transfert
                             <span class="text-muted fw-normal">(optionnel)</span>
                         </label>
                         <textarea name="motif_orientation" class="form-control" rows="3"
-                            placeholder="Raison de l'orientation...">{{ $dossier->motif_orientation }}</textarea>
+                            placeholder="Précisez la raison du transfert...">{{ $dossier->motif_orientation }}</textarea>
                     </div>
 
-                    {{-- INFO DERNIÈRE ORIENTATION --}}
+                    {{-- STATUT CACHÉ → toujours Orienté --}}
+                    <input type="hidden" name="statut" value="Orienté">
+
+                    {{-- HISTORIQUE --}}
                     @if($dossier->date_orientation)
-                    <div class="alert alert-info py-2 mb-0 small">
-                        <i class="fas fa-info-circle me-1"></i>
-                        Dernière orientation :
-                        <strong>
-                            {{ \Carbon\Carbon::parse($dossier->date_orientation)->format('d/m/Y à H:i') }}
-                        </strong>
+                    <div class="alert alert-info text-dark py-2 mb-0 small">
+                        <i class="fas fa-history me-1"></i>
+                        Dernier transfert le
+                        <strong>{{ \Carbon\Carbon::parse($dossier->date_orientation)->format('d/m/Y à H:i') }}</strong>
                         @if($dossier->procureur)
-                        → {{ $dossier->procureur->name }}
+                            → <strong>{{ $dossier->procureur->name }}</strong>
                         @endif
                     </div>
                     @endif
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Annuler
+
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Annuler
                     </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-check me-1"></i> Confirmer l'orientation
+                    <button type="submit" class="btn btn-primary" @if($procureurs->isEmpty()) disabled @endif>
+                        <i class="fas fa-paper-plane me-1"></i> Confirmer le transfert
                     </button>
                 </div>
-            </form>
 
+            </form>
         </div>
     </div>
 </div>

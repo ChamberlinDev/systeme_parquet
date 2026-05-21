@@ -7,6 +7,7 @@ use App\Http\Controllers\ParquetController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RegistreController;
 use App\Http\Controllers\UserController;
+use App\Models\Parquet;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,18 +47,23 @@ Route::middleware(['auth'])->group(function () {
         | DOSSIERS
         |--------------------------------------------------------------------------
         */
-        Route::get('/dossiers', [DossierController::class, 'index'])->name('dossiers.index');
+        Route::get('/dossiers', [DossierController::class, 'index_admin'])->name('dossiers.index');
+        Route::get('/admin/dossiers/{id}', [HomeController::class, 'show'])->name('dossiers.show.admin');
         Route::get('/greffier/dossiers', [DossierController::class, 'index_greffier'])->name('dossiers.index.greffier');
         Route::get('/greffier/dossiers/{id}', [DossierController::class, 'show'])->name('dossiers.show');
 
 
-        // creation dossier
+        // gestion dossier
         Route::get('/dossiers/creer', [DossierController::class, 'create_form'])->name('dossiers.create.form');
         Route::post('/dossiers/creer', [DossierController::class, 'store'])->name('dossiers.store');
         Route::post('/dossiers/{id}/orienter', [DossierController::class, 'orienter'])->name('dossiers.orienter');
         Route::get('/dossiers/{id}/edit', [DossierController::class, 'edit'])->name('dossiers.edit');
         Route::put('/dossiers/{id}', [DossierController::class, 'update'])->name('dossiers.update');
         Route::delete('/dossiers/{id}', [DossierController::class, 'destroy'])->name('dossiers.destroy');
+
+
+
+        // insctruction
 
         /*
         |--------------------------------------------------------------------------
@@ -79,10 +85,15 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/users/{id}/desactiver', [UserController::class, 'desactiver'])->name('users.desactiver');
 
 
+        // Parquets
         Route::get('liste_parquets', [ParquetController::class, 'index'])->name('parquets.index');
         Route::get('/parquets', [ParquetController::class, 'create']);
+        Route::get('/parquet/edit/{id}', [ParquetController::class, 'edit'])->name('parquets.edit');
+        Route::put('parquet/update/{id}', [ParquetController::class, 'update'])->name('parquets.update');
+        Route::delete('/parquet/delete/{id}', [ParquetController::class, 'destroy'])->name('parquets.destroy');
         Route::post('/parquet/creer', [ParquetController::class, 'store'])->name('parquets.store');
 
         Route::resource('registres', RegistreController::class);
+
     });
 });
