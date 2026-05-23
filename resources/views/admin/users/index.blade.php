@@ -120,7 +120,7 @@
                     </a>
 
                     {{-- Supprimer utilisateur --}}
-                    <form action="#"
+                    <form action="{{route('users.destroy', $user->id)}}"
                         method="POST"
                         class="d-inline"
                         onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">

@@ -146,7 +146,7 @@
                            class="btn btn-outline-primary">
                             <i class="fas fa-user-shield me-1"></i> Gérer les permissions
                         </a>
-                        <a href="#"
+                        <a href="{{route('users.edit', $user->id)}}"
                            class="btn btn-outline-warning">
                             <i class="fas fa-user-edit me-1"></i> Modifier
                         </a>

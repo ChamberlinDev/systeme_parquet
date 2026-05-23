@@ -74,6 +74,41 @@ class UserController extends Controller
         return view('admin.users.detail', compact('user'));
     }
 
+    public function edit($id)
+    {
+        $user = User::with('parquet')->findOrFail($id);
+        $roles = Role::all();
+        $parquets = Parquet::all();
+
+        return view('admin.users.edit', compact('user', 'roles', 'parquets'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $request->validate([
+            'name'     => 'required|string',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|min:6',
+            'role'     => 'required|string|exists:roles,name',
+            'is_actif' => 'required|boolean',
+            'parquet_id' => 'required|exists:parquets,id',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        return redirect()->route('users.index')->with('success', "Utilisateur modifié avec succès !");
+    }
+
+    public function destroy($id)
+    {
+
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('users.index')->with('success', "Utilisateur suppriimé avec succès !");
+    }
+
+
 
 
     // Activer un utilisateur

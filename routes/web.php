@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RegistreController;
 use App\Http\Controllers\UserController;
 use App\Models\Parquet;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,6 +82,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/create_user', [UserController::class, 'create_user_form'])->name('users.create');
         Route::post('/register', [UserController::class, 'register'])->name('users.register');
         Route::get('/users/{id}/details', [UserController::class, 'details'])->name('users.details');
+        Route::get('/users/modif/{id}', [UserController::class, 'edit'])->name('users.edit');
+        Route::delete('/users/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
         Route::patch('/users/{id}/activer', [UserController::class, 'activer'])->name('users.activer');
         Route::patch('/users/{id}/desactiver', [UserController::class, 'desactiver'])->name('users.desactiver');
 
