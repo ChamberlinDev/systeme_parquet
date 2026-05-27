@@ -32,6 +32,17 @@ class HomeController extends Controller
     }
 
 
+    public function accueil_procureur()
+    {
+        return view('procureur.accueil');
+    }
+
+    public function accueil_juge()
+    {
+        return view('juge.accueil');
+    }
+
+   
     // Dossiers 
 
      public function show($id)

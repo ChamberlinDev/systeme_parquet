@@ -41,7 +41,9 @@ Route::middleware(['auth'])->group(function () {
         */
         Route::get('/accueil_admin', [HomeController::class, 'accueil_admin'])->name('accueil.admin');
         Route::get('/accueil_greffier', [HomeController::class, 'accueil_greffier'])->name('accueil.greffier');
-
+        Route::get('/accueil_procureur', [HomeController::class, 'accueil_procureur'])->name('accueil.procureur');
+        Route::get('/accueil_juge', [HomeController::class, 'accueil_juge'])->name('accueil.juge');
+        
 
         /*
         |--------------------------------------------------------------------------
@@ -51,8 +53,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dossiers', [DossierController::class, 'index_admin'])->name('dossiers.index');
         Route::get('/admin/dossiers/{id}', [HomeController::class, 'show'])->name('dossiers.show.admin');
         Route::get('/greffier/dossiers', [DossierController::class, 'index_greffier'])->name('dossiers.index.greffier');
-        Route::get('/greffier/dossiers/{id}', [DossierController::class, 'show'])->name('dossiers.show');
-
+        Route::get('/procureur/dossiers', [DossierController::class, 'index_procureur'])->name('dossiers.index.procureur');
+        Route::get('/juge/dossiers', [DossierController::class, 'index_juge'])->name('dossiers.index.juge');
+        
 
         // gestion dossier
         Route::get('/dossiers/creer', [DossierController::class, 'create_form'])->name('dossiers.create.form');

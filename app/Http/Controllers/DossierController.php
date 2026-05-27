@@ -34,24 +34,46 @@ class DossierController extends Controller
         return view('greffier.dossier.index', compact('dossiers'));
     }
 
+    // affichage des dossiers procureur
+    public function index_procureur()
+    {
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->latest()
+            ->paginate(10);
+
+        return view('procureur.dossier.index', compact('dossiers'));
+    }
+    // affichage des dossiers juge
+    public function index_juge()
+    {
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->latest()
+            ->paginate(10);
+
+        return view('juge.dossier.index', compact('dossiers'));
+    }
+    // affichage des dossiers substitut
+    // public function index_substitut()
+    // {
+    //     $dossiers = Dossier::all();
+    //     return view('substitut.dossier.index', compact('dossiers'));
+    // }
     public function create_form()
     {
+        $numbers = $this->getNextDossierNumber();
         $registres = Registre::all();
-        $dossiers  = Dossier::where('id_greffier', Auth::id());
+        $user = Auth::user();
+        $view = 'greffier.dossier.ajout';
 
-        $defaultRegistre = $registres->first();
-        $numbers = null;
-
-        if ($defaultRegistre) {
-            $data = $this->getNextDossierNumber($defaultRegistre->code);
-
-            $numbers = [
-                'numero_rp'       => "RP/{$data['year']}/{$data['sequence']}",
-                'numero_registre' => "{$defaultRegistre->code}/{$data['year']}/{$data['sequence']}"
-            ];
+        if ($user?->hasRole('procureur')) {
+            $view = 'procureur.dossier.ajout';
         }
 
-        return view('greffier.dossier.ajout', compact('numbers', 'registres', 'dossiers'));
+        if ($user?->hasRole('juge')) {
+            $view = 'juge.dossier.ajout';
+        }
+
+        return view($view, compact('numbers', 'registres'));
     }
 
     protected function getNextDossierNumber($registreCode): array
@@ -105,6 +127,8 @@ class DossierController extends Controller
     }
     public function store(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
             'id_registre'        => 'required|exists:registres,id_registre',
             'nature_infraction'  => 'nullable|string',
@@ -270,6 +294,8 @@ class DossierController extends Controller
             'id_registre'       => $request->id_registre,
             'nature_infraction' => $request->nature_infraction,
             'date_demande'      => $request->date_demande,
+            'parquet_competent' => $request->parquet_competent,
+            'id_greffier'       => $user && $user->hasRole('greffier') ? $user->id : null,
         ]);
 
         // Sync parties
@@ -300,6 +326,18 @@ class DossierController extends Controller
             }
         }
 
+        $redirectRoute = 'dossiers.index.greffier';
+
+        if ($user && $user->hasRole('procureur')) {
+            $redirectRoute = 'dossiers.index.procureur';
+        }
+
+        if ($user && $user->hasRole('juge')) {
+            $redirectRoute = 'dossiers.index.juge';
+        }
+
+        return redirect()->route($redirectRoute)
+            ->with('success', 'Dossier ajouté avec succès !');
         return redirect()->route('dossiers.index.greffier')
             ->with('success', "Dossier {$dossier->numero_rp} modifié avec succès !");
     }
