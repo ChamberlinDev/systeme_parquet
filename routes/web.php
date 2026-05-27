@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dossiers/creer', [DossierController::class, 'create_form'])->name('dossiers.create.form');
         Route::post('/dossiers/creer', [DossierController::class, 'store'])->name('dossiers.store');
         Route::post('/dossiers/{id}/orienter', [DossierController::class, 'orienter'])->name('dossiers.orienter');
+        Route::get('/dossiers/{id}', [DossierController::class, 'show'])->name('dossiers.show');
         Route::get('/dossiers/{id}/edit', [DossierController::class, 'edit'])->name('dossiers.edit');
         Route::put('/dossiers/{id}', [DossierController::class, 'update'])->name('dossiers.update');
         Route::delete('/dossiers/{id}', [DossierController::class, 'destroy'])->name('dossiers.destroy');

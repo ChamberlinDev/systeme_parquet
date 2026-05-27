@@ -38,6 +38,7 @@ class DossierController extends Controller
     public function index_procureur()
     {
         $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->where('procureur_id', Auth::id())
             ->latest()
             ->paginate(10);
 
