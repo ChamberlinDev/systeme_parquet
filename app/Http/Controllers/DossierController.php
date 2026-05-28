@@ -59,11 +59,52 @@ class DossierController extends Controller
     //     $dossiers = Dossier::all();
     //     return view('substitut.dossier.index', compact('dossiers'));
     // }
+    // public function create_form()
+    // {
+    //     $numbers = $this->getNextDossierNumber();
+    //     $registres = Registre::all();
+    //     $user = Auth::user();
+    //     $view = 'greffier.dossier.ajout';
+
+    //     if ($user?->hasRole('procureur')) {
+    //         $view = 'procureur.dossier.ajout';
+    //     }
+
+    //     if ($user?->hasRole('juge')) {
+    //         $view = 'juge.dossier.ajout';
+    //     }
+
+    //     return view($view, compact('numbers', 'registres'));
+    // }
+
     public function create_form()
     {
-        $numbers = $this->getNextDossierNumber();
-        $registres = Registre::all();
-        $user = Auth::user();
+        $registres       = Registre::all();
+        $defaultRegistre = $registres->first();
+        $user            = Auth::user();
+        $numbers         = null;
+
+        if ($defaultRegistre) {
+            $data = DB::transaction(function () use ($defaultRegistre) {
+                return $this->getNextDossierNumber($defaultRegistre->code);
+            });
+
+            $numbers = [
+                'numero_rp'       => "RP/{$data['year']}/{$data['sequence']}",
+                'numero_registre' => "{$defaultRegistre->code}/{$data['year']}/{$data['sequence']}"
+            ];
+        }
+
+        $procureurs = User::role('procureur')
+            ->where('parquet_id', $user->parquet_id)
+            ->get();
+
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->where('parquet_id', $user->parquet_id)
+            ->where('id_greffier', $user->id)
+            ->latest()
+            ->paginate(10);
+
         $view = 'greffier.dossier.ajout';
 
         if ($user?->hasRole('procureur')) {
@@ -74,7 +115,7 @@ class DossierController extends Controller
             $view = 'juge.dossier.ajout';
         }
 
-        return view($view, compact('numbers', 'registres'));
+        return view($view, compact('numbers', 'registres', 'procureurs', 'dossiers'));
     }
 
     protected function getNextDossierNumber($registreCode): array

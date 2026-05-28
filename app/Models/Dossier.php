@@ -17,6 +17,8 @@ class Dossier extends Model
         'statut',
         'id_greffier',
         'procureur_id',
+        'juge_id',
+        'date_audience',
         'motif_orientation',
         'date_orientation',
 
@@ -52,5 +54,9 @@ class Dossier extends Model
     public function procureur()
     {
         return $this->belongsTo(User::class, 'procureur_id'); // ← manquante
+    }
+    public function juge()
+    {
+        return $this->belongsTo(User::class, 'juge_id');
     }
 }

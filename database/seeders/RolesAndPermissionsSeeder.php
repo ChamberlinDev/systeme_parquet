@@ -30,17 +30,17 @@ class RolesAndPermissionsSeeder extends Seeder
             'dossier.archiver',
 
             // Analyse & Orientation
-            // 'analyse.obv',
-            // 'decision.orientation',
+            'analyse.obv',
+            'decision.orientation',
 
             // Rôle & Audience
             // 'role.prepare',
-            // 'audience.tenir',
+             'audience.tenir',
 
             // Décision
-            // 'decision.rediger',
-            // 'decision.signer',
-            // 'decision.transmettre',
+            'decision.rediger',
+            'decision.signer',
+            'decision.transmettre',
 
             // Statistiques
             // 'rapport.generer',
@@ -71,7 +71,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $admin->syncPermissions(Permission::all());
 
         // GREFFIER
-         $greffier->syncPermissions([
+        $greffier->syncPermissions([
             'dossier.create',
             'dossier.view',
             'dossier.update',
@@ -82,12 +82,12 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // PROCUREUR
-        // $procureur->syncPermissions([
-        //     'dossier.view',
-        //     'analyse.obv',
-        //     'decision.orientation',
-        //     'dossier.suivi',
-        // ]);
+        $procureur->syncPermissions([
+            'dossier.view',
+            'analyse.obv',
+            'decision.orientation',
+            'dossier.suivi',
+        ]);
 
         // SUBSTITUT
         // $substitut->syncPermissions([
@@ -98,13 +98,12 @@ class RolesAndPermissionsSeeder extends Seeder
         // ]);
 
         // JUGE
-        // $juge->syncPermissions([
-        //     'dossier.view',
-        //     'role.prepare',
-        //     'audience.tenir',
-        //     'decision.rediger',
-        //     'decision.signer',
-        // ]); 
+        $juge->syncPermissions([
+            'dossier.view',
+            'audience.tenir',
+            'decision.rediger',
+            'decision.signer',
+        ]);
 
         //ADMIN PAR DÉFAUT
 
@@ -114,8 +113,8 @@ class RolesAndPermissionsSeeder extends Seeder
                 'name'     => 'Administrateur',
                 'password' => Hash::make('motdepasse1234'),
                 'is_actif' => true,
-                'must_change_password' => true, 
-                'parquet_id'=>null,
+                'must_change_password' => true,
+                'parquet_id' => null,
 
             ]
         );

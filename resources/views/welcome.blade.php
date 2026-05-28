@@ -83,7 +83,9 @@
 							<th style="width:35%">Dossier</th>
 							<th>Registre</th>
 							<th>Statut</th>
-							<th>Date</th>
+							<th>Date enregistrement</th>
+							<th>Greffier</th>
+							<th>Procureur</th>
 							<th class="text-center">Actions</th>
 						</tr>
 					</thead>
@@ -141,6 +143,24 @@
 									{{ \Carbon\Carbon::parse($dossier->date_demande)->diffForHumans() }}
 								</small>
 							</td>
+							
+							{{-- GREFFIER --}}
+							<td>
+								@if($dossier->greffier)
+								{{ $dossier->greffier->name }}
+								@else
+								<span class="text-muted">Non assigné</span>
+								@endif
+							</td>
+							
+							{{-- PROCUREUR --}}
+							<td>
+								@if($dossier->procureur)
+								{{ $dossier->procureur->name }}
+								@else
+								<span class="text-muted">Non assigné</span>
+								@endif
+							</td>
 
 							{{-- ACTIONS --}}
 							<td class="text-center">
@@ -168,11 +188,11 @@
 							<td colspan="5" class="text-center py-5 text-muted">
 								<i class="fas fa-folder-open fa-3x mb-3 opacity-25 d-block"></i>
 								Aucun dossier trouvé
-								<div class="mt-3">
+								<!-- <div class="mt-3">
 									<a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm">
 										Créer un dossier
 									</a>
-								</div>
+								</div> -->
 							</td>
 						</tr>
 						@endforelse

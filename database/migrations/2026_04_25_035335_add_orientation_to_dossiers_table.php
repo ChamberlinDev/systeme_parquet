@@ -28,8 +28,11 @@ return new class extends Migration
         Schema::table('dossiers', function (Blueprint $table) {
             $table->unsignedBigInteger('procureur_id')->nullable()->after('statut');
             $table->foreign('procureur_id')->references('id')->on('users')->onDelete('set null');
-            $table->text('motif_orientation')->nullable()->after('procureur_id');
+            $table->unsignedBigInteger('juge_id')->nullable()->after('procureur_id');
+            $table->foreign('juge_id')->references('id')->on('users')->onDelete('set null');
+            $table->text('motif_orientation')->nullable()->after('juge_id');
             $table->timestamp('date_orientation')->nullable()->after('motif_orientation');
+            $table->timestamp('date_audience')->nullable()->after('date_orientation');
         });
     }
 };
