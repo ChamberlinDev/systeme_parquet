@@ -55,11 +55,13 @@ class DossierController extends Controller
 
     public function index_procureur(Request $request)
     {
+        $user      = Auth::user();
         $filtres   = $this->filtres($request);
         $registres = Registre::orderBy('nom')->get();
         $statuts   = \App\Models\Dossier::statutsList();
 
         $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->when($user->parquet_id, fn($q) => $q->where('parquet_id', $user->parquet_id))
             ->recherche($filtres)
             ->latest()
             ->paginate(15)

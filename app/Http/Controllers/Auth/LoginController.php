@@ -43,15 +43,19 @@ class LoginController extends Controller
         }
 
         // Redirection normale par rôle
-        if ($user->hasRole('admin')) return redirect('/accueil_admin');
-        if ($user->hasRole('greffier')) return redirect('/accueil_greffier');
-        if ($user->hasRole('procureur')) return redirect('/accueil_procureur');
-        if ($user->hasRole('juge')) return redirect('/accueil_juge');
-
+        if ($user->hasRole(‘admin’))             return redirect(‘/accueil_admin’);
+        if ($user->hasRole(‘greffier’))          return redirect(‘/accueil_greffier’);
+        if ($user->hasRole(‘procureur’))         return redirect(‘/accueil_procureur’);
+        if ($user->hasRole(‘substitut’))         return redirect(‘/accueil_substitut’);
+        if ($user->hasRole(‘juge’))              return redirect(‘/accueil_juge’);
+        if ($user->hasRole(‘police_judiciaire’)) return redirect(‘/accueil_pj’);
+        if ($user->hasRole(‘huissier’))          return redirect(‘/accueil_huissier’);
+        if ($user->hasRole(‘penitentiaire’))     return redirect(‘/accueil_penitentiaire’);
+        if ($user->hasRole(‘tresor’))            return redirect(‘/accueil_tresor’);
 
         Auth::logout();
         return back()->withErrors([
-            'email' => 'Aucun rôle valide n’est associé à ce compte.',
+            ‘email’ => ‘Aucun rôle valide n\’est associé à ce compte.’,
         ]);
     }
 
@@ -72,11 +76,15 @@ class LoginController extends Controller
         $user->save();
 
         // Redirection après changement
-        if ($user->hasRole('admin')) return redirect('/accueil_admin');
-        if ($user->hasRole('greffier')) return redirect('/accueil_greffier');
-        if ($user->hasRole('procureur')) return redirect('/accueil_procureur');
-        if ($user->hasRole('juge')) return redirect('/accueil_juge');
-
+        if ($user->hasRole('admin'))             return redirect('/accueil_admin');
+        if ($user->hasRole('greffier'))          return redirect('/accueil_greffier');
+        if ($user->hasRole('procureur'))         return redirect('/accueil_procureur');
+        if ($user->hasRole('substitut'))         return redirect('/accueil_substitut');
+        if ($user->hasRole('juge'))              return redirect('/accueil_juge');
+        if ($user->hasRole('police_judiciaire')) return redirect('/accueil_pj');
+        if ($user->hasRole('huissier'))          return redirect('/accueil_huissier');
+        if ($user->hasRole('penitentiaire'))     return redirect('/accueil_penitentiaire');
+        if ($user->hasRole('tresor'))            return redirect('/accueil_tresor');
 
         return redirect('/');
     }

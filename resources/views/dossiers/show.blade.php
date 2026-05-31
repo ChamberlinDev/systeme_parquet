@@ -57,7 +57,7 @@
             <small class="text-muted">{{ $dossier->numero_rp }}</small>
         </div>
         <div class="d-flex gap-2">
-            @if($user?->hasRole('procureur'))
+            @if($user?->hasRole('procureur') || $user?->hasRole('substitut'))
                 <a href="{{ route('dossiers.orientation.form', $dossier) }}" class="btn btn-warning btn-sm">
                     <i class="fas fa-gavel"></i>
                     {{ $dossier->decision_orientation ? 'Modifier l\'orientation' : 'Décider orientation' }}

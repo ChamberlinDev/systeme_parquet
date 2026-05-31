@@ -55,11 +55,15 @@ class RolesAndPermissionsSeeder extends Seeder
         | ROLES
         |--------------------------------------------------------------------------
         */
-        $admin      = Role::firstOrCreate(['name' => 'admin']);
-        $greffier   = Role::firstOrCreate(['name' => 'greffier']);
-        $juge       = Role::firstOrCreate(['name' => 'juge']);
-        $procureur  = Role::firstOrCreate(['name' => 'procureur']);
-        $substitut  = Role::firstOrCreate(['name' => 'substitut']);
+        Role::firstOrCreate(['name' => 'admin']);
+        Role::firstOrCreate(['name' => 'greffier']);
+        Role::firstOrCreate(['name' => 'juge']);
+        Role::firstOrCreate(['name' => 'procureur']);
+        Role::firstOrCreate(['name' => 'substitut']);
+        Role::firstOrCreate(['name' => 'police_judiciaire']);
+        Role::firstOrCreate(['name' => 'huissier']);
+        Role::firstOrCreate(['name' => 'penitentiaire']);
+        Role::firstOrCreate(['name' => 'tresor']);
 
         /*
         |--------------------------------------------------------------------------

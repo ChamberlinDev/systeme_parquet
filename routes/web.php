@@ -49,7 +49,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/accueil_admin', [HomeController::class, 'accueil_admin'])->name('accueil.admin');
         Route::get('/accueil_greffier', [HomeController::class, 'accueil_greffier'])->name('accueil.greffier');
         Route::get('/accueil_procureur', [HomeController::class, 'accueil_procureur'])->name('accueil.procureur');
+        Route::get('/accueil_substitut', [HomeController::class, 'accueil_substitut'])->name('accueil.substitut');
         Route::get('/accueil_juge', [HomeController::class, 'accueil_juge'])->name('accueil.juge');
+        Route::get('/accueil_pj', [HomeController::class, 'accueil_pj'])->name('accueil.pj');
+        Route::get('/accueil_huissier', [HomeController::class, 'accueil_huissier'])->name('accueil.huissier');
+        Route::get('/accueil_penitentiaire', [HomeController::class, 'accueil_penitentiaire'])->name('accueil.penitentiaire');
+        Route::get('/accueil_tresor', [HomeController::class, 'accueil_tresor'])->name('accueil.tresor');
         
 
         /*
