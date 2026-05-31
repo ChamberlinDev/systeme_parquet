@@ -49,6 +49,13 @@
         </a>
     </li>
 
+    <li class="nav-item {{ request()->routeIs('instructions.index.procureur','instructions.show','instructions.create') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('instructions.index.procureur') }}">
+            <i class="fas fa-fw fa-search"></i>
+            <span>Instructions</span>
+        </a>
+    </li>
+
     <hr class="sidebar-divider">
 
     <li class="nav-item px-3">

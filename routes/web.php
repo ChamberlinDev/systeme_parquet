@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\ActeInstructionController;
 use App\Http\Controllers\ArchivageController;
 use App\Http\Controllers\AudienceController;
+use App\Http\Controllers\InstructionController;
+use App\Http\Controllers\MessageInstructionController;
+use App\Http\Controllers\MesureDetentionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DecisionController;
 use App\Http\Controllers\ExecutionController;
@@ -190,5 +194,41 @@ Route::middleware(['auth'])->group(function () {
         |--------------------------------------------------------------------------
         */
         Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
+
+        /*
+        |--------------------------------------------------------------------------
+        | INSTRUCTION JUDICIAIRE
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/juge/instructions', [InstructionController::class, 'indexJuge'])->name('instructions.index.juge');
+        Route::get('/procureur/instructions', [InstructionController::class, 'indexProcureur'])->name('instructions.index.procureur');
+
+        Route::get('/dossiers/{dossier}/instruction/ouvrir', [InstructionController::class, 'create'])
+            ->whereNumber('dossier')->name('instructions.create');
+        Route::post('/dossiers/{dossier}/instruction/ouvrir', [InstructionController::class, 'store'])
+            ->whereNumber('dossier')->name('instructions.store');
+
+        Route::get('/instructions/{instruction}', [InstructionController::class, 'show'])
+            ->name('instructions.show');
+        Route::post('/instructions/{instruction}/clore', [InstructionController::class, 'clore'])
+            ->name('instructions.clore');
+
+        // Actes
+        Route::post('/instructions/{instruction}/actes', [ActeInstructionController::class, 'store'])
+            ->name('actes.store');
+        Route::patch('/actes/{acte}/statut', [ActeInstructionController::class, 'updateStatut'])
+            ->name('actes.statut');
+
+        // Détention
+        Route::post('/instructions/{instruction}/detention', [MesureDetentionController::class, 'store'])
+            ->name('detention.store');
+        Route::patch('/detentions/{detention}/prolonger', [MesureDetentionController::class, 'prolonger'])
+            ->name('detention.prolonger');
+        Route::patch('/detentions/{detention}/lever', [MesureDetentionController::class, 'lever'])
+            ->name('detention.lever');
+
+        // Messages
+        Route::post('/instructions/{instruction}/messages', [MessageInstructionController::class, 'store'])
+            ->name('messages.instruction.store');
     });
 });

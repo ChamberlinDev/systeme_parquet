@@ -35,6 +35,13 @@
         </a>
     </li>
 
+    <li class="nav-item {{ request()->routeIs('instructions.index.juge','instructions.show') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('instructions.index.juge') }}">
+            <i class="fas fa-fw fa-balance-scale"></i>
+            <span>Instructions</span>
+        </a>
+    </li>
+
     <li class="nav-item {{ request()->routeIs('audiences.index.juge', 'audiences.show', 'decisions.create') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('audiences.index.juge') }}">
             <i class="fas fa-fw fa-gavel"></i>

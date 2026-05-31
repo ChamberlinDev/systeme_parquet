@@ -62,6 +62,11 @@
                     <i class="fas fa-gavel"></i>
                     {{ $dossier->decision_orientation ? 'Modifier l\'orientation' : 'Décider orientation' }}
                 </a>
+                @if($dossier->decision_orientation === 'requisitoire_introductif' && $dossier->instructions->isEmpty())
+                    <a href="{{ route('instructions.create', $dossier) }}" class="btn btn-dark btn-sm">
+                        <i class="fas fa-balance-scale"></i> Ouvrir instruction
+                    </a>
+                @endif
             @endif
             @if($user?->hasRole('greffier') && in_array($dossier->statut, ['Exécuté', 'Classé', 'Jugé']) && $dossier->statut !== 'Archivé')
                 <a href="{{ route('archivage.confirmer', $dossier) }}" class="btn btn-secondary btn-sm">
@@ -159,6 +164,40 @@
         </div>
 
         <div class="col-lg-7 mb-4">
+            {{-- Instruction judiciaire --}}
+            @if($dossier->instructions->isNotEmpty())
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-dark">Instruction judiciaire</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach($dossier->instructions as $instr)
+                    @php
+                    $instrColors = ['en_cours'=>'primary','clos_renvoi'=>'success','clos_non_lieu'=>'secondary'];
+                    $instrLabels = ['en_cours'=>'En cours','clos_renvoi'=>'Clos — Renvoi','clos_non_lieu'=>'Clos — Non-lieu'];
+                    @endphp
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-semibold small">
+                                Saisie le {{ \Carbon\Carbon::parse($instr->date_saisine)->format('d/m/Y') }}
+                            </span>
+                            <span class="text-muted small ms-2">
+                                Juge : {{ $instr->juge->name ?? '—' }}
+                            </span>
+                            <span class="badge bg-{{ $instrColors[$instr->statut] ?? 'secondary' }} ms-2">
+                                {{ $instrLabels[$instr->statut] ?? $instr->statut }}
+                            </span>
+                        </div>
+                        <a href="{{ route('instructions.show', $instr) }}"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
             {{-- Audiences liées --}}
             @if($dossier->audiences->isNotEmpty())
             <div class="card shadow-sm border-0 mb-4">
