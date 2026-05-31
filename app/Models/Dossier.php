@@ -69,6 +69,11 @@ class Dossier extends Model
         return $this->hasMany(Instruction::class, 'id_dossier', 'id_dossier')->latest();
     }
 
+    public function pjDocuments()
+    {
+        return $this->hasMany(PjDocument::class, 'id_dossier', 'id_dossier')->latest();
+    }
+
     public function scopeRecherche($query, array $filtres)
     {
         if (!empty($filtres['q'])) {

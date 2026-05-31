@@ -102,6 +102,14 @@
     </a>
   </li>
 
+  {{-- Messagerie --}}
+  <li class="nav-item {{ request()->routeIs('messagerie.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('messagerie.index') }}">
+      <i class="fas fa-fw fa-envelope"></i>
+      <span>Messagerie</span>
+    </a>
+  </li>
+
   {{-- Paramètres --}}
   <li class="nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
     <a class="nav-link" href="#">

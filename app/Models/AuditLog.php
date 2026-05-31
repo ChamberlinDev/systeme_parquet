@@ -45,6 +45,9 @@ class AuditLog extends Model
         'ACTE_INSTRUCTION'     => 'info',
         'DETENTION'            => 'danger',
         'MESSAGE'              => 'light',
+        'GENERATION_PDF'       => 'secondary',
+        'DEPOT_PJ'             => 'primary',
+        'MESSAGE_SERVICE'      => 'light',
     ];
 
     public static array $labels = [
@@ -65,5 +68,8 @@ class AuditLog extends Model
         'ACTE_INSTRUCTION'     => 'Acte instruction',
         'DETENTION'            => 'Détention',
         'MESSAGE'              => 'Message',
+        'GENERATION_PDF'       => 'Génération PDF',
+        'DEPOT_PJ'             => 'Dépôt PJ',
+        'MESSAGE_SERVICE'      => 'Message inter-services',
     ];
 }

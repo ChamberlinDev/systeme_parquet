@@ -2,10 +2,22 @@
 @php $roleLabel = 'Police Judiciaire'; $homeRoute = route('accueil.pj'); @endphp
 
 @section('sidebar_links')
-<li class="nav-item">
+<li class="nav-item active">
     <a class="nav-link" href="{{ route('accueil.pj') }}">
         <i class="fas fa-fw fa-tasks"></i>
         <span>Mes actes à exécuter</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('pj.depot.form') }}">
+        <i class="fas fa-fw fa-upload"></i>
+        <span>Dépôt de pièces</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('messagerie.index') }}">
+        <i class="fas fa-fw fa-envelope"></i>
+        <span>Messagerie</span>
     </a>
 </li>
 @endsection

@@ -111,7 +111,7 @@ class DossierController extends Controller
 
     public function show(Dossier $dossier)
     {
-        $dossier->load(['registre', 'parties', 'files', 'historique.user', 'audiences', 'decisions']);
+        $dossier->load(['registre', 'parties', 'files', 'historique.user', 'audiences', 'decisions', 'pjDocuments.uploader']);
 
         AuditService::log('CONSULTATION_DOSSIER', 'Dossier', $dossier->id_dossier, $dossier->numero_rp);
 

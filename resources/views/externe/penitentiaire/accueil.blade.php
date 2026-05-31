@@ -2,10 +2,16 @@
 @php $roleLabel = 'Administration Pénitentiaire'; $homeRoute = route('accueil.penitentiaire'); @endphp
 
 @section('sidebar_links')
-<li class="nav-item">
+<li class="nav-item active">
     <a class="nav-link" href="{{ route('accueil.penitentiaire') }}">
         <i class="fas fa-fw fa-lock"></i>
         <span>Mandats de détention</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('messagerie.index') }}">
+        <i class="fas fa-fw fa-envelope"></i>
+        <span>Messagerie</span>
     </a>
 </li>
 @endsection

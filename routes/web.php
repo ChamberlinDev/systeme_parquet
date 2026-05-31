@@ -3,6 +3,8 @@
 use App\Http\Controllers\ActeInstructionController;
 use App\Http\Controllers\ActePdfController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\MessageServiceController;
+use App\Http\Controllers\PjPortailController;
 use App\Http\Controllers\ArchivageController;
 use App\Http\Controllers\AudienceController;
 use App\Http\Controllers\InstructionController;
@@ -239,6 +241,24 @@ Route::middleware(['auth'])->group(function () {
             ->whereNumber('decision')->name('pdf.ordonnance');
         Route::get('/pdf/decisions/{decision}/notification', [ActePdfController::class, 'notification'])
             ->whereNumber('decision')->name('pdf.notification');
+
+        /*
+        |--------------------------------------------------------------------------
+        | PORTAIL POLICE JUDICIAIRE
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/pj/depot', [PjPortailController::class, 'depotForm'])->name('pj.depot.form');
+        Route::post('/pj/depot', [PjPortailController::class, 'store'])->name('pj.depot.store');
+        Route::get('/pj/documents/{document}', [PjPortailController::class, 'voir'])
+            ->whereNumber('document')->name('pj.document.voir');
+
+        /*
+        |--------------------------------------------------------------------------
+        | MESSAGERIE INTER-SERVICES
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/messagerie', [MessageServiceController::class, 'index'])->name('messagerie.index');
+        Route::post('/messagerie', [MessageServiceController::class, 'store'])->name('messagerie.store');
 
         /*
         |--------------------------------------------------------------------------

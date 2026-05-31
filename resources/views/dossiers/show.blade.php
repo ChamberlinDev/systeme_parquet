@@ -217,6 +217,33 @@
         </div>
 
         <div class="col-lg-7 mb-4">
+            {{-- Pièces déposées par la PJ --}}
+            @if($dossier->pjDocuments->isNotEmpty())
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-dark">Pièces déposées par la PJ</h5>
+                    <span class="badge bg-light border text-dark">{{ $dossier->pjDocuments->count() }}</span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach($dossier->pjDocuments as $doc)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas {{ \App\Models\PjDocument::$typeIcons[$doc->type_document] ?? 'fa-file' }} text-primary me-1"></i>
+                            <span class="fw-semibold small">{{ \App\Models\PjDocument::$typeLabels[$doc->type_document] ?? $doc->type_document }}</span>
+                            <span class="text-muted small ms-1">{{ $doc->description ?: $doc->original_name }}</span>
+                            <div class="text-muted" style="font-size:0.72rem">
+                                Déposé par {{ $doc->uploader->name ?? '—' }} le {{ $doc->created_at->format('d/m/Y') }}
+                            </div>
+                        </div>
+                        <a href="{{ route('pj.document.voir', $doc) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
             {{-- Instruction judiciaire --}}
             @if($dossier->instructions->isNotEmpty())
             <div class="card shadow-sm border-0 mb-4">

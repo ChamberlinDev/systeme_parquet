@@ -2,10 +2,16 @@
 @php $roleLabel = 'Huissier de justice'; $homeRoute = route('accueil.huissier'); @endphp
 
 @section('sidebar_links')
-<li class="nav-item">
+<li class="nav-item active">
     <a class="nav-link" href="{{ route('accueil.huissier') }}">
         <i class="fas fa-fw fa-calendar-check"></i>
         <span>Convocations à signifier</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('messagerie.index') }}">
+        <i class="fas fa-fw fa-envelope"></i>
+        <span>Messagerie</span>
     </a>
 </li>
 @endsection

@@ -2,10 +2,16 @@
 @php $roleLabel = 'Trésor Public'; $homeRoute = route('accueil.tresor'); @endphp
 
 @section('sidebar_links')
-<li class="nav-item">
+<li class="nav-item active">
     <a class="nav-link" href="{{ route('accueil.tresor') }}">
         <i class="fas fa-fw fa-coins"></i>
         <span>Amendes à recouvrer</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('messagerie.index') }}">
+        <i class="fas fa-fw fa-envelope"></i>
+        <span>Messagerie</span>
     </a>
 </li>
 @endsection
