@@ -66,6 +66,14 @@
     </a>
   </li>
 
+  {{-- Journal d'audit --}}
+  <li class="nav-item {{ request()->routeIs('audit.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('audit.index') }}">
+      <i class="fas fa-fw fa-clipboard-list"></i>
+      <span>Journal d'audit</span>
+    </a>
+  </li>
+
   {{-- Exécution --}}
   <li class="nav-item {{ request()->routeIs('executions.*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('executions.index') }}">

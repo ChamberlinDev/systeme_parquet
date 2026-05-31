@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\AuditService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,6 +43,8 @@ class LoginController extends Controller
             return redirect()->route('change_password.form');
         }
 
+        AuditService::log(‘CONNEXION’, ‘User’, $user->id, ‘Connexion réussie’);
+
         // Redirection normale par rôle
         if ($user->hasRole(‘admin’))             return redirect(‘/accueil_admin’);
         if ($user->hasRole(‘greffier’))          return redirect(‘/accueil_greffier’);
@@ -75,6 +78,8 @@ class LoginController extends Controller
         $user->must_change_password = false;
         $user->save();
 
+        AuditService::log('MOT_DE_PASSE', 'User', $user->id, 'Mot de passe modifié');
+
         // Redirection après changement
         if ($user->hasRole('admin'))             return redirect('/accueil_admin');
         if ($user->hasRole('greffier'))          return redirect('/accueil_greffier');
@@ -93,6 +98,8 @@ class LoginController extends Controller
     {
         // Déconnexion de l'utilisateur
         Auth::logout();
+        AuditService::log('DECONNEXION', 'User', null, 'Déconnexion');
+
         // Invalider la session
         $request->session()->invalidate();
 

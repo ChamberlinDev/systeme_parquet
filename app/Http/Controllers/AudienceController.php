@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ConvocationAudienceMail;
+use App\Services\AuditService;
 use App\Models\Audience;
 use App\Models\Dossier;
 use App\Models\DossierHistorique;
@@ -98,6 +99,9 @@ class AudienceController extends Controller
                 }
             }
         }
+
+        AuditService::log('CREATION_AUDIENCE', 'Audience', $audience->id_audience,
+            'Audience du ' . \Carbon\Carbon::parse($request->date_audience)->format('d/m/Y'));
 
         $msg = 'Audience planifiée avec succès.';
         if ($convoquesCount > 0) {

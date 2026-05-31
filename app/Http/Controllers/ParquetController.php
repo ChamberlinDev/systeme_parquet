@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\OrientationDecideeMail;
+use App\Services\AuditService;
 use App\Models\Dossier;
 use App\Models\DossierHistorique;
 use App\Models\User;
@@ -69,6 +70,9 @@ class ParquetController extends Controller
             'action'     => 'Orientation',
             'detail'     => self::$labels[$request->decision_orientation] . ' — ' . $request->motif_orientation,
         ]);
+
+        AuditService::log('ORIENTATION', 'Dossier', $dossier->id_dossier,
+            self::$labels[$request->decision_orientation] . ' — ' . $dossier->numero_rp);
 
         // Notifier le greffier du dossier
         if ($dossier->id_greffier) {

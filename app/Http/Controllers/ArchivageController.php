@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dossier;
 use App\Models\DossierHistorique;
+use App\Services\AuditService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -78,6 +79,8 @@ class ArchivageController extends Controller
             'action'     => 'Archivage',
             'detail'     => $request->motif_archivage,
         ]);
+
+        AuditService::log('ARCHIVAGE', 'Dossier', $dossier->id_dossier, $dossier->numero_rp);
 
         return redirect()->route('archivage.index')
             ->with('success', 'Dossier ' . $dossier->numero_registre . ' archivé.');

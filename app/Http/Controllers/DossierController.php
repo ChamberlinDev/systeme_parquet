@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\NouveauDossierMail;
 use App\Models\Dossier;
+use App\Services\AuditService;
 use App\Models\Dossier_files;
 use App\Models\Registre;
 use App\Models\User;
@@ -111,6 +112,8 @@ class DossierController extends Controller
     public function show(Dossier $dossier)
     {
         $dossier->load(['registre', 'parties', 'files', 'historique.user', 'audiences', 'decisions']);
+
+        AuditService::log('CONSULTATION_DOSSIER', 'Dossier', $dossier->id_dossier, $dossier->numero_rp);
 
         return view('dossiers.show', compact('dossier'));
     }
@@ -238,6 +241,8 @@ class DossierController extends Controller
                 ->withInput()
                 ->with('error', 'Impossible de stocker les pieces jointes. Verifie que MinIO est lance et que le bucket parquet existe.');
         }
+
+        AuditService::log('CREATION_DOSSIER', 'Dossier', $dossier->id_dossier, $dossier->numero_rp);
 
         // Notifier les procureurs du nouveau dossier
         $dossier->load('parties');

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActeInstructionController;
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\ArchivageController;
 use App\Http\Controllers\AudienceController;
 use App\Http\Controllers\InstructionController;
@@ -211,6 +212,14 @@ Route::middleware(['auth'])->group(function () {
         |--------------------------------------------------------------------------
         */
         Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
+
+        /*
+        |--------------------------------------------------------------------------
+        | JOURNAL D'AUDIT (admin uniquement)
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/admin/audit', [AuditLogController::class, 'index'])->name('audit.index');
+        Route::get('/admin/audit/export', [AuditLogController::class, 'export'])->name('audit.export');
 
         /*
         |--------------------------------------------------------------------------

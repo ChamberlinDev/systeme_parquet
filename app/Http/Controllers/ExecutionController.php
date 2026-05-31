@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ExecutionCreeMail;
+use App\Services\AuditService;
 use App\Models\Decision;
 use App\Models\Dossier;
 use App\Models\DossierHistorique;
@@ -68,6 +69,9 @@ class ExecutionController extends Controller
             'detail'     => $peineLabels[$request->type_peine] . ' — ' . ($institution->nom ?? ''),
         ]);
 
+        AuditService::log('CREATION_EXECUTION', 'Execution', $execution->id_execution,
+            $peineLabels[$request->type_peine] . ' — ' . ($institution->nom ?? ''));
+
         // Notifier l'institution si elle a un email configuré
         $execution->load('decision.dossier', 'institution');
         if ($institution && $institution->email) {
@@ -102,6 +106,9 @@ class ExecutionController extends Controller
             'executee'     => 'Exécutée',
             'non_executee' => 'Non exécutée',
         ];
+
+        AuditService::log('MAJ_EXECUTION', 'Execution', $execution->id_execution,
+            $statutLabels[$request->statut_execution] ?? $request->statut_execution);
 
         $dossier = $execution->decision->dossier;
 
