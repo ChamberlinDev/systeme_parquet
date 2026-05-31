@@ -249,14 +249,157 @@ Ref. cahier : "Integrations recommandees" (pp. 432–436)
 
 ### Priorite 9 — Fonctionnalites complementaires non critiques
 
-- [ ] Edition d'un dossier apres creation (infraction, parties, parquet competent)
-- [ ] Suppression controlee d'un dossier (admin uniquement, avec confirmation)
-- [ ] Export de la liste des dossiers en PDF ou Excel
-- [ ] Rapports periodiques automatiques (mensuel, trimestriel, annuel) exportables
-- [ ] Tableau de bord statistique accessible au procureur (pas seulement admin)
-- [ ] Page de profil utilisateur completement fonctionnelle (modification nom, mot de passe)
-- [ ] Integration reelle d'un provider SMS (actuellement stub loggue)
-- [ ] Chiffrement au repos (AES) et sauvegardes PCA/PRA (infrastructure)
+Ces fonctionnalites ne figurent pas explicitement dans le cahier des charges
+mais ameliorent le confort d'usage et la robustesse. Detail de ce qu'il faut faire
+pour chacune.
+
+---
+
+#### 9.1 — Edition d'un dossier apres creation
+
+**Objectif** : permettre au greffier de corriger un dossier (infraction, parties,
+parquet competent, registre) tant qu'il n'est pas juge/archive.
+
+**A faire :**
+- `DossierController::edit(Dossier $dossier)` : afficher le formulaire pre-rempli
+  (reutiliser la vue d'ajout ou creer `dossiers/edit.blade.php`)
+- `DossierController::update(Request $request, Dossier $dossier)` :
+  - Valider les memes champs que `store()`
+  - Bloquer l'edition si statut dans [Juge, Execute, Archive] → `abort(403)`
+  - Mettre a jour le dossier + synchroniser les parties (supprimer/recreer ou updateOrCreate)
+  - Gerer l'ajout/suppression de pieces jointes existantes
+- Routes : `GET /dossiers/{dossier}/modifier` (edit), `PUT /dossiers/{dossier}` (update)
+- Bouton "Modifier" sur la page detail dossier (visible greffier, statut editable)
+- Logger `MAJ_DOSSIER` dans le journal d'audit + `dossier_historique`
+
+**Fichiers** : `DossierController.php`, `routes/web.php`,
+`resources/views/dossiers/edit.blade.php`, `dossiers/show.blade.php`
+
+---
+
+#### 9.2 — Suppression controlee d'un dossier (admin)
+
+**Objectif** : suppression reservee a l'admin, avec confirmation et trace.
+
+**A faire :**
+- `DossierController::destroy(Dossier $dossier)` :
+  - Verifier `auth()->user()->hasRole('admin')` → sinon `abort(403)`
+  - Supprimer en cascade les pieces MinIO (boucle sur `$dossier->files` + `pjDocuments`)
+  - Logger `SUPPRESSION_DOSSIER` AVANT le delete (apres, l'id n'existe plus)
+  - `$dossier->delete()` (les FK en cascade gerent parties/audiences/etc.)
+- Route : `DELETE /dossiers/{dossier}`
+- Modale de confirmation Bootstrap sur la liste admin (double confirmation : taper le numero)
+- Ajouter le label/couleur `SUPPRESSION_DOSSIER` dans `AuditLog`
+
+**Fichiers** : `DossierController.php`, `routes/web.php`,
+`admin/dossiers/index.blade.php`, `app/Models/AuditLog.php`
+
+---
+
+#### 9.3 — Export de la liste des dossiers (Excel / PDF)
+
+**Objectif** : exporter la liste filtree des dossiers.
+
+**A faire :**
+- Export CSV (simple, sans dependance) : `DossierController::export(Request $request)`
+  - Reutiliser le scope `recherche()` avec les memes filtres que l'index
+  - Generer un CSV en streaming (BOM UTF-8, separateur `;`) — cf. modele `AuditLogController::export()`
+  - Colonnes : numero RP, numero registre, registre, statut, infraction, date, nb parties
+- Export PDF (optionnel) : vue `pdf/liste_dossiers.blade.php` + DomPDF en mode paysage
+- Routes : `GET /dossiers/export/csv`, `GET /dossiers/export/pdf`
+- Boutons "Export CSV" / "Export PDF" sur les listes (remplacer le bouton "Export PDF" mort)
+
+**Fichiers** : `DossierController.php`, `routes/web.php`,
+`partials/dossier_search.blade.php` ou chaque vue index, `pdf/liste_dossiers.blade.php`
+
+---
+
+#### 9.4 — Rapports periodiques exportables
+
+**Objectif** : rapport mensuel / trimestriel / annuel avec indicateurs.
+
+**A faire :**
+- `RapportController::index(Request $request)` :
+  - Parametre `periode` (mois/trimestre/annee) + `date_reference`
+  - Agreger : dossiers enregistres, classes, juges, executes, archives sur la periode
+  - Delais moyens (date_demande → date_orientation, → date_decision, → date_archivage)
+  - Repartition par registre et par type d'orientation
+- Vue `admin/rapports/index.blade.php` : selection de periode + tableaux + graphes
+- Export PDF du rapport : `pdf/rapport_periodique.blade.php` (en-tete officiel, periode, indicateurs)
+- Routes : `GET /rapports`, `GET /rapports/pdf`
+- Lien "Rapports" dans la sidebar admin
+
+**Fichiers** : `app/Http/Controllers/RapportController.php`, `routes/web.php`,
+`admin/rapports/index.blade.php`, `pdf/rapport_periodique.blade.php`,
+`admin/partials/sidebar.blade.php`
+
+---
+
+#### 9.5 — Tableau de bord statistique accessible au procureur
+
+**Objectif** : donner l'acces aux statistiques au procureur, pas seulement a l'admin.
+
+**A faire :**
+- Route `statistiques.index` : actuellement reservee de fait a l'admin via la sidebar.
+  Ajouter le lien "Statistiques" dans `procureur/partials/sidebar.blade.php`
+- Adapter `StatistiqueController::index()` pour filtrer par `parquet_id`
+  si l'utilisateur est procureur avec un parquet (cloisonnement)
+- Verifier que la vue `admin/statistiques/index.blade.php` fonctionne sous le layout
+  procureur (ou creer une version partagee)
+
+**Fichiers** : `StatistiqueController.php`,
+`procureur/partials/sidebar.blade.php`, eventuellement la vue stats
+
+---
+
+#### 9.6 — Page de profil utilisateur fonctionnelle
+
+**Objectif** : permettre a chaque utilisateur de modifier son nom et son mot de passe.
+
+**A faire :**
+- `ProfilController::update(Request $request)` :
+  - Modifier le nom (validation `required|string`)
+  - Changement de mot de passe optionnel (`current_password` + `password|confirmed|min:8`)
+  - Verifier l'ancien mot de passe avec `Hash::check()`
+- La vue `profil/voir` existe deja par role — ajouter un formulaire d'edition
+  (ou une vue `profil/modif.blade.php` ; elle existe deja cote admin)
+- Route : `PUT /profil`
+- Logger `MAJ_PROFIL` dans le journal d'audit
+
+**Fichiers** : `ProfilController.php`, `routes/web.php`, vues `*/profil/`
+
+---
+
+#### 9.7 — Integration reelle d'un provider SMS
+
+**Objectif** : remplacer le stub SMS loggue par un envoi reel.
+
+**A faire :**
+- Choisir un provider (Twilio, Vonage/Nexmo, ou Orange SMS API selon le pays)
+- `composer require twilio/sdk` (ou autre)
+- Completer `NotificationService::sendSms()` :
+  - Lire les identifiants depuis `config/services.php` + `.env`
+  - Appeler l'API du provider, garder le try-catch silencieux
+- Variables `.env` : `SMS_PROVIDER`, `SMS_SID`, `SMS_TOKEN`, `SMS_FROM`
+- La logique d'appel (convocations audience) est deja en place — rien a changer cote metier
+
+**Fichiers** : `app/Services/NotificationService.php`, `config/services.php`, `.env`
+
+---
+
+#### 9.8 — Chiffrement au repos et sauvegardes (infrastructure)
+
+**Objectif** : conformite au cahier (chiffrement AES au repos, PCA/PRA).
+
+**A faire (hors code applicatif) :**
+- Chiffrement au repos : activer le chiffrement cote MinIO (SSE) et cote base de donnees
+  (chiffrement disque ou TDE selon le SGBD)
+- Sauvegardes quotidiennes : script `mysqldump` + sync MinIO planifie (cron)
+- Optionnel cote Laravel : package `spatie/laravel-backup` pour automatiser
+  les dumps DB + fichiers vers un stockage distant
+- Documenter la procedure de restauration (PRA)
+
+**Fichiers** : configuration serveur/Docker, eventuellement `config/backup.php`
 
 ---
 
