@@ -6,12 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Audience extends Model
 {
-    //
+    protected $primaryKey = 'id_audience';
+
     protected $fillable = [
-        'id_audience',
         'date_audience',
         'salle',
         'type_audience',
-        'role'
+        'role',
     ];
+
+    public function dossiers()
+    {
+        return $this->belongsToMany(Dossier::class, 'dossier_audience', 'id_audience', 'id_dossier');
+    }
 }

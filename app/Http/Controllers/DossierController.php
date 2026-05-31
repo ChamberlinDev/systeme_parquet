@@ -3,16 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dossier;
+use App\Models\Dossier_files;
 use App\Models\Registre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 
 class DossierController extends Controller
 {
     //affichage des dossiers admin
     public function index()
     {
-        $dossiers = Dossier::latest()->paginate(10);
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->latest()
+            ->paginate(10);
+
         return view('admin.dossiers.index', compact('dossiers'));
     }
     // affichage des dossiers greffier
@@ -67,6 +74,33 @@ class DossierController extends Controller
 
         return view($view, compact('numbers', 'registres'));
     }
+
+    public function show(Dossier $dossier)
+    {
+        $dossier->load(['registre', 'parties', 'files', 'historique.user']);
+
+        return view('dossiers.show', compact('dossier'));
+    }
+
+    public function showFile(Dossier $dossier, Dossier_files $file)
+    {
+        abort_unless((int) $file->id_dossier === (int) $dossier->id_dossier, 404);
+
+        $location = $this->resolveDossierFileLocation($file->file_path);
+
+        abort_unless($location, 404, 'Fichier introuvable dans le stockage.');
+
+        [$disk, $path] = $location;
+        $filename = basename($path);
+
+        return Storage::disk($disk)->response(
+            $path,
+            $filename,
+            ['Content-Type' => 'application/pdf'],
+            'inline'
+        );
+    }
+
     protected function getNextDossierNumber(): array
     {
         $year = date('Y');
@@ -105,40 +139,66 @@ class DossierController extends Controller
             'parties.*.role'     => 'nullable|string',
         ]);
 
-        $numbers  = $this->getNextDossierNumber();
-        $registre = Registre::findOrFail($request->id_registre);
-        $seq      = explode('/', $numbers['numero_rp'])[2];
-        $year     = date('Y');
+        $disk = $this->dossierFilesDisk();
+        $storedFiles = [];
 
-        $dossier = Dossier::create([
-            'numero_rp'         => $numbers['numero_rp'],
-            'numero_registre'   => "{$registre->code}/{$year}/{$seq}",
-            'id_registre'       => $registre->id_registre,
-            'nature_infraction' => $request->nature_infraction,
-            'date_demande'      => $request->date_demande,
-            'parquet_competent' => $request->parquet_competent,
-            'id_greffier'       => $user && $user->hasRole('greffier') ? $user->id : null,
-        ]);
+        try {
+            $dossier = DB::transaction(function () use ($request, $user, $disk, &$storedFiles) {
+                $numbers  = $this->getNextDossierNumber();
+                $registre = Registre::findOrFail($request->id_registre);
+                $seq      = explode('/', $numbers['numero_rp'])[2];
+                $year     = date('Y');
 
-
-        // Parties
-        if ($request->has('parties')) {
-            foreach ($request->parties as $partie) {
-                $dossier->parties()->create([
-                    'nom'     => $partie['nom'],
-                    'prenom'  => $partie['prenom']  ?? null,
-                    'contact' => $partie['contact'] ?? null,
-                    'role'    => $partie['role']    ?? 'Plaignant',
+                $dossier = Dossier::create([
+                    'numero_rp'         => $numbers['numero_rp'],
+                    'numero_registre'   => "{$registre->code}/{$year}/{$seq}",
+                    'id_registre'       => $registre->id_registre,
+                    'nature_infraction' => $request->nature_infraction,
+                    'date_demande'      => $request->date_demande,
+                    'parquet_competent' => $request->parquet_competent,
+                    'id_greffier'       => $user && $user->hasRole('greffier') ? $user->id : null,
                 ]);
-            }
-        }
 
-        // Fichiers PDF
-        if ($request->hasFile('pdf_files')) {
-            foreach ($request->file('pdf_files') as $pdf) {
-                $filename = $pdf->store('dossiers_pdfs', 'public');
-                $dossier->files()->create(['file_path' => $filename]);
+                if ($request->has('parties')) {
+                    foreach ($request->parties as $partie) {
+                        $dossier->parties()->create([
+                            'nom'     => $partie['nom'],
+                            'prenom'  => $partie['prenom']  ?? null,
+                            'contact' => $partie['contact'] ?? null,
+                            'role'    => $partie['role']    ?? 'Plaignant',
+                        ]);
+                    }
+                }
+
+                if ($request->hasFile('pdf_files')) {
+                    foreach ($request->file('pdf_files') as $pdf) {
+                        $filename = $pdf->store("dossiers/{$dossier->id_dossier}/pieces", $disk);
+
+                        if (!$filename) {
+                            throw new RuntimeException('Le fichier PDF n a pas pu etre stocke.');
+                        }
+
+                        $storedFiles[] = $filename;
+                        $dossier->files()->create(['file_path' => $filename]);
+                    }
+                }
+
+                return $dossier;
+            });
+        } catch (\Throwable $exception) {
+            foreach ($storedFiles as $path) {
+                try {
+                    Storage::disk($disk)->delete($path);
+                } catch (\Throwable $cleanupException) {
+                    report($cleanupException);
+                }
             }
+
+            report($exception);
+
+            return back()
+                ->withInput()
+                ->with('error', 'Impossible de stocker les pieces jointes. Verifie que MinIO est lance et que le bucket parquet existe.');
         }
 
         $redirectRoute = 'dossiers.index.greffier';
@@ -153,5 +213,33 @@ class DossierController extends Controller
 
         return redirect()->route($redirectRoute)
             ->with('success', 'Dossier ajouté avec succès !');
+    }
+
+    private function dossierFilesDisk(): string
+    {
+        $disk = config('filesystems.default', 'public');
+
+        return $disk === 'local' ? 'public' : $disk;
+    }
+
+    private function resolveDossierFileLocation(string $path): ?array
+    {
+        $candidateDisks = array_unique([
+            $this->dossierFilesDisk(),
+            'minio',
+            'public',
+        ]);
+
+        foreach ($candidateDisks as $disk) {
+            try {
+                if (Storage::disk($disk)->exists($path)) {
+                    return [$disk, $path];
+                }
+            } catch (\Throwable $exception) {
+                report($exception);
+            }
+        }
+
+        return null;
     }
 }

@@ -12,7 +12,7 @@ class Decision extends Model
         'type_decision',
         'contenu',
         'date_decision',
-        'sagnatures'
+        'signatures'
     ];
 
     public function audience()

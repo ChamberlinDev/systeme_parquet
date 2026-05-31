@@ -8,6 +8,9 @@
                 <h2 class="m-0 font-weight-bold text-dark">Ajouter un Dossier</h2>
             </div>
             <div class="card-body p-5 text-dark">
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
 
                 <form action="{{ route('dossiers.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf

@@ -16,6 +16,10 @@ class Dossier extends Model
         'parquet_competent',
         'statut',
         'id_greffier',
+        'decision_orientation',
+        'motif_orientation',
+        'date_orientation',
+        'id_procureur',
     ];
 
     public function registre()
@@ -31,5 +35,15 @@ class Dossier extends Model
     public function parties()
     {
         return $this->hasMany(Partie::class, 'id_dossier', 'id_dossier');
+    }
+
+    public function audiences()
+    {
+        return $this->belongsToMany(Audience::class, 'dossier_audience', 'id_dossier', 'id_audience');
+    }
+
+    public function historique()
+    {
+        return $this->hasMany(DossierHistorique::class, 'id_dossier', 'id_dossier')->latest();
     }
 }

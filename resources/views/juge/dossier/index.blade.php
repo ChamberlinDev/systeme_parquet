@@ -92,7 +92,7 @@
                             <div class="d-flex align-items-center gap-3">
                                 <i class="fas fa-folder-open fa-2x text-warning"></i>
                                 <div>
-                                    <a href="#" class="text-primary">
+                                    <a href="{{ route('dossiers.show', $dossier) }}" class="text-primary">
                                         <div class="fw-semibold">{{ $dossier->numero_registre }}</div>
                                     </a>
                                     <small class="text-muted">
@@ -133,7 +133,7 @@
 
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="#" class="btn btn-sm btn-outline-primary" title="Voir">
+                                <a href="{{ route('dossiers.show', $dossier) }}" class="btn btn-sm btn-outline-primary" title="Voir">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="btn btn-sm btn-outline-warning" title="Modifier">

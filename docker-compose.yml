@@ -19,6 +19,7 @@ services:
       - systeme_parquet_network
 #---------------------------------
 # phpMyAdmin service configuration
+# Web interface: http://localhost:8081
 #---------------------------------
 
   phpmyadmin:
@@ -37,6 +38,7 @@ services:
       - systeme_parquet_network
 #---------------------------------
 # MINIO service de storage configuration
+#Web interface: http://localhost:9002
 #---------------------------------
   minio:
     image: minio/minio

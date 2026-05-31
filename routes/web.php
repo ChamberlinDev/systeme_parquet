@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DossierController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ParquetController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RegistreController;
 use App\Http\Controllers\UserController;
@@ -57,6 +58,13 @@ Route::middleware(['auth'])->group(function () {
         // creation dossier
         Route::get('/dossiers/creer', [DossierController::class, 'create_form'])->name('dossiers.create.form');
         Route::post('/dossiers/creer', [DossierController::class, 'store'])->name('dossiers.store');
+        Route::get('/dossiers/{dossier}', [DossierController::class, 'show'])
+            ->whereNumber('dossier')
+            ->name('dossiers.show');
+        Route::get('/dossiers/{dossier}/fichiers/{file}', [DossierController::class, 'showFile'])
+            ->whereNumber('dossier')
+            ->whereNumber('file')
+            ->name('dossiers.files.show');
 
         /*
         |--------------------------------------------------------------------------
@@ -77,5 +85,18 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/users/{id}/desactiver', [UserController::class, 'desactiver'])->name('users.desactiver');
 
         Route::resource('registres', RegistreController::class);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ORIENTATION PARQUET
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/procureur/dossiers/{dossier}/orientation', [ParquetController::class, 'orientationForm'])
+            ->whereNumber('dossier')
+            ->name('dossiers.orientation.form');
+
+        Route::post('/procureur/dossiers/{dossier}/orientation', [ParquetController::class, 'orientationStore'])
+            ->whereNumber('dossier')
+            ->name('dossiers.orientation.store');
     });
 });
