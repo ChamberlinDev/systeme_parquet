@@ -71,12 +71,12 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-bold text-dark mb-0">Liste des Dossiers</h4>
-        <div class="d-flex gap-2">
-            <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm">
-                <i class="fas fa-plus me-1"></i> Nouveau
+        <div class="d-flex">
+            <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm mr-2">
+                <i class="fas fa-plus"></i> Nouveau
             </a>
             <a href="#" class="btn btn-outline-secondary btn-sm">
-                <i class="fas fa-file-pdf me-1"></i> Export PDF
+                <i class="fas fa-file-pdf"></i> Export PDF
             </a>
         </div>
     </div>
@@ -104,7 +104,7 @@
                             <div class="d-flex align-items-center gap-3">
                                 <i class="fas fa-folder-open fa-2x text-warning"></i>
                                 <div>
-                                    <a href="#" class="text-primary">
+                                    <a href="{{ route('dossiers.show', $dossier) }}" class="text-primary">
                                     <div class="fw-semibold"> {{ $dossier->numero_registre }}</div>
                                      </a>
                                     <small class="text-muted">
@@ -152,7 +152,7 @@
                         {{-- ACTIONS --}}
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="#" class="btn btn-sm btn-outline-primary" title="Voir">
+                                <a href="{{ route('dossiers.show', $dossier) }}" class="btn btn-sm btn-outline-primary" title="Voir">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="btn btn-sm btn-outline-warning" title="Modifier">

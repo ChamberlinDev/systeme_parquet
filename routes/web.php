@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\ArchivageController;
+use App\Http\Controllers\AudienceController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DecisionController;
+use App\Http\Controllers\ExecutionController;
+use App\Http\Controllers\StatistiqueController;
 use App\Http\Controllers\DossierController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ParquetController;
@@ -39,7 +44,9 @@ Route::middleware(['auth'])->group(function () {
         */
         Route::get('/accueil_admin', [HomeController::class, 'accueil_admin'])->name('accueil.admin');
         Route::get('/accueil_greffier', [HomeController::class, 'accueil_greffier'])->name('accueil.greffier');
-
+        Route::get('/accueil_procureur', [HomeController::class, 'accueil_procureur'])->name('accueil.procureur');
+        Route::get('/accueil_juge', [HomeController::class, 'accueil_juge'])->name('accueil.juge');
+        
 
         /*
         |--------------------------------------------------------------------------
@@ -48,12 +55,21 @@ Route::middleware(['auth'])->group(function () {
         */
         Route::get('/dossiers', [DossierController::class, 'index'])->name('dossiers.index');
         Route::get('/greffier/dossiers', [DossierController::class, 'index_greffier'])->name('dossiers.index.greffier');
-        Route::get('/greffier/dossiers/{id}', [DossierController::class, 'show'])->name('dossiers.show');
+        Route::get('/procureur/dossiers', [DossierController::class, 'index_procureur'])->name('dossiers.index.procureur');
+        Route::get('/juge/dossiers', [DossierController::class, 'index_juge'])->name('dossiers.index.juge');
+        
 
 
         // creation dossier
         Route::get('/dossiers/creer', [DossierController::class, 'create_form'])->name('dossiers.create.form');
         Route::post('/dossiers/creer', [DossierController::class, 'store'])->name('dossiers.store');
+        Route::get('/dossiers/{dossier}', [DossierController::class, 'show'])
+            ->whereNumber('dossier')
+            ->name('dossiers.show');
+        Route::get('/dossiers/{dossier}/fichiers/{file}', [DossierController::class, 'showFile'])
+            ->whereNumber('dossier')
+            ->whereNumber('file')
+            ->name('dossiers.files.show');
 
         Route::get('/dossiers/{id}/edit', [DossierController::class, 'edit'])->name('dossiers.edit');
         Route::put('/dossiers/{id}', [DossierController::class, 'update'])->name('dossiers.update');
@@ -83,5 +99,96 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/parquet/creer', [ParquetController::class, 'store'])->name('parquets.store');
 
         Route::resource('registres', RegistreController::class);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ORIENTATION PARQUET
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/procureur/dossiers/{dossier}/orientation', [ParquetController::class, 'orientationForm'])
+            ->whereNumber('dossier')
+            ->name('dossiers.orientation.form');
+
+        Route::post('/procureur/dossiers/{dossier}/orientation', [ParquetController::class, 'orientationStore'])
+            ->whereNumber('dossier')
+            ->name('dossiers.orientation.store');
+
+        /*
+        |--------------------------------------------------------------------------
+        | AUDIENCES
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/greffier/audiences', [AudienceController::class, 'indexGreffier'])->name('audiences.index.greffier');
+        Route::get('/juge/audiences', [AudienceController::class, 'indexJuge'])->name('audiences.index.juge');
+        Route::get('/procureur/audiences', [AudienceController::class, 'indexProcureur'])->name('audiences.index.procureur');
+
+        Route::get('/audiences/creer', [AudienceController::class, 'create'])->name('audiences.create');
+        Route::post('/audiences/creer', [AudienceController::class, 'store'])->name('audiences.store');
+
+        Route::get('/audiences/{audience}', [AudienceController::class, 'show'])
+            ->whereNumber('audience')
+            ->name('audiences.show');
+
+        Route::post('/audiences/{audience}/pv', [AudienceController::class, 'addPv'])
+            ->whereNumber('audience')
+            ->name('audiences.pv');
+
+        /*
+        |--------------------------------------------------------------------------
+        | DECISIONS
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/audiences/{audience}/dossiers/{dossier}/decision', [DecisionController::class, 'create'])
+            ->whereNumber('audience')->whereNumber('dossier')
+            ->name('decisions.create');
+
+        Route::post('/audiences/{audience}/dossiers/{dossier}/decision', [DecisionController::class, 'store'])
+            ->whereNumber('audience')->whereNumber('dossier')
+            ->name('decisions.store');
+
+        /*
+        |--------------------------------------------------------------------------
+        | EXÉCUTIONS
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/greffier/executions', [ExecutionController::class, 'index'])->name('executions.index');
+
+        Route::get('/decisions/{decision}/executions/creer', [ExecutionController::class, 'create'])
+            ->whereNumber('decision')
+            ->name('executions.create');
+
+        Route::post('/decisions/{decision}/executions/creer', [ExecutionController::class, 'store'])
+            ->whereNumber('decision')
+            ->name('executions.store');
+
+        Route::get('/executions/{execution}', [ExecutionController::class, 'show'])
+            ->whereNumber('execution')
+            ->name('executions.show');
+
+        Route::patch('/executions/{execution}/statut', [ExecutionController::class, 'updateStatut'])
+            ->whereNumber('execution')
+            ->name('executions.statut');
+
+        /*
+        |--------------------------------------------------------------------------
+        | ARCHIVAGE
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/greffier/archives', [ArchivageController::class, 'index'])->name('archivage.index');
+
+        Route::get('/dossiers/{dossier}/archiver', [ArchivageController::class, 'confirmer'])
+            ->whereNumber('dossier')
+            ->name('archivage.confirmer');
+
+        Route::post('/dossiers/{dossier}/archiver', [ArchivageController::class, 'store'])
+            ->whereNumber('dossier')
+            ->name('archivage.store');
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATISTIQUES
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
     });
 });

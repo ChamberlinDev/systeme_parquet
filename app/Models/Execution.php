@@ -11,9 +11,10 @@ class Execution extends Model
 
     protected $fillable = [
         'id_decision',
+        'id_institution',
         'type_peine',
         'date_execution',
-        'statut_execution'
+        'statut_execution',
     ];
 
     public function decision()

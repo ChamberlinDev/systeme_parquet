@@ -16,7 +16,12 @@ class Dossier extends Model
         'parquet_id',
         'statut',
         'id_greffier',
-        
+        'decision_orientation',
+        'motif_orientation',
+        'date_orientation',
+        'id_procureur',
+        'motif_archivage',
+        'date_archivage',
     ];
 
     // public function dossiers()
@@ -42,8 +47,19 @@ class Dossier extends Model
     {
         return $this->hasMany(Partie::class, 'id_dossier', 'id_dossier');
     }
-    public function greffier()
+
+    public function audiences()
     {
-        return $this->belongsTo(User::class, 'id_greffier');
+        return $this->belongsToMany(Audience::class, 'dossier_audience', 'id_dossier', 'id_audience');
+    }
+
+    public function historique()
+    {
+        return $this->hasMany(DossierHistorique::class, 'id_dossier', 'id_dossier')->latest();
+    }
+
+    public function decisions()
+    {
+        return $this->hasMany(Decision::class, 'id_dossier', 'id_dossier')->latest();
     }
 }

@@ -58,17 +58,17 @@
     </a>
   </li>
 
-  {{-- Audience et décision --}}
-  <li class="nav-item {{ request()->routeIs('audiences.index') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-calendar-check"></i>
-      <span>Audience et décision</span>
+  {{-- Statistiques --}}
+  <li class="nav-item {{ request()->routeIs('statistiques.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('statistiques.index') }}">
+      <i class="fas fa-fw fa-chart-bar"></i>
+      <span>Statistiques</span>
     </a>
   </li>
 
   {{-- Exécution --}}
   <li class="nav-item {{ request()->routeIs('executions.*') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="{{ route('executions.index') }}">
       <i class="fas fa-fw fa-clipboard-check"></i>
       <span>Exécution des décisions</span>
     </a>

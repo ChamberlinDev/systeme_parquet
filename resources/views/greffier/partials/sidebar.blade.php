@@ -48,27 +48,27 @@
     </a>
   </li>
 
-  {{-- Préparation audience --}}
-  <li class="nav-item {{ request()->routeIs('audience.preparation') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-calendar-alt"></i>
-      <span>Préparation audience</span>
-    </a>
-  </li>
-
-  {{-- Audience et décision --}}
-  <li class="nav-item {{ request()->routeIs('audience.index') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
+  {{-- Audiences --}}
+  <li class="nav-item {{ request()->routeIs('audiences.index.greffier', 'audiences.create', 'audiences.show') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('audiences.index.greffier') }}">
       <i class="fas fa-fw fa-calendar-check"></i>
-      <span>Audience et Décision</span>
+      <span>Audiences</span>
     </a>
   </li>
 
   {{-- Exécution --}}
-  <li class="nav-item {{ request()->routeIs('execution.index') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
+  <li class="nav-item {{ request()->routeIs('executions.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('executions.index') }}">
       <i class="fas fa-fw fa-clipboard-check"></i>
-      <span>Exécution des décisions</span>
+      <span>Exécutions</span>
+    </a>
+  </li>
+
+  {{-- Archives --}}
+  <li class="nav-item {{ request()->routeIs('archivage.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('archivage.index') }}">
+      <i class="fas fa-fw fa-archive"></i>
+      <span>Archives</span>
     </a>
   </li>
 

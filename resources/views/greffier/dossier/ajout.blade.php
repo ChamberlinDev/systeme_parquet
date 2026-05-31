@@ -25,7 +25,10 @@
                     <i class="fas fa-folder-open fa-2x text-primary opacity-75"></i>
                 </div>
             </div>
-        </div>
+            <div class="card-body p-5 text-dark">
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
 
         {{-- En cours --}}
         <div class="col-xl-3 col-md-6">

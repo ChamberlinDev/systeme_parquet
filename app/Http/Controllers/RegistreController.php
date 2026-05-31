@@ -44,12 +44,12 @@ class RegistreController extends Controller
 
         $registre->update($request->only('nom', 'code'));
 
-        return redirect()->route('greffier.registres.index')->with('success', 'Registre mis à jour');
+        return redirect()->route('registres.index')->with('success', 'Registre mis à jour');
     }
 
     public function destroy(Registre $registre)
     {
         $registre->delete();
-        return redirect()->route('greffier.registres.index')->with('success', 'Registre supprimé');
+        return redirect()->route('registres.index')->with('success', 'Registre supprimé');
     }
 }
