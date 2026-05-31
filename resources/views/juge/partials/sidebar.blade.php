@@ -35,17 +35,10 @@
         </a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item {{ request()->routeIs('audiences.index.juge', 'audiences.show', 'decisions.create') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('audiences.index.juge') }}">
             <i class="fas fa-fw fa-gavel"></i>
             <span>Audiences</span>
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-file-signature"></i>
-            <span>Jugements</span>
         </a>
     </li>
 

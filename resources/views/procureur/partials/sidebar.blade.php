@@ -35,17 +35,17 @@
         </a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-balance-scale"></i>
-            <span>Requisitions</span>
+    <li class="nav-item {{ request()->routeIs('audiences.index.procureur', 'audiences.show') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('audiences.index.procureur') }}">
+            <i class="fas fa-fw fa-calendar-check"></i>
+            <span>Audiences</span>
         </a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-search"></i>
-            <span>Suivi des procedures</span>
+    <li class="nav-item {{ request()->routeIs('dossiers.orientation.form') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('dossiers.index.procureur') }}">
+            <i class="fas fa-fw fa-balance-scale"></i>
+            <span>Orientations</span>
         </a>
     </li>
 

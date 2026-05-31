@@ -77,7 +77,7 @@ class DossierController extends Controller
 
     public function show(Dossier $dossier)
     {
-        $dossier->load(['registre', 'parties', 'files', 'historique.user']);
+        $dossier->load(['registre', 'parties', 'files', 'historique.user', 'audiences', 'decisions']);
 
         return view('dossiers.show', compact('dossier'));
     }

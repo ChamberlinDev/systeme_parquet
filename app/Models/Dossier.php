@@ -46,4 +46,9 @@ class Dossier extends Model
     {
         return $this->hasMany(DossierHistorique::class, 'id_dossier', 'id_dossier')->latest();
     }
+
+    public function decisions()
+    {
+        return $this->hasMany(Decision::class, 'id_dossier', 'id_dossier')->latest();
+    }
 }

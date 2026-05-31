@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AudienceController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DecisionController;
 use App\Http\Controllers\DossierController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ParquetController;
@@ -98,5 +100,38 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/procureur/dossiers/{dossier}/orientation', [ParquetController::class, 'orientationStore'])
             ->whereNumber('dossier')
             ->name('dossiers.orientation.store');
+
+        /*
+        |--------------------------------------------------------------------------
+        | AUDIENCES
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/greffier/audiences', [AudienceController::class, 'indexGreffier'])->name('audiences.index.greffier');
+        Route::get('/juge/audiences', [AudienceController::class, 'indexJuge'])->name('audiences.index.juge');
+        Route::get('/procureur/audiences', [AudienceController::class, 'indexProcureur'])->name('audiences.index.procureur');
+
+        Route::get('/audiences/creer', [AudienceController::class, 'create'])->name('audiences.create');
+        Route::post('/audiences/creer', [AudienceController::class, 'store'])->name('audiences.store');
+
+        Route::get('/audiences/{audience}', [AudienceController::class, 'show'])
+            ->whereNumber('audience')
+            ->name('audiences.show');
+
+        Route::post('/audiences/{audience}/pv', [AudienceController::class, 'addPv'])
+            ->whereNumber('audience')
+            ->name('audiences.pv');
+
+        /*
+        |--------------------------------------------------------------------------
+        | DECISIONS
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/audiences/{audience}/dossiers/{dossier}/decision', [DecisionController::class, 'create'])
+            ->whereNumber('audience')->whereNumber('dossier')
+            ->name('decisions.create');
+
+        Route::post('/audiences/{audience}/dossiers/{dossier}/decision', [DecisionController::class, 'store'])
+            ->whereNumber('audience')->whereNumber('dossier')
+            ->name('decisions.store');
     });
 });

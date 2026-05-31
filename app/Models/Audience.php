@@ -13,6 +13,7 @@ class Audience extends Model
         'salle',
         'type_audience',
         'role',
+        'pv',
     ];
 
     public function dossiers()

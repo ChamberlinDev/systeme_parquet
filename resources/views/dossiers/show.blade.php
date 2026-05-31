@@ -15,6 +15,7 @@
     }
 
     $firstFile = $dossier->files->first();
+    $dossier->loadMissing('audiences', 'decisions');
 
     $orientationLabels = [
         'classement_sans_suite'    => 'Classement sans suite',
@@ -153,6 +154,50 @@
         </div>
 
         <div class="col-lg-7 mb-4">
+            {{-- Audiences liées --}}
+            @if($dossier->audiences->isNotEmpty())
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-dark">Audiences</h5>
+                    <span class="badge bg-light border text-dark">{{ $dossier->audiences->count() }}</span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach($dossier->audiences as $audience)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-semibold">{{ \Carbon\Carbon::parse($audience->date_audience)->format('d/m/Y') }}</span>
+                            <span class="text-muted small ms-2">{{ $audience->salle }}</span>
+                            <span class="badge bg-light border text-dark ms-1">{{ ucfirst($audience->type_audience) }}</span>
+                        </div>
+                        <a href="{{ route('audiences.show', $audience) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            {{-- Décisions rendues --}}
+            @if($dossier->decisions->isNotEmpty())
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-dark">Décisions judiciaires</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach($dossier->decisions as $dec)
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="fw-semibold">{{ ucfirst($dec->type_decision) }}</span>
+                            <span class="text-muted small">{{ \Carbon\Carbon::parse($dec->date_decision)->format('d/m/Y') }}</span>
+                        </div>
+                        <div class="text-muted small mt-1">{{ Str::limit($dec->contenu, 150) }}</div>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
             {{-- Historique --}}
             @if($dossier->historique->isNotEmpty())
             <div class="card shadow-sm border-0 mb-4">

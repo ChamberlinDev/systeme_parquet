@@ -114,14 +114,18 @@
                         <td>
                             @php
                             $colors = [
-                            'En cours' => 'warning',
-                            'Cloture' => 'success',
-                            'Archive' => 'secondary',
-                            'Suspendu' => 'danger',
+                                'En cours'       => 'warning',
+                                'Orienté'        => 'info',
+                                'En instruction' => 'primary',
+                                'Classé'         => 'secondary',
+                                'Jugé'           => 'success',
+                                'Cloture'        => 'success',
+                                'Archive'        => 'secondary',
+                                'Suspendu'       => 'danger',
                             ];
                             $color = $colors[$dossier->statut] ?? 'secondary';
                             @endphp
-                            <span class="badge bg-{{ $color }}">{{ $dossier->statut }}</span>
+                            <span class="badge bg-{{ $color }} {{ $color === 'warning' ? 'text-dark' : '' }}">{{ $dossier->statut }}</span>
                         </td>
 
                         <td>
