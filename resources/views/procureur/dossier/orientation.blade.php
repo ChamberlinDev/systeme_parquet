@@ -87,10 +87,12 @@
 
                             @php
                             $options = [
-                                'classement_sans_suite'    => ['label' => 'Classement sans suite', 'desc' => 'Charges insuffisantes ou action publique non opportune.', 'color' => 'danger'],
-                                'citation_directe'         => ['label' => 'Citation directe', 'desc' => 'Assignation directe devant le tribunal (affaires simples).', 'color' => 'primary'],
-                                'comparution_immediate'    => ['label' => 'Comparution immédiate', 'desc' => 'Flagrants délits — jugement rapide.', 'color' => 'warning'],
+                                'classement_sans_suite'    => ['label' => 'Classement sans suite',    'desc' => 'Charges insuffisantes ou action publique non opportune.',        'color' => 'danger'],
+                                'citation_directe'         => ['label' => 'Citation directe',         'desc' => 'Assignation directe devant le tribunal (affaires simples).',      'color' => 'primary'],
+                                'comparution_immediate'    => ['label' => 'Comparution immédiate',    'desc' => 'Flagrants délits — jugement rapide.',                             'color' => 'warning'],
                                 'requisitoire_introductif' => ['label' => 'Réquisitoire introductif', 'desc' => 'Saisine du juge d\'instruction (affaires graves ou complexes).', 'color' => 'dark'],
+                                'mediation_penale'         => ['label' => 'Médiation pénale',         'desc' => 'Alternative aux poursuites — résolution amiable du conflit.',     'color' => 'success'],
+                                'renvoi_administratif'     => ['label' => 'Renvoi administratif',     'desc' => 'Transmission à l\'autorité administrative compétente.',           'color' => 'secondary'],
                             ];
                             @endphp
 
@@ -169,10 +171,12 @@ document.querySelectorAll('input[name="decision_orientation"]').forEach(function
         if (selected) {
             const card = selected.nextElementSibling;
             const colors = {
-                'classement_sans_suite': 'danger',
-                'citation_directe': 'primary',
-                'comparution_immediate': 'warning',
+                'classement_sans_suite':    'danger',
+                'citation_directe':         'primary',
+                'comparution_immediate':    'warning',
                 'requisitoire_introductif': 'dark',
+                'mediation_penale':         'success',
+                'renvoi_administratif':     'secondary',
             };
             const c = colors[selected.value] || 'primary';
             card.className = 'card border-2 p-3 h-100 d-block border-' + c + ' bg-' + c + '-subtle';

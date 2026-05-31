@@ -110,22 +110,63 @@
 
             {{-- Bloc orientation --}}
             @if($dossier->decision_orientation)
+            @php
+                $orientationLabels['mediation_penale']     = 'Médiation pénale';
+                $orientationLabels['renvoi_administratif'] = 'Renvoi administratif';
+                $orientationColors['mediation_penale']     = 'success';
+                $orientationColors['renvoi_administratif'] = 'secondary';
+                $oc = $orientationColors[$dossier->decision_orientation] ?? 'secondary';
+            @endphp
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 text-dark">Decision d'orientation</h5>
-                    @php $oc = $orientationColors[$dossier->decision_orientation] ?? 'secondary'; @endphp
                     <span class="badge bg-{{ $oc }} {{ $oc === 'warning' ? 'text-dark' : '' }}">
                         {{ $orientationLabels[$dossier->decision_orientation] ?? $dossier->decision_orientation }}
                     </span>
                 </div>
                 <div class="card-body">
-                    <dl class="row mb-0 small">
+                    <dl class="row mb-3 small">
                         <dt class="col-sm-5">Date</dt>
                         <dd class="col-sm-7">{{ \Carbon\Carbon::parse($dossier->date_orientation)->format('d/m/Y') }}</dd>
-
                         <dt class="col-sm-5">Motif</dt>
                         <dd class="col-sm-7">{{ $dossier->motif_orientation }}</dd>
                     </dl>
+
+                    {{-- Actions PDF --}}
+                    <div class="d-flex flex-wrap gap-2">
+                        @if($user?->hasRole('procureur'))
+                        <a href="{{ route('dossiers.acte.pdf', $dossier) }}"
+                           class="btn btn-sm btn-outline-dark" target="_blank">
+                            <i class="fas fa-file-pdf"></i> Télécharger l'acte PDF
+                        </a>
+                        @endif
+
+                        @if($dossier->acte_signe_path)
+                        <a href="{{ route('dossiers.acte.voir', $dossier) }}"
+                           class="btn btn-sm btn-outline-success" target="_blank">
+                            <i class="fas fa-file-signature"></i> Voir l'acte signé
+                        </a>
+                        @endif
+                    </div>
+
+                    {{-- Upload acte signé --}}
+                    @if($user?->hasRole('procureur'))
+                    <div class="mt-3">
+                        <form method="POST" action="{{ route('dossiers.acte.upload', $dossier) }}"
+                              enctype="multipart/form-data">
+                            @csrf
+                            <div class="input-group input-group-sm">
+                                <input type="file" name="acte_signe" accept=".pdf"
+                                    class="form-control form-control-sm">
+                                <button type="submit" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-upload"></i>
+                                    {{ $dossier->acte_signe_path ? 'Remplacer l\'acte signé' : 'Déposer l\'acte signé' }}
+                                </button>
+                            </div>
+                            <div class="form-text">PDF uniquement, max 5 Mo</div>
+                        </form>
+                    </div>
+                    @endif
                 </div>
             </div>
             @endif

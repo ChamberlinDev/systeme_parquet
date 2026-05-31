@@ -116,9 +116,12 @@
                                 'En cours'       => 'warning',
                                 'Orienté'        => 'info',
                                 'En instruction' => 'primary',
+                                'Médiation'      => 'success',
                                 'Classé'         => 'secondary',
+                                'Jugé'           => 'success',
+                                'Exécuté'        => 'success',
+                                'Archivé'        => 'dark',
                                 'Cloture'        => 'success',
-                                'Archive'        => 'secondary',
                                 'Suspendu'       => 'danger',
                             ];
                             $color = $colors[$dossier->statut] ?? 'secondary';

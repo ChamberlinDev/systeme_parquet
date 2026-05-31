@@ -117,6 +117,18 @@ Route::middleware(['auth'])->group(function () {
             ->whereNumber('dossier')
             ->name('dossiers.orientation.store');
 
+        Route::get('/procureur/dossiers/{dossier}/acte-pdf', [ParquetController::class, 'genererActePdf'])
+            ->whereNumber('dossier')
+            ->name('dossiers.acte.pdf');
+
+        Route::post('/procureur/dossiers/{dossier}/acte-signe', [ParquetController::class, 'uploadActeSigne'])
+            ->whereNumber('dossier')
+            ->name('dossiers.acte.upload');
+
+        Route::get('/dossiers/{dossier}/acte-signe', [ParquetController::class, 'voirActeSigne'])
+            ->whereNumber('dossier')
+            ->name('dossiers.acte.voir');
+
         /*
         |--------------------------------------------------------------------------
         | AUDIENCES

@@ -22,6 +22,7 @@ class Dossier extends Model
         'id_procureur',
         'motif_archivage',
         'date_archivage',
+        'acte_signe_path',
     ];
 
     // public function dossiers()
