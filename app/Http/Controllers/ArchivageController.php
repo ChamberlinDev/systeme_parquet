@@ -9,14 +9,44 @@ use Illuminate\Support\Facades\Auth;
 
 class ArchivageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dossiers = Dossier::with(['registre', 'parties'])
-            ->where('statut', 'Archivé')
-            ->orderByDesc('date_archivage')
-            ->paginate(15);
+        $filtres   = $request->only(['q', 'registre', 'date_du', 'date_au']);
+        $registres = \App\Models\Registre::orderBy('nom')->get();
 
-        return view('greffier.archivage.index', compact('dossiers'));
+        $query = Dossier::with(['registre', 'parties'])
+            ->where('statut', 'Archivé');
+
+        if (!empty($filtres['q'])) {
+            $q = $filtres['q'];
+            $query->where(function ($sub) use ($q) {
+                $sub->where('numero_rp', 'like', "%{$q}%")
+                    ->orWhere('numero_registre', 'like', "%{$q}%")
+                    ->orWhere('nature_infraction', 'like', "%{$q}%")
+                    ->orWhere('motif_archivage', 'like', "%{$q}%")
+                    ->orWhereHas('parties', fn($p) =>
+                        $p->where('nom', 'like', "%{$q}%")->orWhere('prenom', 'like', "%{$q}%")
+                    );
+            });
+        }
+
+        if (!empty($filtres['registre'])) {
+            $query->where('id_registre', $filtres['registre']);
+        }
+
+        if (!empty($filtres['date_du'])) {
+            $query->whereDate('date_archivage', '>=', $filtres['date_du']);
+        }
+
+        if (!empty($filtres['date_au'])) {
+            $query->whereDate('date_archivage', '<=', $filtres['date_au']);
+        }
+
+        $dossiers = $query->orderByDesc('date_archivage')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('greffier.archivage.index', compact('dossiers', 'filtres', 'registres'));
     }
 
     public function confirmer(Dossier $dossier)

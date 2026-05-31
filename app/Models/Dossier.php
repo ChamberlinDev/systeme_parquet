@@ -68,4 +68,47 @@ class Dossier extends Model
     {
         return $this->hasMany(Instruction::class, 'id_dossier', 'id_dossier')->latest();
     }
+
+    public function scopeRecherche($query, array $filtres)
+    {
+        if (!empty($filtres['q'])) {
+            $q = $filtres['q'];
+            $query->where(function ($sub) use ($q) {
+                $sub->where('numero_rp', 'like', "%{$q}%")
+                    ->orWhere('numero_registre', 'like', "%{$q}%")
+                    ->orWhere('nature_infraction', 'like', "%{$q}%")
+                    ->orWhere('parquet_competent', 'like', "%{$q}%")
+                    ->orWhereHas('parties', function ($p) use ($q) {
+                        $p->where('nom', 'like', "%{$q}%")
+                          ->orWhere('prenom', 'like', "%{$q}%");
+                    });
+            });
+        }
+
+        if (!empty($filtres['registre'])) {
+            $query->where('id_registre', $filtres['registre']);
+        }
+
+        if (!empty($filtres['statut'])) {
+            $query->where('statut', $filtres['statut']);
+        }
+
+        if (!empty($filtres['date_du'])) {
+            $query->whereDate('date_demande', '>=', $filtres['date_du']);
+        }
+
+        if (!empty($filtres['date_au'])) {
+            $query->whereDate('date_demande', '<=', $filtres['date_au']);
+        }
+
+        return $query;
+    }
+
+    public static function statutsList(): array
+    {
+        return [
+            'En cours', 'Orienté', 'En instruction',
+            'Médiation', 'Classé', 'Jugé', 'Exécuté', 'Archivé',
+        ];
+    }
 }

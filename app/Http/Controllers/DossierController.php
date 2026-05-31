@@ -13,46 +13,71 @@ use RuntimeException;
 
 class DossierController extends Controller
 {
-    //affichage des dossiers admin
-    public function index()
+    private function filtres(Request $request): array
     {
-        $dossiers = Dossier::with(['registre', 'parties', 'files'])
-            ->latest()
-            ->paginate(10);
-
-        return view('admin.dossiers.index', compact('dossiers'));
+        return $request->only(['q', 'registre', 'statut', 'date_du', 'date_au']);
     }
-    // affichage des dossiers greffier
-    public function index_greffier()
+
+    public function index(Request $request)
     {
-        $user = Auth::user();
+        $filtres   = $this->filtres($request);
+        $registres = Registre::orderBy('nom')->get();
+        $statuts   = \App\Models\Dossier::statutsList();
 
         $dossiers = Dossier::with(['registre', 'parties', 'files'])
-            ->where('parquet_id', $user->parquet_id)
+            ->recherche($filtres)
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.dossiers.index', compact('dossiers', 'filtres', 'registres', 'statuts'));
+    }
+
+    public function index_greffier(Request $request)
+    {
+        $user      = Auth::user();
+        $filtres   = $this->filtres($request);
+        $registres = Registre::orderBy('nom')->get();
+        $statuts   = \App\Models\Dossier::statutsList();
+
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
             ->where('id_greffier', $user->id)
+            ->recherche($filtres)
             ->latest()
-            ->paginate(10);
+            ->paginate(15)
+            ->withQueryString();
 
-        return view('greffier.dossier.index', compact('dossiers'));
+        return view('greffier.dossier.index', compact('dossiers', 'filtres', 'registres', 'statuts'));
     }
 
-    // affichage des dossiers procureur
-    public function index_procureur()
+    public function index_procureur(Request $request)
     {
-        $dossiers = Dossier::with(['registre', 'parties', 'files'])
-            ->latest()
-            ->paginate(10);
+        $filtres   = $this->filtres($request);
+        $registres = Registre::orderBy('nom')->get();
+        $statuts   = \App\Models\Dossier::statutsList();
 
-        return view('procureur.dossier.index', compact('dossiers'));
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->recherche($filtres)
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('procureur.dossier.index', compact('dossiers', 'filtres', 'registres', 'statuts'));
     }
-    // affichage des dossiers juge
-    public function index_juge()
-    {
-        $dossiers = Dossier::with(['registre', 'parties', 'files'])
-            ->latest()
-            ->paginate(10);
 
-        return view('juge.dossier.index', compact('dossiers'));
+    public function index_juge(Request $request)
+    {
+        $filtres   = $this->filtres($request);
+        $registres = Registre::orderBy('nom')->get();
+        $statuts   = \App\Models\Dossier::statutsList();
+
+        $dossiers = Dossier::with(['registre', 'parties', 'files'])
+            ->recherche($filtres)
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('juge.dossier.index', compact('dossiers', 'filtres', 'registres', 'statuts'));
     }
     // affichage des dossiers substitut
     // public function index_substitut()

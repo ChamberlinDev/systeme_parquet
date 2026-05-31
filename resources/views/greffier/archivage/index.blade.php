@@ -15,6 +15,8 @@
         <span class="badge bg-secondary fs-6">{{ $dossiers->total() }} dossier(s)</span>
     </div>
 
+    @include('partials.dossier_search', ['route' => 'archivage.index', 'statuts' => []])
+
     <div class="card shadow-sm border-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
