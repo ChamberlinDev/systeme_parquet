@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrientationDecideeMail;
 use App\Models\Dossier;
 use App\Models\DossierHistorique;
+use App\Models\User;
+use App\Services\NotificationService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,6 +69,17 @@ class ParquetController extends Controller
             'action'     => 'Orientation',
             'detail'     => self::$labels[$request->decision_orientation] . ' — ' . $request->motif_orientation,
         ]);
+
+        // Notifier le greffier du dossier
+        if ($dossier->id_greffier) {
+            $greffier = User::find($dossier->id_greffier);
+            if ($greffier) {
+                NotificationService::sendMail(
+                    $greffier->email,
+                    new OrientationDecideeMail($dossier, self::$labels[$request->decision_orientation])
+                );
+            }
+        }
 
         return redirect()
             ->route('dossiers.show', $dossier)

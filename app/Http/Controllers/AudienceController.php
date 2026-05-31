@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConvocationAudienceMail;
 use App\Models\Audience;
 use App\Models\Dossier;
 use App\Models\DossierHistorique;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -62,6 +64,8 @@ class AudienceController extends Controller
 
         $audience->dossiers()->sync($request->dossier_ids);
 
+        $convoquesCount = 0;
+
         foreach ($request->dossier_ids as $id) {
             DossierHistorique::create([
                 'id_dossier' => $id,
@@ -70,10 +74,37 @@ class AudienceController extends Controller
                 'detail'     => 'Audience du ' . \Carbon\Carbon::parse($request->date_audience)->format('d/m/Y') . ' — Salle : ' . $request->salle,
             ]);
             Dossier::where('id_dossier', $id)->where('statut', 'En cours')->update(['statut' => 'Orienté']);
+
+            // Envoyer convocations aux parties ayant un email valide
+            $dossier = Dossier::with('parties')->find($id);
+            if ($dossier) {
+                foreach ($dossier->parties as $partie) {
+                    if ($partie->contact && filter_var($partie->contact, FILTER_VALIDATE_EMAIL)) {
+                        NotificationService::sendMail(
+                            $partie->contact,
+                            new ConvocationAudienceMail($audience, $dossier, $partie)
+                        );
+                        $convoquesCount++;
+                    }
+                    // SMS stub si contact ressemble à un numéro
+                    if ($partie->contact && !filter_var($partie->contact, FILTER_VALIDATE_EMAIL)) {
+                        NotificationService::sendSms(
+                            $partie->contact,
+                            "Convocation : vous êtes convoqué(e) le " .
+                            \Carbon\Carbon::parse($request->date_audience)->format('d/m/Y') .
+                            " salle {$request->salle} — Dossier {$dossier->numero_registre}"
+                        );
+                    }
+                }
+            }
         }
 
-        return redirect()->route('audiences.index.greffier')
-            ->with('success', 'Audience planifiée avec succès.');
+        $msg = 'Audience planifiée avec succès.';
+        if ($convoquesCount > 0) {
+            $msg .= " {$convoquesCount} convocation(s) email envoyée(s).";
+        }
+
+        return redirect()->route('audiences.index.greffier')->with('success', $msg);
     }
 
     public function show(Audience $audience)

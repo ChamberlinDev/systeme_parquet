@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NouveauDossierMail;
 use App\Models\Dossier;
 use App\Models\Dossier_files;
 use App\Models\Registre;
+use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -232,6 +235,13 @@ class DossierController extends Controller
             return back()
                 ->withInput()
                 ->with('error', 'Impossible de stocker les pieces jointes. Verifie que MinIO est lance et que le bucket parquet existe.');
+        }
+
+        // Notifier les procureurs du nouveau dossier
+        $dossier->load('parties');
+        $procureurs = User::role('procureur')->get();
+        foreach ($procureurs as $proc) {
+            NotificationService::sendMail($proc->email, new NouveauDossierMail($dossier));
         }
 
         $redirectRoute = 'dossiers.index.greffier';

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ExecutionCreeMail;
 use App\Models\Decision;
 use App\Models\Dossier;
 use App\Models\DossierHistorique;
 use App\Models\Execution;
 use App\Models\Institution_executante;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,6 +67,12 @@ class ExecutionController extends Controller
             'action'     => 'Exécution créée',
             'detail'     => $peineLabels[$request->type_peine] . ' — ' . ($institution->nom ?? ''),
         ]);
+
+        // Notifier l'institution si elle a un email configuré
+        $execution->load('decision.dossier', 'institution');
+        if ($institution && $institution->email) {
+            NotificationService::sendMail($institution->email, new ExecutionCreeMail($execution));
+        }
 
         return redirect()->route('executions.show', $execution)
             ->with('success', 'Exécution enregistrée.');

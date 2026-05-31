@@ -11,6 +11,7 @@ class Institution_executante extends Model
 
     protected $fillable = [
         'nom',
+        'email',
         'type_institution',
     ];
 
