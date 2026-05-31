@@ -20,6 +20,8 @@ class Dossier extends Model
         'motif_orientation',
         'date_orientation',
         'id_procureur',
+        'motif_archivage',
+        'date_archivage',
     ];
 
     public function registre()

@@ -64,6 +64,14 @@
     </a>
   </li>
 
+  {{-- Archives --}}
+  <li class="nav-item {{ request()->routeIs('archivage.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('archivage.index') }}">
+      <i class="fas fa-fw fa-archive"></i>
+      <span>Archives</span>
+    </a>
+  </li>
+
   <hr class="sidebar-divider">
 
   {{-- Déconnexion sécurisée --}}

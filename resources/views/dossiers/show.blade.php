@@ -63,6 +63,11 @@
                     {{ $dossier->decision_orientation ? 'Modifier l\'orientation' : 'Décider orientation' }}
                 </a>
             @endif
+            @if($user?->hasRole('greffier') && in_array($dossier->statut, ['Exécuté', 'Classé', 'Jugé']) && $dossier->statut !== 'Archivé')
+                <a href="{{ route('archivage.confirmer', $dossier) }}" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-archive"></i> Archiver
+                </a>
+            @endif
             <a href="{{ route($backRoute) }}" class="btn btn-outline-secondary btn-sm">
                 <i class="fas fa-arrow-left"></i> Retour
             </a>

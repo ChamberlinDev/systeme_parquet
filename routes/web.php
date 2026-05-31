@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\ArchivageController;
 use App\Http\Controllers\AudienceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DecisionController;
 use App\Http\Controllers\ExecutionController;
+use App\Http\Controllers\StatistiqueController;
 use App\Http\Controllers\DossierController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ParquetController;
@@ -157,5 +159,27 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/executions/{execution}/statut', [ExecutionController::class, 'updateStatut'])
             ->whereNumber('execution')
             ->name('executions.statut');
+
+        /*
+        |--------------------------------------------------------------------------
+        | ARCHIVAGE
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/greffier/archives', [ArchivageController::class, 'index'])->name('archivage.index');
+
+        Route::get('/dossiers/{dossier}/archiver', [ArchivageController::class, 'confirmer'])
+            ->whereNumber('dossier')
+            ->name('archivage.confirmer');
+
+        Route::post('/dossiers/{dossier}/archiver', [ArchivageController::class, 'store'])
+            ->whereNumber('dossier')
+            ->name('archivage.store');
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATISTIQUES
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
     });
 });
