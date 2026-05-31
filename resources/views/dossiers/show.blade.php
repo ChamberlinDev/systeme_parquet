@@ -181,8 +181,18 @@
             {{-- Décisions rendues --}}
             @if($dossier->decisions->isNotEmpty())
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 text-dark">Décisions judiciaires</h5>
+                    @if($user?->hasRole('greffier'))
+                    <div class="d-flex gap-1">
+                        @foreach($dossier->decisions as $dec)
+                        <a href="{{ route('executions.create', $dec) }}"
+                           class="btn btn-sm btn-outline-success" title="Créer une exécution pour cette décision">
+                            <i class="fas fa-plus"></i> Exécution
+                        </a>
+                        @endforeach
+                    </div>
+                    @endif
                 </div>
                 <ul class="list-group list-group-flush">
                     @foreach($dossier->decisions as $dec)

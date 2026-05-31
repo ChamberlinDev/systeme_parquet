@@ -3,6 +3,7 @@
 use App\Http\Controllers\AudienceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DecisionController;
+use App\Http\Controllers\ExecutionController;
 use App\Http\Controllers\DossierController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ParquetController;
@@ -133,5 +134,28 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/audiences/{audience}/dossiers/{dossier}/decision', [DecisionController::class, 'store'])
             ->whereNumber('audience')->whereNumber('dossier')
             ->name('decisions.store');
+
+        /*
+        |--------------------------------------------------------------------------
+        | EXÉCUTIONS
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/greffier/executions', [ExecutionController::class, 'index'])->name('executions.index');
+
+        Route::get('/decisions/{decision}/executions/creer', [ExecutionController::class, 'create'])
+            ->whereNumber('decision')
+            ->name('executions.create');
+
+        Route::post('/decisions/{decision}/executions/creer', [ExecutionController::class, 'store'])
+            ->whereNumber('decision')
+            ->name('executions.store');
+
+        Route::get('/executions/{execution}', [ExecutionController::class, 'show'])
+            ->whereNumber('execution')
+            ->name('executions.show');
+
+        Route::patch('/executions/{execution}/statut', [ExecutionController::class, 'updateStatut'])
+            ->whereNumber('execution')
+            ->name('executions.statut');
     });
 });

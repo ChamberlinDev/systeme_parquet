@@ -67,7 +67,7 @@
 
   {{-- Exécution --}}
   <li class="nav-item {{ request()->routeIs('executions.*') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="{{ route('executions.index') }}">
       <i class="fas fa-fw fa-clipboard-check"></i>
       <span>Exécution des décisions</span>
     </a>
