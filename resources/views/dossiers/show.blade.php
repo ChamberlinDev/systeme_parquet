@@ -134,11 +134,23 @@
 
                     {{-- Actions PDF --}}
                     <div class="d-flex flex-wrap gap-2">
-                        @if($user?->hasRole('procureur'))
+                        @if($user?->hasRole('procureur') || $user?->hasRole('substitut'))
                         <a href="{{ route('dossiers.acte.pdf', $dossier) }}"
                            class="btn btn-sm btn-outline-dark" target="_blank">
-                            <i class="fas fa-file-pdf"></i> Télécharger l'acte PDF
+                            <i class="fas fa-file-pdf"></i> Acte d'orientation
                         </a>
+                        @if($dossier->decision_orientation === 'citation_directe')
+                        <a href="{{ route('pdf.citation', $dossier) }}"
+                           class="btn btn-sm btn-outline-primary" target="_blank">
+                            <i class="fas fa-file-pdf"></i> Citation directe
+                        </a>
+                        @endif
+                        @if($dossier->decision_orientation === 'requisitoire_introductif')
+                        <a href="{{ route('pdf.requisitoire', $dossier) }}"
+                           class="btn btn-sm btn-outline-dark" target="_blank">
+                            <i class="fas fa-file-pdf"></i> Réquisitoire introductif
+                        </a>
+                        @endif
                         @endif
 
                         @if($dossier->acte_signe_path)
@@ -284,7 +296,24 @@
                     <li class="list-group-item">
                         <div class="d-flex justify-content-between align-items-start">
                             <span class="fw-semibold">{{ ucfirst($dec->type_decision) }}</span>
-                            <span class="text-muted small">{{ \Carbon\Carbon::parse($dec->date_decision)->format('d/m/Y') }}</span>
+                            <div class="d-flex gap-1">
+                                <span class="text-muted small">{{ \Carbon\Carbon::parse($dec->date_decision)->format('d/m/Y') }}</span>
+                                @if($dec->type_decision === 'jugement')
+                                <a href="{{ route('pdf.jugement', $dec) }}"
+                                   class="btn btn-xs btn-outline-success ms-2" target="_blank" style="font-size:0.7rem;padding:1px 6px">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </a>
+                                @elseif($dec->type_decision === 'ordonnance')
+                                <a href="{{ route('pdf.ordonnance', $dec) }}"
+                                   class="btn btn-xs btn-outline-secondary ms-2" target="_blank" style="font-size:0.7rem;padding:1px 6px">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </a>
+                                @endif
+                                <a href="{{ route('pdf.notification', $dec) }}"
+                                   class="btn btn-xs btn-outline-info ms-1" target="_blank" style="font-size:0.7rem;padding:1px 6px">
+                                    <i class="fas fa-bell"></i> Notifier
+                                </a>
+                            </div>
                         </div>
                         <div class="text-muted small mt-1">{{ Str::limit($dec->contenu, 150) }}</div>
                     </li>

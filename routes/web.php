@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActeInstructionController;
+use App\Http\Controllers\ActePdfController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\ArchivageController;
 use App\Http\Controllers\AudienceController;
@@ -220,6 +221,24 @@ Route::middleware(['auth'])->group(function () {
         */
         Route::get('/admin/audit', [AuditLogController::class, 'index'])->name('audit.index');
         Route::get('/admin/audit/export', [AuditLogController::class, 'export'])->name('audit.export');
+
+        /*
+        |--------------------------------------------------------------------------
+        | GÉNÉRATION D'ACTES PDF
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/pdf/dossiers/{dossier}/citation', [ActePdfController::class, 'citation'])
+            ->whereNumber('dossier')->name('pdf.citation');
+        Route::get('/pdf/dossiers/{dossier}/requisitoire', [ActePdfController::class, 'requisitoire'])
+            ->whereNumber('dossier')->name('pdf.requisitoire');
+        Route::get('/pdf/executions/{execution}/mandat', [ActePdfController::class, 'mandat'])
+            ->whereNumber('execution')->name('pdf.mandat');
+        Route::get('/pdf/decisions/{decision}/jugement', [ActePdfController::class, 'jugement'])
+            ->whereNumber('decision')->name('pdf.jugement');
+        Route::get('/pdf/decisions/{decision}/ordonnance', [ActePdfController::class, 'ordonnance'])
+            ->whereNumber('decision')->name('pdf.ordonnance');
+        Route::get('/pdf/decisions/{decision}/notification', [ActePdfController::class, 'notification'])
+            ->whereNumber('decision')->name('pdf.notification');
 
         /*
         |--------------------------------------------------------------------------

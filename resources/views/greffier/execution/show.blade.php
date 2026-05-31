@@ -21,6 +21,12 @@ $dossier = $execution->decision->dossier ?? null;
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="fw-bold text-dark mb-1">Exécution #{{ $execution->id_execution }}</h4>
+            @if($execution->type_peine === 'privative_liberte')
+            <a href="{{ route('pdf.mandat', $execution) }}"
+               class="btn btn-sm btn-outline-dark mt-1" target="_blank">
+                <i class="fas fa-file-pdf"></i> Mandat de dépôt PDF
+            </a>
+            @endif
             @if($dossier)
             <small class="text-muted">Dossier {{ $dossier->numero_registre }}</small>
             @endif
