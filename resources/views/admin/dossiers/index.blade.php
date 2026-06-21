@@ -72,13 +72,13 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-bold text-dark mb-0">Liste des Dossiers</h4>
         <div class="d-flex">
-            <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm mr-2">
+            <!-- <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm mr-2">
                 <i class="fas fa-plus"></i> Nouveau
-            </a>
+            </a> -->
             <a href="#" class="btn btn-outline-secondary btn-sm">
                 <i class="fas fa-file-pdf"></i> Export PDF
             </a>
-        </div> -->
+        </div> 
     </div>
 
     <div class="card shadow-sm border-0">
@@ -108,20 +108,20 @@
                                         <div class="fw-semibold"> {{ $dossier->numero_registre }}</div>
                                     </a>
                                     <small class="text-muted">
-                                       
+
                                         · {{ $dossier->parties->count() }} partie(s)
                                         @if($dossier->files->count())
                                         · {{ $dossier->files->count() }} fichier(s)
                                         @endif
                                     </small>
-                                   
+
                                 </div>
                             </div>
                         </td>
 
                         {{-- REGISTRE --}}
-                       <td>
-                            
+                        <td>
+
                             <span class="badge bg-light border text-dark">
                                 {{ $dossier->registre->nom ?? '—' }}
                             </span>

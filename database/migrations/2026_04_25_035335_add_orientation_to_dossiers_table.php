@@ -13,27 +13,27 @@ return new class extends Migration
     {
         Schema::table('dossiers', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('procureur_id')->nullable()->after('statut');
+            $table->unsignedBigInteger('procureur_id')->nullable();
             $table->foreign('procureur_id')->references('id')->on('users')->onDelete('set null');
-            $table->text('motif_orientation')->nullable()->after('procureur_id');
-            $table->timestamp('date_orientation')->nullable()->after('motif_orientation');
+            $table->unsignedBigInteger('juge_id')->nullable();
+            $table->foreign('juge_id')->references('id')->on('users')->onDelete('set null');
+            $table->text('motif_orientation')->nullable();
+            $table->timestamp('date_orientation')->nullable();
+            $table->timestamp('date_audience')->nullable();
         });
     }
 
     /**
      * Reverse the migrations.
      */
+
     public function down(): void
     {
         Schema::table('dossiers', function (Blueprint $table) {
-            $table->unsignedBigInteger('procureur_id')->nullable()->after('statut');
-            $table->foreign('procureur_id')->references('id')->on('users')->onDelete('set null');
-            $table->unsignedBigInteger('juge_id')->nullable()->after('procureur_id');
-            $table->foreign('juge_id')->references('id')->on('users')->onDelete('set null');
-            $table->text('motif_orientation')->nullable()->after('juge_id');
-            $table->timestamp('date_orientation')->nullable()->after('motif_orientation');
-            $table->timestamp('date_audience')->nullable()->after('date_orientation');
+            $table->dropForeign(['procureur_id']);
+            $table->dropColumn(['procureur_id', 'motif_orientation', 'date_orientation']);
+            $table->dropForeign(['juge_id']);
+            $table->dropColumn(['juge_id', 'date_audience']);
         });
     }
 };
-
