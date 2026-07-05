@@ -69,7 +69,7 @@
         <thead class="table-white">
             <tr>
                 <th>#</th>
-                <th>Nom</th>
+                <th>Nom & Prenom</th>
                 <th>Email</th>
                 <th>Parquet</th>
                 <th>Statut</th>

@@ -16,8 +16,8 @@ return new class extends Migration
                 'requisitoire_introductif',
             ])->nullable()->after('statut');
 
-            $table->text('motif_orientation')->nullable()->after('decision_orientation');
-            $table->date('date_orientation')->nullable()->after('motif_orientation');
+            // $table->text('motif_orientation')->nullable()->after('decision_orientation');
+            // $table->date('date_orientation')->nullable()->after('motif_orientation');
             $table->unsignedBigInteger('id_procureur')->nullable()->after('date_orientation');
             $table->foreign('id_procureur')->references('id')->on('users')->onDelete('set null');
         });

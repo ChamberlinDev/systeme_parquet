@@ -27,9 +27,9 @@ class HomeController extends Controller
         $stats = [
             'mes_dossiers'   => Dossier::where('id_greffier', $user->id)->count(),
             'en_cours'       => Dossier::where('id_greffier', $user->id)->where('statut', 'En cours')->count(),
-            'audiences'      => Audience::whereHas('dossiers', fn($q) => $q->where('id_greffier', $user->id))->count(),
-            'executions'     => Execution::where('statut_execution', 'en_cours')->count(),
-            'archives'       => Dossier::where('statut', 'Archivé')->count(),
+            // 'audiences'      => Audience::whereHas('dossiers', fn($q) => $q->where('id_greffier', $user->id))->count(),
+            // 'executions'     => Execution::where('statut_execution', 'en_cours')->count(),
+            // 'archives'       => Dossier::where('statut', 'Archivé')->count(),
         ];
         $derniersDossiers = Dossier::with('registre')
             ->where('id_greffier', $user->id)

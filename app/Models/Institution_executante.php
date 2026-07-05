@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Institution_executante extends Model
 {
     //
-    protected $primaryKey = 'id_institution';
+     protected $primaryKey = 'id_institution';
 
     protected $fillable = [
         'nom',

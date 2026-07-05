@@ -6,6 +6,7 @@ use App\Mail\OrientationDecideeMail;
 use App\Services\AuditService;
 use App\Models\Dossier;
 use App\Models\DossierHistorique;
+use App\Models\Parquet;
 use App\Models\User;
 use App\Services\NotificationService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -154,4 +155,41 @@ class ParquetController extends Controller
             'inline'
         );
     }
+
+    // liste de tous les parquets
+    public function index()
+    {
+        $parquets = Parquet::all();
+        return view('admin.parquet.index', compact('parquets'));    
+    }
+
+    // afficher le formulaire de création d'un parquet
+    public function create()
+    {
+        return view('admin.parquet.ajout');   
+    }
+
+    // enregistrer un nouveau parquet
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'ville' => 'required|string|max:255',
+            'telephone' => 'required|string|max:20',
+            'adresse' => 'required|string|max:255',
+        ]);
+
+        $parquet =new Parquet();
+        $parquet->nom = $request->nom;
+        $parquet->email = $request->email;
+        $parquet->ville = $request->ville;
+        $parquet->telephone = $request->telephone;
+        $parquet->adresse = $request->adresse;  
+        $parquet->save();   
+
+        return redirect()->route('parquets.index')->with('success', 'Parquet ajouté avec succès.');
+    }
+
+   
 }

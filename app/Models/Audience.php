@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Audience extends Model
 {
+    //
+
     protected $primaryKey = 'id_audience';
 
     protected $fillable = [
