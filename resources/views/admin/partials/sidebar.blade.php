@@ -1,11 +1,9 @@
-
 <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
 
   {{-- Logo --}}
-  <a class="sidebar-brand d-flex align-items-center justify-content-center"
-     href="/accueil_admin">
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/accueil_admin">
     <div class="sidebar-brand-icon">
-      <img src="{{ asset('img/logo/logo2.png') }}">
+      <img src="{{ asset('img/logo/logo2.png') }}" alt="Logo">
     </div>
     <div class="sidebar-brand-text mx-3">GS. Parquet</div>
   </a>
@@ -33,46 +31,42 @@
       <span>Nouveau dossier</span>
     </a>
   </li>
-
-  {{-- Instruction et suivi --}}
-  <!-- <li class="nav-item {{ request()->routeIs('instructions.*') ? 'active' : '' }}">
+  <li class="nav-item">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-clipboard"></i>
-      <span>Instruction et suivi</span>
+      <span>Instructions et Suivi</span>
     </a>
-  </li> -->
-
-  {{-- Instruction judiciaire --}}
-  <!-- <li class="nav-item {{ request()->routeIs('instruction.judiciaire') ? 'active' : '' }}">
+  </li>
+  <li class="nav-item">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-gavel"></i>
-      <span>Instruction judiciaire</span>
+      <span>Instructions judicaires</span>
     </a>
-  </li> -->
-
-  {{-- Préparation audience --}}
-  <!-- <li class="nav-item {{ request()->routeIs('audiences.preparation') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-calendar-alt"></i>
-      <span>Préparation audience</span>
-    </a>
-  </li> -->
-
-  {{-- Audience et décision --}}
-  <!-- <li class="nav-item {{ request()->routeIs('audiences.index') ? 'active' : '' }}">
+  </li>
+  <li class="nav-item">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-calendar-check"></i>
-      <span>Audience et décision</span>
+      <span>Audiences</span>
     </a>
-  </li> -->
-
-  {{-- Exécution --}}
-  <!-- <li class="nav-item {{ request()->routeIs('executions.*') ? 'active' : '' }}">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-folder"></i>
+      <span>Statistiques</span>
+    </a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-clipboard-check"></i>
-      <span>Exécution des décisions</span>
+      <span>Executions des decisions</span>
     </a>
-  </li> -->
+  </li>
+  <li class="nav-item" >
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-archive"></i>
+      <span>Archives</span>
+    </a>
+  </li>
 
   <hr class="sidebar-divider">
 
@@ -87,7 +81,9 @@
       <span>Utilisateurs</span>
     </a>
   </li>
-   <li class="nav-item {{ request()->routeIs('parquets.*') ? 'active' : '' }}">
+
+  {{-- Parquets --}}
+  <li class="nav-item {{ request()->routeIs('parquets.*') ? 'active' : '' }}">
     <a class="nav-link" href="/liste_parquets">
       <i class="fas fa-fw fa-home"></i>
       <span>Parquets</span>
@@ -102,17 +98,15 @@
     </a>
   </li>
 
-  <hr class="sidebar-divider">
+  <hr class="sidebar-divider d-none d-md-block">
 
-  {{-- Déconnexion sécurisée --}}
-  <li class="nav-item px-3">
-   <div class="dropdown-divider"></div>
- 				<a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
- 					<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger-400"></i>
- 					Deconnexion
- 				</a>
+  {{-- Déconnexion --}}
+  <li class="nav-item px-3 mt-2">
+    <a class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center"
+      href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
+      <i class="fas fa-sign-out-alt fa-sm me-2"></i>
+      Déconnexion
+    </a>
   </li>
-
-  <!-- <div class="version" id="version-ruangadmin"></div> -->
 
 </ul>

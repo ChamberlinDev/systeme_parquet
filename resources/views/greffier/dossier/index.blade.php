@@ -87,150 +87,158 @@
     </div>
     @endif
 
-    <div class="card shadow-sm border-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+ <div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
 
-                <thead class="table-light">
-                    <tr>
-                        <th>N° Registre</th>
-                        <th>N° Affaire</th>
-                        <th>Type Affaire</th>
-                        <th>Statut</th>
-                        <th>Date enregistrement</th>
-                        <th>Créé par</th>
-                        <th>Procureur</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
+            <thead>
+                <tr class="text-uppercase text-muted small">
+                    <th class="ps-4">N° Registre</th>
+                    <th>N° Affaire</th>
+                    <th>Type Affaire</th>
+                    <th>Statut</th>
+                    <th>Date enregistrement</th>
+                    <th>Créé par</th>
+                    <th>Procureur</th>
+                    <th class="text-center pe-4">Actions</th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    @forelse($dossiers as $dossier)
-                    <tr>
+            <tbody>
+                @forelse($dossiers as $dossier)
+                <tr>
 
-                        {{-- NUMÉRO REGISTRE --}}
-                        <td>
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-folder-open fa-2x text-warning"></i>
+                    {{-- NUMÉRO REGISTRE --}}
+                    <td class="ps-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-warning bg-opacity-10 text-warning rounded-3 d-flex align-items-center justify-content-center" style="width:44px; height:44px; flex-shrink:0;">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <div>
+                                <a href="{{ route('dossiers.show', $dossier->id_dossier) }}"
+                                    class="fw-semibold text-dark text-decoration-none">
+                                    {{ $dossier->numero_rp }}
+                                </a>
                                 <div>
-                                    <a href="{{ route('dossiers.show', $dossier->id_dossier) }}"
-                                        class="text-primary fw-semibold text-decoration-none">
-                                        {{ $dossier->numero_rp }}
-                                    </a>
-                                    <div>
-                                        <small class="text-muted">
-                                            · {{ $dossier->parties->count() }} partie(s)
-                                            @if($dossier->files->count())
-                                            · {{ $dossier->files->count() }} fichier(s)
-                                            @endif
-                                        </small>
-                                    </div>
+                                    <small class="text-muted">
+                                        {{ $dossier->parties->count() }} partie(s)
+                                        @if($dossier->files->count())
+                                        · {{ $dossier->files->count() }} fichier(s)
+                                        @endif
+                                    </small>
                                 </div>
                             </div>
-                        </td>
+                        </div>
+                    </td>
 
-                        {{-- Type affaire --}}
-                        <td>
-                            <span class="fw-semibold text-secondary"> {{ $dossier->numero_registre }}
+                    {{-- Type affaire --}}
+                    <td>
+                        <span class="fw-semibold text-secondary">{{ $dossier->numero_registre }}</span>
+                    </td>
+
+                    {{-- Nom affaire --}}
+                    <td>
+                        <span class="badge bg-light border text-dark fw-normal">
+                            {{ $dossier->registre->nom ?? '—' }}
+                        </span>
+                    </td>
+
+                    {{-- STATUT --}}
+                    <td>
+                        @php
+                        $colors = [
+                        'En cours' => 'warning',
+                        'Clôturé' => 'info',
+                        'Archivé' => 'secondary',
+                        'Suspendu' => 'danger',
+                        'Orienté' => 'success',
+                        ];
+                        $color = $colors[$dossier->statut] ?? 'secondary';
+                        @endphp
+                        <span class="badge rounded-pill bg-{{ $color }} bg-opacity-10 text-{{ $color }} border border-{{ $color }} border-opacity-25 px-3 py-2">
+                            {{ $dossier->statut }}
+                        </span>
+                    </td>
+
+                    {{-- DATE --}}
+                    <td>
+                        <div class="fw-medium">{{ \Carbon\Carbon::parse($dossier->date_demande)->format('d/m/Y') }}</div>
+                        <small class="text-muted">
+                            {{ \Carbon\Carbon::parse($dossier->date_demande)->diffForHumans() }}
+                        </small>
+                    </td>
+
+                    {{-- GREFFIER --}}
+                    <td class="text-muted">{{ $dossier->greffier->name ?? '—' }}</td>
+
+                    {{-- PROCUREUR --}}
+                    <td>
+                        @if($dossier->procureur)
+                        <span class="text-dark">{{ $dossier->procureur->name }}</span>
+                        @else
+                        <span class="text-muted fst-italic">Pas assigné</span>
+                        @endif
+                    </td>
+
+                    {{-- ACTIONS --}}
+                    <td class="text-center pe-4">
+                        <div class="d-flex justify-content-center gap-1">
+
+                            {{-- Voir — toujours visible --}}
+                            <a href="{{ route('dossiers.show', $dossier->id_dossier) }}"
+                                class="btn btn-sm btn-light text-primary" title="Voir">
+                                <i class="fas fa-eye"></i>
+                            </a>
+
+                            {{-- Modifier & Supprimer — masqués si dossier clôturé/archivé/orienté --}}
+                            @if(!in_array($dossier->statut, ['Clôturé', 'Archivé', 'Orienté']))
+                            <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}"
+                                class="btn btn-sm btn-light text-warning" title="Modifier">
+                                <i class="fas fa-pen"></i>
+                            </a>
+
+                            <form action="{{ route('dossiers.destroy', $dossier->id_dossier) }}"
+                                method="POST" class="d-inline"
+                                onsubmit="return confirm('Supprimer ce dossier ?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-light text-danger" title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                            @else
+                            {{-- Indicateur visuel que le dossier est verrouillé --}}
+                            <span class="btn btn-sm btn-light text-muted disabled" title="Dossier verrouillé">
+                                <i class="fas fa-lock"></i>
                             </span>
-                        </td>
+                            @endif
 
-                        {{-- Nom affaire --}}
-                        <td>
-                            <span class="badge bg-light border text-dark">
-                                {{ $dossier->registre->nom ?? '—' }}
-                            </span>
-                        </td>
+                        </div>
+                    </td>
 
-                        {{-- STATUT --}}
-                        <td>
-                            @php
-                            $colors = [
-                            'En cours' => 'warning',
-                            'Clôturé' => 'info',
-                            'Archivé' => 'secondary',
-                            'Suspendu' => 'danger',
-                            'Orienté' => 'success',
-                            ];
-                            $color = $colors[$dossier->statut] ?? 'secondary';
-                            @endphp
-                            <span class="badge bg-{{ $color }}">{{ $dossier->statut }}</span>
-                        </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="8" class="text-center py-5 text-muted">
+                        <i class="fas fa-folder-open fa-3x mb-3 opacity-25 d-block"></i>
+                        Aucun dossier trouvé
+                        <div class="mt-3">
+                            <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm">
+                                Créer un dossier
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
 
-                        {{-- DATE --}}
-                        <td>
-                            <div>{{ \Carbon\Carbon::parse($dossier->date_demande)->format('d/m/Y') }}</div>
-                            <small class="text-muted">
-                                {{ \Carbon\Carbon::parse($dossier->date_demande)->diffForHumans() }}
-                            </small>
-                        </td>
-
-                        {{-- GREFFIER --}}
-                        <td>{{ $dossier->greffier->name ?? '—' }}</td>
-                        {{-- PROCUREUR --}}
-                        <td>{{ $dossier->procureur->name ?? 'pas assigné' }}</td>
-                        {{-- ACTIONS --}}
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
-
-                                {{-- Voir — toujours visible --}}
-                                <a href="{{ route('dossiers.show', $dossier->id_dossier) }}"
-                                    class="btn btn-sm btn-primary" title="Voir">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-
-                                {{-- Modifier & Supprimer — masqués si dossier clôturé/archivé/orienté --}}
-                                @if(!in_array($dossier->statut, ['Clôturé', 'Archivé', 'Orienté']))
-                                <a href="{{ route('dossiers.edit', $dossier->id_dossier) }}"
-                                    class="btn btn-sm btn-outline-warning" title="Modifier">
-                                    <i class="fas fa-pen"></i>
-                                </a>
-
-                                <form action="{{ route('dossiers.destroy', $dossier->id_dossier) }}"
-                                    method="POST" class="d-inline"
-                                    onsubmit="return confirm('Supprimer ce dossier ?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger" title="Supprimer">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                                @else
-                                {{-- Indicateur visuel que le dossier est verrouillé --}}
-                                <span class="btn btn-sm btn-light text-muted" title="Dossier verrouillé">
-                                    <i class="fas fa-lock"></i>
-                                </span>
-                                @endif
-
-                            </div>
-                        </td>
-
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">
-                            <i class="fas fa-folder-open fa-3x mb-3 opacity-25 d-block"></i>
-                            Aucun dossier trouvé
-                            <div class="mt-3">
-                                <a href="{{ route('dossiers.create.form') }}" class="btn btn-primary btn-sm">
-                                    Créer un dossier
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-
-            </table>
-        </div>
-
-        @if(method_exists($dossiers, 'links'))
-        <div class="card-footer bg-white">
-            {{ $dossiers->links() }}
-        </div>
-        @endif
+        </table>
     </div>
 
+    @if(method_exists($dossiers, 'links'))
+    <div class="card-footer bg-white">
+        {{ $dossiers->links() }}
+    </div>
+    @endif
 </div>
-
 @endsection

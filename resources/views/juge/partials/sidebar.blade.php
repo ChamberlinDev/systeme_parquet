@@ -28,10 +28,17 @@
         </a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('dossiers.create.form') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('dossiers.create.form') }}">
+    <li class="nav-item">
+        <a class="nav-link" href="#">
             <i class="fas fa-fw fa-plus-circle"></i>
             <span>Nouveau dossier</span>
+        </a>
+    </li>
+
+    <li class="nav-item ">
+        <a class="nav-link" href="#">
+            <i class="fas fa-fw fa-balance-scale"></i>
+            <span>Instructions</span>
         </a>
     </li>
 
@@ -42,12 +49,7 @@
         </a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-file-signature"></i>
-            <span>Jugements</span>
-        </a>
-    </li>
+ 
 
     <hr class="sidebar-divider">
 

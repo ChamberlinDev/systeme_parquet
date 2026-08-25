@@ -33,44 +33,46 @@
   </li>
 
   {{-- Instruction et suivi --}}
-  <li class="nav-item {{ request()->routeIs('instruction.index') ? 'active' : '' }}">
+  <li class="nav-item">
     <a class="nav-link" href="#">
       <i class="fas fa-fw fa-clipboard"></i>
-      <span>Instructions</span>
+      <span>Instructions et suivi</span>
     </a>
   </li>
 
   {{-- Instruction judiciaire --}}
-  <li class="nav-item {{ request()->routeIs('archives.index') ? 'active' : '' }}">
+  <li class="nav-item">
     <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-clipboard"></i>
+      <i class="fas fa-fw fa-gavel"></i>
+      <span>Instruction judiciaire</span>
+    </a>
+  </li>
+
+  {{-- Audiences --}}
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-calendar-check"></i>
+      <span>Preparation des audiences</span>
+    </a>
+  </li>
+
+  {{-- Exécution --}}
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-clipboard-check"></i>
+      <span>Exécutions des décisions</span>
+    </a>
+  </li>
+
+  {{-- Archives --}}
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-archive"></i>
       <span>Archives</span>
     </a>
   </li>
 
-  {{-- Préparation audience --}}
-  <!-- <li class="nav-item {{ request()->routeIs('audience.preparation') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-calendar-alt"></i>
-      <span>Préparation audience</span>
-    </a>
-  </li> -->
-
-  {{-- Audience et décision --}}
-  <!-- <li class="nav-item {{ request()->routeIs('audience.index') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-calendar-check"></i>
-      <span>Audience et Décision</span>
-    </a>
-  </li> -->
-
-  {{-- Exécution --}}
-  <!-- <li class="nav-item {{ request()->routeIs('execution.index') ? 'active' : '' }}">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-clipboard-check"></i>
-      <span>Exécution des décisions</span>
-    </a>
-  </li> -->
+  
 
   <hr class="sidebar-divider">
 

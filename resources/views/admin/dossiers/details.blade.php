@@ -197,7 +197,7 @@
     <div class="d-flex gap-2 mt-4 flex-wrap">
 
         {{-- Retour --}}
-        <a href="{{ route('dossiers.index') }}" class="btn btn-outline-secondary">
+        <a href="{{ route('accueil.admin') }}" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left me-1"></i> Retour
         </a>
     </div>

@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['force.password.change'])->group(function () {
 
         // Déconnexion
-        Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
         /*
         |--------------------------------------------------------------------------

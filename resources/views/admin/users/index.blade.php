@@ -21,12 +21,14 @@
                         <div class="text-uppercase small fw-bold text-muted">Total Utilisateurs</div>
                         <div class="fs-4 fw-bold text-dark">{{ $total }}</div>
                     </div>
-                    <i class="fas fa-users fa-2x text-primary opacity-75"></i>
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center" style="width:50px; height:50px; flex-shrink:0;">
+                        <i class="fas fa-users fa-lg"></i>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- En cours --}}
+        {{-- Actifs --}}
         <div class="col-xl-3 col-md-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
@@ -34,12 +36,14 @@
                         <div class="text-uppercase small fw-bold text-muted">Utilisateurs Actifs</div>
                         <div class="fs-4 fw-bold text-success">{{ $enCours }}</div>
                     </div>
-                    <i class="fas fa-user-check fa-2x text-success opacity-75"></i>
+                    <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center" style="width:50px; height:50px; flex-shrink:0;">
+                        <i class="fas fa-user-check fa-lg"></i>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- Traités --}}
+        {{-- Inactifs --}}
         <div class="col-xl-3 col-md-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
@@ -47,121 +51,135 @@
                         <div class="text-uppercase small fw-bold text-muted">Utilisateurs Inactifs</div>
                         <div class="fs-4 fw-bold text-danger">{{ $traites }}</div>
                     </div>
-                    <i class="fas fa-user-times fa-2x text-danger opacity-75"></i>
+                    <div class="bg-danger bg-opacity-10 text-danger rounded-3 d-flex align-items-center justify-content-center" style="width:50px; height:50px; flex-shrink:0;">
+                        <i class="fas fa-user-times fa-lg"></i>
+                    </div>
                 </div>
             </div>
         </div>
 
-
     </div>
 
-    <hr>
+    {{-- ===================== EN-TÊTE ===================== --}}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold text-dark mb-0">Liste des utilisateurs</h4>
+        <a href="/create_user" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> Ajouter un utilisateur
+        </a>
+    </div>
 
+    {{-- ===================== TABLEAU ===================== --}}
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr class="text-uppercase text-muted small">
+                        <th class="ps-4">#</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Parquet</th>
+                        <th>Statut</th>
+                        <th>Rôle(s)</th>
+                        <th class="text-center pe-4">Actions</th>
+                    </tr>
+                </thead>
 
-    <h3 class="text-center">Liste des utilisateurs</h3>
+                <tbody>
+                    @forelse($users as $user)
+                    <tr>
+                        <td class="ps-4 text-muted">{{ $loop->iteration }}</td>
 
-    <hr>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-semibold" style="width:38px; height:38px; flex-shrink:0;">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </div>
+                                <span class="fw-semibold text-dark">{{ $user->name }}</span>
+                            </div>
+                        </td>
 
-    <a href="/create_user" class="btn btn-primary mb-3">
-        Ajouter un utilisateur
-    </a>
+                        <td class="text-muted">
+                            <i class="fas fa-envelope me-1 opacity-50"></i>{{ $user->email }}
+                        </td>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-white">
-            <tr>
-                <th>#</th>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Parquet</th>
-                <th>Statut</th>
-                <th>Rôle(s)</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @forelse($users as $user)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-
-                <td>{{ $user->name }}</td>
-
-                <td>{{ $user->email }}</td>
-                <td>
-                    @if($user->parquet)
-                    {{ $user->parquet->nom }}
-                    @else
-                    <span class="text-muted">Global</span>
-                    @endif
-                </td>
-
-                <td>
-                    @if($user->is_actif)
-                    <span class="badge bg-success text-white">Actif</span>
-                    @else
-                    <span class="badge bg-danger text-white">Inactif</span>
-                    @endif
-                </td>
-
-                <td>
-                    @forelse($user->getRoleNames() as $role)
-                    <span class="badge bg-primary text-white">
-                        {{ ucfirst($role) }}
-                    </span>
-                    @empty
-                    <span class="text-muted">Aucun rôle</span>
-                    @endforelse
-                </td>
-
-                <td class="text-center">
-                    {{-- Modifier utilisateur --}}
-                    <a href="{{ route('users.details', $user->id) }}" class="btn btn-sm btn-warning" title="Modifier">
-                        <i class="fas fa-edit"></i>
-                    </a>
-
-                    {{-- Supprimer utilisateur --}}
-                    <form action="{{route('users.destroy', $user->id)}}"
-                        method="POST"
-                        class="d-inline"
-                        onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </form>
-
-                    {{-- Activer / Désactiver --}}
-                    <form action="{{ $user->is_actif ? route('users.desactiver', $user->id) : route('users.activer', $user->id) }}"
-                        method="POST"
-                        class="d-inline">
-                        @csrf
-                        @method('PATCH')
-
-                        <button type="submit"
-                            class="btn btn-sm {{ $user->is_actif ? 'btn-secondary' : 'btn-success' }}"
-                            title="{{ $user->is_actif ? 'Désactiver' : 'Activer' }}"
-                            onclick="return confirm('Confirmer cette action ?')">
-                            @if($user->is_actif)
-                            <i class="fas fa-user-slash"></i>
+                        <td>
+                            @if($user->parquet)
+                            <span class="badge bg-light border text-dark fw-normal">{{ $user->parquet->nom }}</span>
                             @else
-                            <i class="fas fa-user-check"></i>
+                            <span class="text-muted fst-italic">Global</span>
                             @endif
-                        </button>
-                    </form>
-                </td>
+                        </td>
 
-            </tr>
-            @empty
-            <tr>
-                <td colspan="6" class="text-center text-muted">
-                    Aucun utilisateur trouvé
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+                        <td>
+                            @if($user->is_actif)
+                            <span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2">
+                                <i class="fas fa-circle fa-xs me-1"></i>Actif
+                            </span>
+                            @else
+                            <span class="badge rounded-pill bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2">
+                                <i class="fas fa-circle fa-xs me-1"></i>Inactif
+                            </span>
+                            @endif
+                        </td>
+
+                        <td>
+                            @forelse($user->getRoleNames() as $role)
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 me-1">
+                                {{ ucfirst($role) }}
+                            </span>
+                            @empty
+                            <span class="text-muted fst-italic small">Aucun rôle</span>
+                            @endforelse
+                        </td>
+
+                        <td class="text-center pe-4">
+                            <div class="d-flex justify-content-center gap-1">
+                                {{-- Modifier --}}
+                                <a href="{{ route('users.details', $user->id) }}" class="btn btn-sm btn-light text-warning" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                {{-- Supprimer --}}
+                                <form action="{{ route('users.destroy', $user->id) }}"
+                                    method="POST"
+                                    class="d-inline"
+                                    onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-light text-danger" title="Supprimer">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+
+                                {{-- Activer / Désactiver --}}
+                                <form action="{{ $user->is_actif ? route('users.desactiver', $user->id) : route('users.activer', $user->id) }}"
+                                    method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit"
+                                        class="btn btn-sm btn-light {{ $user->is_actif ? 'text-secondary' : 'text-success' }}"
+                                        title="{{ $user->is_actif ? 'Désactiver' : 'Activer' }}"
+                                        onclick="return confirm('Confirmer cette action ?')">
+                                        <i class="fas {{ $user->is_actif ? 'fa-user-slash' : 'fa-user-check' }}"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="fas fa-users fa-3x mb-3 opacity-25 d-block"></i>
+                            Aucun utilisateur trouvé
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
-
 @endsection
