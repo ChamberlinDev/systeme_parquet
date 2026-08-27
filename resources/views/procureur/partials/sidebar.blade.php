@@ -35,29 +35,29 @@
         </a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('audiences.index.procureur', 'audiences.show') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('audiences.index.procureur') }}">
+    <li class="nav-item ">
+        <a class="nav-link" href="#">
             <i class="fas fa-fw fa-calendar-check"></i>
             <span>Audiences</span>
         </a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('dossiers.orientation.form') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('dossiers.index.procureur') }}">
+    <li class="nav-item ">
+        <a class="nav-link" href="#">
             <i class="fas fa-fw fa-balance-scale"></i>
             <span>Orientations</span>
         </a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('instructions.index.procureur','instructions.show','instructions.create') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('instructions.index.procureur') }}">
+    <li class="nav-item ">
+        <a class="nav-link" href="#">
             <i class="fas fa-fw fa-search"></i>
             <span>Instructions</span>
         </a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('messagerie.*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('messagerie.index') }}">
+    <li class="nav-item">
+        <a class="nav-link" href="#">
             <i class="fas fa-fw fa-envelope"></i>
             <span>Messagerie</span>
         </a>
